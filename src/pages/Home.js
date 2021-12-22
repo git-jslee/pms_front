@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { API_URL } from '../config/constants';
 import { Button, Table, Tag, Space } from 'antd';
 
 const Home = () => {
     const [ lists, setLists ] = useState([]);
+    const navigate = useNavigate();
     const columns = [
         {
           title: '고객사',
@@ -32,6 +33,18 @@ const Home = () => {
           key: 'startdate',
           dataIndex: 'startdate',
         },
+        {
+            title: 'Action',
+            key: 'action',
+            render: (text, record) => (
+                <Space size="middle">
+                  <Button onClick={()=>{
+                      onClick(record.key)
+                  }}>View</Button>
+                  <Button>Edit</Button>
+                </Space>
+            ),
+          },
       ];
 
     useEffect(() => {
@@ -48,15 +61,22 @@ const Home = () => {
     const data = [];
     const projectlist = lists.map((list, index) => {
         const array = {
-            key: index,
+            key: list.id,
             customer:  list.customer.name,
             type: list.code_type.name,
             name: list.name,
             status: list.code_status.name,
             startdate: list.planStartDate,
+            action: 'View'
         }
         data.push(array);
     })
+
+    const onClick = (id) => {
+        console.log("키..", id);
+        // project..view..코드 작성
+        navigate(`/project/${id}`);
+    }
 
     return (
         <div>
@@ -74,7 +94,7 @@ const Home = () => {
                 <Button>유지보수</Button>
             </Link>
             <hr></hr>
-            <Table columns={columns} dataSource={data} />
+            <Table columns={columns} dataSource={data}/>
         </div>
     );
 };

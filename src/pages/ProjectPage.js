@@ -151,12 +151,15 @@ const ProjectPage = () => {
           <Form.Item 
               label={<div className='form-lavel'>프로젝트명</div>}
               name="project"
+
               rules={[{required: true, message: '프로젝트명을 입력해 주세요.'}]}
           >
               <Input 
                   className = 'project-name'
                   size='large'
-                  placeholder='프로젝트명을 입력해 주세요'/>
+                  placeholder='프로젝트명을 입력해 주세요!!'
+
+             />
           </Form.Item>
           <Form.Item label="서비스" name="service">
               <Select onChange={onChange}>

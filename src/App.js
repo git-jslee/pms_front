@@ -11,6 +11,7 @@ import CustomerPage from './pages/CustomerPage';
 import WorkPage from './pages/WorkPage';
 import AntdPage from './pages/Antd';
 import Login from './pages/login';
+import ProjectView from './pages/ProjectView';
 
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/project' element={<ProjectPage />} />
+        <Route path='/project/:id' element={<ProjectView />} />
         <Route path='/customer' element={<CustomerPage />} />
         <Route path='/work' element={<WorkPage />} />
         <Route path='/antd' element={<AntdPage />} />
