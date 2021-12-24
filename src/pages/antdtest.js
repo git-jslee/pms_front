@@ -1,120 +1,68 @@
-import { Form, Input, Button, Select } from 'antd';
+import { Form, Input, Select, Tooltip, Button, Space, Typography } from 'antd';
+
 const { Option } = Select;
-const layout = {
-  labelCol: {
-    span: 8,
-  },
-  wrapperCol: {
-    span: 16,
-  },
-};
-const tailLayout = {
-  wrapperCol: {
-    offset: 8,
-    span: 16,
-  },
-};
 
 const Demo = () => {
-  const [form] = Form.useForm();
-
-  const onGenderChange = (value) => {
-    switch (value) {
-      case 'male':
-        form.setFieldsValue({
-          note: 'Hi, man!',
-        });
-        return;
-
-      case 'female':
-        form.setFieldsValue({
-          note: 'Hi, lady!',
-        });
-        return;
-
-      case 'other':
-        form.setFieldsValue({
-          note: 'Hi there!',
-        });
-    }
-  };
-
-  // const onFinish = (values) => {
-  //   console.log(values);
-  // };
-
-  const onReset = () => {
-    form.resetFields();
-  };
-
-  const onFill = () => {
-    form.setFieldsValue({
-      note: 'Hello world!',
-      gender: 'male',
-    });createImageBitmap
+  const onFinish = values => {
+    console.log('Received values of form: ', values);
   };
 
   return (
-    <Form {...layout} form={form} name="control-hooks" onFinish={onSubmit}>
-      <Form.Item
-        name="note"
-        label="Note"
-        rules={[
-          {
-            required: true,
-          },
-        ]}
-      >
-        <Input />
+    <Form name="complex-form" onFinish={onFinish} labelCol={{ span: 8 }} wrapperCol={{ span: 16 }}>
+      <Form.Item label="Username">
+        <Space>
+          <Form.Item
+            name="username"
+            noStyle
+            rules={[{ required: true, message: 'Username is required' }]}
+          >
+            <Input style={{ width: 160 }} placeholder="Please input" />
+          </Form.Item>
+          <Tooltip title="Useful information">
+            <Typography.Link href="#API">Need Help?</Typography.Link>
+          </Tooltip>
+        </Space>
       </Form.Item>
-      <Form.Item
-        name="gender"
-        label="Gender"
-        rules={[
-          {
-            required: true,
-          },
-        ]}
-      >
-        <Select
-          placeholder="Select a option and change input text above"
-          onChange={onGenderChange}
-          allowClear
+      <Form.Item label="Address">
+        <Input.Group compact>
+          <Form.Item
+            name={['address', 'province']}
+            noStyle
+            rules={[{ required: true, message: 'Province is required' }]}
+          >
+            <Select placeholder="Select province">
+              <Option value="Zhejiang">Zhejiang</Option>
+              <Option value="Jiangsu">Jiangsu</Option>
+            </Select>
+          </Form.Item>
+          <Form.Item
+            name={['address', 'street']}
+            noStyle
+            rules={[{ required: true, message: 'Street is required' }]}
+          >
+            <Input style={{ width: '50%' }} placeholder="Input street" />
+          </Form.Item>
+        </Input.Group>
+      </Form.Item>
+      <Form.Item label="BirthDate" style={{ marginBottom: 0 }}>
+        <Form.Item
+          name="year"
+          rules={[{ required: true }]}
+          style={{ display: 'inline-block', width: 'calc(50% - 8px)' }}
         >
-          <Option value="male">male</Option>
-          <Option value="female">female</Option>
-          <Option value="other">other</Option>
-        </Select>
+          <Input placeholder="Input birth year" />
+        </Form.Item>
+        <Form.Item
+          name="month"
+          rules={[{ required: true }]}
+          style={{ display: 'inline-block', width: 'calc(50% - 8px)', margin: '0 8px' }}
+        >
+          <Input placeholder="Input birth month" />
+        </Form.Item>
       </Form.Item>
-      <Form.Item
-        noStyle
-        shouldUpdate={(prevValues, currentValues) => prevValues.gender !== currentValues.gender}
-      >
-        {({ getFieldValue }) =>
-          getFieldValue('gender') === 'other' ? (
-            <Form.Item
-              name="customizeGender"
-              label="Customize Gender"
-              rules={[
-                {
-                  required: true,
-                },
-              ]}
-            >
-              <Input />
-            </Form.Item>
-          ) : null
-        }
-      </Form.Item>
-      <Form.Item {...tailLayout}>
+      <Form.Item label=" " colon={false}>
         <Button type="primary" htmlType="submit">
           Submit
-        </Button>
-        <Button htmlType="button" onClick={onReset}>
-          Reset
-        </Button>
-        <Button type="link" htmlType="button" onClick={onFill}>
-          Fill form
         </Button>
       </Form.Item>
     </Form>

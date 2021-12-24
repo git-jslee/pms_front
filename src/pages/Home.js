@@ -24,6 +24,11 @@ const Home = () => {
           key: 'name',
         },
         {
+            title: '서비스',
+            dataIndex: 'service',
+            key: 'service',
+          },
+        {
           title: '상태',
           key: 'status',
           dataIndex: 'status',
@@ -65,6 +70,7 @@ const Home = () => {
             customer:  list.customer.name,
             type: list.code_type.name,
             name: list.name,
+            service: list.code_service.name,
             status: list.code_status.name,
             startdate: list.planStartDate,
             action: 'View'

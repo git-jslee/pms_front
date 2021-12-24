@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-
+import ProjectTimeForm from './ProjectTimeForm';
 import {
     Form,
     Input,
@@ -28,6 +28,7 @@ const ProjectForm = ({ id_project, responses }) => {
     const code_services = responses[2].data;
     const code_statuses = responses[3].data;
     const code_tasks = responses[4].data;
+    console.log('code_tasks>>>', code_tasks);
 
     return (
         <>
@@ -126,18 +127,14 @@ const ProjectForm = ({ id_project, responses }) => {
               <Input.TextArea size='large' id="description"/>
           </Form.Item>
           <Divider />
-
-          <Divider />
-          <Form.Item label="Switch" valuePropName="checked">
-              <Switch />
-          </Form.Item>
-          <Form.Item>
-              <Button id='submit-button' size='large' htmlType="submit">
-                  Submit
-              </Button>
-          </Form.Item>
-          <Divider />
           </Form>
+          {
+              code_tasks == null ? (
+                <h1>로딩중1...</h1>
+                ) : (
+                <ProjectTimeForm code_tasks={code_tasks} id_project={id_project} />
+                ) 
+           }
             
         </>
     );
