@@ -3,13 +3,32 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import { BrowserRouter } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { createStore, applyMiddleware } from 'redux';
+import { composeWithDevTools } from 'redux-devtools-extension';
+import rootReducer from './modules';
+import ReduxThunk from 'redux-thunk';
+
+
+const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(ReduxThunk)));
+
+// SessionStorage 에 있는 user 정보 Redux 에 넣기..로그인 상태 유지
+const loadUser = () => {
+  try {
+    const user = sessionStorage.getItem('user');
+    if (!user) return; //로그인 상태가 아니면 아무것도 안 함.
+    
+  } catch (e) {
+    console.log('index.js>>>localStorage is no working');
+  }
+}
 
 ReactDOM.render(
-  <React.StrictMode>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-  </React.StrictMode>,
+    <Provider store={ store }>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </Provider>,
   document.getElementById('root')
 );
 

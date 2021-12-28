@@ -3,6 +3,7 @@ import './App.css';
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 
+
 //page import
 import SiteHeader from './components/SiteHeader';
 import Home from './pages/Home';
@@ -10,13 +11,16 @@ import ProjectPage from './pages/ProjectPage';
 import CustomerPage from './pages/CustomerPage';
 import WorkPage from './pages/WorkPage';
 import AntdPage from './pages/Antd';
-import Login from './pages/login';
 import ProjectView from './pages/ProjectView';
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
+import HeaderContainer from './containers/common/HeaderContainer';
 
 
 function App() {
   return (
-    <div>
+    <>
+      <HeaderContainer />
       <SiteHeader />
       <Routes>
         <Route path='/' element={<Home />} />
@@ -25,9 +29,10 @@ function App() {
         <Route path='/customer' element={<CustomerPage />} />
         <Route path='/work' element={<WorkPage />} />
         <Route path='/antd' element={<AntdPage />} />
-        <Route path='/login' element={<Login />} />
+        <Route path='/login' element={<LoginPage />} />
+        <Route path='/register' element={<RegisterPage />} />
       </Routes>
-    </div>
+    </>
   );
 }
 

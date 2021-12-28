@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { API_URL } from '../config/constants';
 import { Button, Table, Tag, Space } from 'antd';
+import HeaderContainer from '../containers/common/HeaderContainer';
 
 const Home = () => {
     const [ lists, setLists ] = useState([]);
@@ -85,7 +86,7 @@ const Home = () => {
     }
 
     return (
-        <div>
+        <>
             <h1>Main Page</h1>
             <Link to='/project'>
                 <Button>프로젝트 등록</Button>
@@ -101,7 +102,7 @@ const Home = () => {
             </Link>
             <hr></hr>
             <Table columns={columns} dataSource={data}/>
-        </div>
+        </>
     );
 };
 
