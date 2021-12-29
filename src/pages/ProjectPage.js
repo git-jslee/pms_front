@@ -63,6 +63,7 @@ const ProjectPage = () => {
 
   const onSubmit = (values) => {
       console.log(values)
+      const webtoken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNjQwNzQ1NTU5LCJleHAiOjE2NDMzMzc1NTl9.bBOShlCgI9p-VjkUGcOAGyuRbbQhaKD789yUWRJsSeQ'
       axios.post(`${API_URL}/projects`, {
           customer: values.customer,
           code_type: values.type,
@@ -71,7 +72,10 @@ const ProjectPage = () => {
           code_status: values.status,
           price: parseInt(values.price),
           planStartDate: values.startDate,
-      }).then((result) => {
+          Users_permissions_user: "crea",
+      }, { headers: {
+        Authorization: "Bearer " + webtoken
+      }}).then((result) => {
         axios_post(result.data.id, values);
         navigate('/');
       })

@@ -2,6 +2,7 @@ import 'antd/dist/antd.css';
 import './App.css';
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 
 //page import
@@ -18,6 +19,9 @@ import HeaderContainer from './containers/common/HeaderContainer';
 
 
 function App() {
+  const { user } = useSelector(({ auth }) => ({ user: auth.auth}));
+  // if (!user) {return <LoginPage /> }
+
   return (
     <>
       <HeaderContainer />

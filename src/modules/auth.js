@@ -9,6 +9,8 @@ const LOGIN = 'auth/LOGIN';
 const LOGIN_SUCCESS = 'auth/LOGIN_SUCCESS';
 const LOGIN_FAILURE = 'auth/LOGIN_FAILURE';
 
+const LOGOUT = 'auth/LOGOUT';
+
 export const changeField = createAction(
     CHANGE_FIELD,
     ({ form, key , value }) => ({
@@ -35,6 +37,8 @@ export const login = ({ username, password}) => async dispatch => {
         throw error; // 나중에 컴포넌트단에서 에러를 조회할 수 있게 해 줌
     }
 }
+
+export const logout = createAction(LOGOUT);
 
 const initialState = {
     register: {
@@ -71,6 +75,11 @@ const auth = handleActions(
             ...state,
             authError: payload.message,
         }),
+        //로그 아웃
+        [LOGOUT]: (state) => ({
+            ...state,
+            auth: null,
+        })
     },
     initialState
 );

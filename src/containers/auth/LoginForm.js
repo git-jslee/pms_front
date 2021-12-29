@@ -63,7 +63,6 @@ const LoginForm = () => {
                 // localStorage.setItem('user', JSON.stringify(auth));
                 // localStorage.setItem('jwt', auth.jwt);
                 sessionStorage.setItem('user', JSON.stringify(auth));
-                sessionStorage.setItem('jwt', auth.jwt);
             } catch (e) {
                 console.log('loginForm>>>localStorage is not working');
             }
