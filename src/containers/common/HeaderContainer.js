@@ -5,7 +5,6 @@ import { logout } from '../../modules/auth';
 
 const HeaderContainer = () => {
     const { user } = useSelector(({ auth }) => ({ user: auth.auth}));
-    console.log('>>>username>>>', user)
     const dispatch = useDispatch();
     const onLogout = () => {
         dispatch(logout());
