@@ -1,7 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { API_URL } from '../config/constants';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
 import {
   Form,
   Input,
@@ -17,106 +14,54 @@ import {
   message,
 } from 'antd';
 
-const ProjectPage = () => {
+const ProjectForm = ({
+  onSubmit,
+  code_types,
+  // code_tasks,
+  code_services,
+  code_statuses,
+  tasks,
+  onChange,
+}) => {
   const [componentSize, setComponentSize] = useState('default');
-  const [responses, setResponses] = useState([]);
-  const [services, setServices] = useState();
-  let code_types = [];
-  let customers = [];
-  let code_services = [];
-  let code_statuses = [];
-  let code_tasks = [];
-  const navigate = useNavigate();
+  const [service, setService] = useState();
   const onFormLayoutChange = ({ size }) => {
     setComponentSize(size);
   };
+  const customers = [
+    { id: 1, name: 'crea' },
+    { id: 2, name: 'cwcc' },
+  ];
 
-  useEffect(() => {
-    axios
-      .all([
-        axios.get(`${API_URL}/code-types`),
-        axios.get(`${API_URL}/customers`),
-        axios.get(`${API_URL}/code-services`),
-        axios.get(`${API_URL}/code-statuses`),
-        axios.get(`${API_URL}/code-tasks`),
-      ])
-      .then(
-        // axios.spread((res1, res2) => {
-        //     console.log(res1.data, res2.data)
-        // })
-        axios.spread((...responses) => {
-          setResponses(responses);
-        }),
-      )
-      .catch((error) => {
-        console.error('에러발생 : ', error);
-      });
-  }, []);
+  //   const onChange = (item) => {
+  //     const getTasks = code_tasks.filter((v) => v.code_service.id === item);
+  //     setService(getTasks);
+  //   };
 
-  if (responses.length > 1) {
-    code_types = responses[0].data;
-    customers = responses[1].data;
-    code_services = responses[2].data;
-    code_statuses = responses[3].data;
-    code_tasks = responses[4].data;
-  }
-
-  const onSubmit = (values) => {
-    console.log(values);
-    const webtoken =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNjQwNzQ1NTU5LCJleHAiOjE2NDMzMzc1NTl9.bBOShlCgI9p-VjkUGcOAGyuRbbQhaKD789yUWRJsSeQ';
-    axios
-      .post(
-        `${API_URL}/projects`,
-        {
-          customer: values.customer,
-          code_type: values.type,
-          name: values.project,
-          code_service: values.service,
-          code_status: values.status,
-          price: parseInt(values.price),
-          planStartDate: values.startDate,
-          Users_permissions_user: 'crea',
-        },
-        {
-          headers: {
-            Authorization: 'Bearer ' + webtoken,
-          },
-        },
-      )
-      .then((result) => {
-        axios_post(result.data.id, values);
-        navigate('/');
-      })
-      .catch((error) => {
-        console.error(error);
-        message.error(`에러가 발생했습니다.  ${error.message}`);
-      });
-  };
-
-  //task 별 작업시간 data 추가
-  const axios_post = (id, values) => {
-    console.log(id);
-    console.log('services>>>>', services);
-    console.log('values>>>>', values);
-    services.map((service, index) => {
-      axios.post(`${API_URL}/worktime-mgrs`, {
-        project: id,
-        code_task: service.id,
-        planTime: values[service.code],
-      });
+  // 서비스 선택시 task 정보 생성
+  if (tasks) {
+    const workTimeForm = tasks.map((list, index) => {
+      return (
+        <Form.Item label={list.name} key={index}>
+          <Form.Item
+            name={list.code}
+            style={{ display: 'inline-block', width: 'calc(50% - 8px)' }}
+          >
+            <InputNumber />
+          </Form.Item>
+          <Form.Item
+            name="11"
+            style={{ display: 'inline-block', width: 'calc(50% - 8px)' }}
+          >
+            <InputNumber />
+          </Form.Item>
+        </Form.Item>
+      );
     });
-  };
-
-  const onChange = (item) => {
-    const getTasks = code_tasks.filter((v) => v.code_service.id === item);
-    setServices(getTasks);
-  };
+  }
 
   return (
     <>
-      <h1>프로젝트 등록 페이지</h1>
-      <hr></hr>
       <Form
         labelCol={{
           span: 4,
@@ -173,6 +118,7 @@ const ProjectPage = () => {
           />
         </Form.Item>
         <Form.Item label="서비스" name="service">
+          {/* 서비스 선택시..reduce update 적용 필요 */}
           <Select onChange={onChange}>
             {code_services.map((service, index) => {
               return (
@@ -203,31 +149,37 @@ const ProjectPage = () => {
         <Form.Item label="비고" name="description">
           <Input.TextArea size="large" id="description" />
         </Form.Item>
-        <Divider />
-        {services !== undefined ? (
-          services.map((code, index) => {
+        {/* {ProjectTaskForm 추가..}} */}
+        {tasks ? (
+          tasks.map((list, index) => {
             return (
-              <Form.Item key={index} label={code.name} name={code.code}>
-                <InputNumber />
+              <Form.Item label={list.name} key={index}>
+                <Form.Item
+                  name={list.code}
+                  style={{ display: 'inline-block', width: 'calc(50% - 8px)' }}
+                >
+                  <InputNumber />
+                </Form.Item>
+                <Form.Item
+                  name="11"
+                  style={{ display: 'inline-block', width: 'calc(50% - 8px)' }}
+                >
+                  <InputNumber />
+                </Form.Item>
               </Form.Item>
             );
           })
         ) : (
-          <h1>로딩중2</h1>
+          <h1>서비스 입력 대기중</h1>
         )}
-        <Divider />
-        <Form.Item label="Switch" valuePropName="checked">
-          <Switch />
-        </Form.Item>
         <Form.Item>
           <Button id="submit-button" size="large" htmlType="submit">
             Submit
           </Button>
         </Form.Item>
-        <Divider />
       </Form>
     </>
   );
 };
 
-export default ProjectPage;
+export default ProjectForm;

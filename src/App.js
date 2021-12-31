@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 
 //page import
 import SiteHeader from './components/SiteHeader';
-import Home from './pages/Home';
+import MainPage from './pages/MainPage';
 import ProjectPage from './pages/ProjectPage';
 import CustomerPage from './pages/CustomerPage';
 import WorkPage from './pages/WorkPage';
@@ -15,7 +15,7 @@ import AntdPage from './pages/Antd';
 import ProjectView from './pages/ProjectView';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
-import HeaderContainer from './containers/common/HeaderContainer';
+import AddPorjectPage from './pages/AddPorjectPage';
 
 
 function App() {
@@ -24,12 +24,11 @@ function App() {
 
   return (
     <>
-      <HeaderContainer />
-      <SiteHeader />
       <Routes>
-        <Route path='/' element={<Home />} />
+        <Route path='/' element={<MainPage />} />
         <Route path='/project' element={<ProjectPage />} />
         <Route path='/project/:id' element={<ProjectView />} />
+        <Route path='/addproject/' element={<AddPorjectPage />} />
         <Route path='/customer' element={<CustomerPage />} />
         <Route path='/work' element={<WorkPage />} />
         <Route path='/antd' element={<AntdPage />} />
