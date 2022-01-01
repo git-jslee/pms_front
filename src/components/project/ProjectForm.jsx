@@ -15,13 +15,13 @@ import {
 } from 'antd';
 
 const ProjectForm = ({
-  onSubmit,
   code_types,
   // code_tasks,
   code_services,
   code_statuses,
   tasks,
   onChange,
+  onSubmit,
 }) => {
   const [componentSize, setComponentSize] = useState('default');
   const [service, setService] = useState();

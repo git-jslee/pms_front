@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getCodebook } from '../../modules/codebook';
 import ProjectForm from '../../components/project/ProjectForm';
 import { selectedService } from '../../modules/addPorject';
+import { apiAddProject, apiAddProjectTasks } from '../../lib/api/api';
+import axios from 'axios';
 
 const ProjectFormContainer = () => {
   const dispatch = useDispatch();
@@ -29,6 +31,12 @@ const ProjectFormContainer = () => {
   const tasks = serviceId
     ? code_tasks.filter((v) => v.code_service.id === serviceId)
     : null;
+
+  //웹토큰 가져오기..값 변경시에만 실행되게 설정 변경..
+  const { auth } = useSelector(({ auth }) => ({
+    jwt: auth.auth,
+  }));
+  console.log('>>auth>>', auth);
 
   // code_task 정보 가져오기 & 선택된 서비스ID 에 해당되는 task 만들기
   //   if (serviceId) {
@@ -68,6 +76,42 @@ const ProjectFormContainer = () => {
     );
   };
 
+  // 프로젝트 등록 기능 구현//redux 사용 안함
+  const onSubmit = (values) => {
+    console.log('>>>onSubmit>>>', values);
+    const auth =
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNjQxMDA4NzE5LCJleHAiOjE2NDM2MDA3MTl9.axMN2VemKxDxPeZJ_zfvhGm8FmMUVd5MkPe_lED0ocM';
+    const datas = [
+      {
+        customer: values.customer,
+        code_type: values.type,
+        name: values.project,
+        code_service: values.service,
+        code_status: values.status,
+        price: parseInt(values.price),
+        planStartDate: values.startDate,
+      },
+      {
+        headers: {
+          Authorization: 'Bearer ' + auth,
+        },
+      },
+    ];
+    // axios
+    //   .post('http://192.168.20.99:1337/projects', datas, {
+    //     headers: {
+    //       Authorization: 'Bearer ' + auth,
+    //     },
+    //   })
+    //   .then((result) => {
+    //     console.log('등록 성공');
+    //   })
+    //   .catch((error) => {
+    //     console.log(`에러가 발생했습니다.  ${error.message}`);
+    //   });
+    apiAddProject(datas, values, tasks, code_tasks);
+  };
+
   return (
     <>
       {code_types ? (
@@ -78,6 +122,7 @@ const ProjectFormContainer = () => {
           code_tasks={code_tasks}
           tasks={tasks}
           onChange={onChange}
+          onSubmit={onSubmit}
         />
       ) : (
         <h1>로딩중</h1>
