@@ -13,22 +13,18 @@ import {
   Divider,
   message,
 } from 'antd';
-import ProjectTaskForm from './ProjectTaskForm';
 
-const ProjectForm = ({
+const ProjectFormView = ({
   code_types,
-  code_tasks,
+  // code_tasks,
   code_services,
   code_statuses,
-  // tasks,
-  // onChange,
-  // onSubmit,
-  projectInfo,
-  projectTaskInfo,
-  formInitValues,
-  editdisabled,
+  tasks,
+  onChange,
+  onSubmit,
 }) => {
   const [componentSize, setComponentSize] = useState('default');
+  const [service, setService] = useState();
   const onFormLayoutChange = ({ size }) => {
     setComponentSize(size);
   };
@@ -36,9 +32,6 @@ const ProjectForm = ({
     { id: 1, name: 'crea' },
     { id: 2, name: 'cwcc' },
   ];
-  const projectTask = projectInfo.project_tasks;
-  console.log('>>>projectInfo>>>>', projectInfo);
-  console.log('>>>codeTask>>>>', code_tasks);
 
   //   const onChange = (item) => {
   //     const getTasks = code_tasks.filter((v) => v.code_service.id === item);
@@ -46,26 +39,26 @@ const ProjectForm = ({
   //   };
 
   // 서비스 선택시 task 정보 생성
-  // if (tasks) {
-  //   const workTimeForm = tasks.map((list, index) => {
-  //     return (
-  //       <Form.Item label={list.name} key={index}>
-  //         <Form.Item
-  //           name={list.code}
-  //           style={{ display: 'inline-block', width: 'calc(50% - 8px)' }}
-  //         >
-  //           <InputNumber />
-  //         </Form.Item>
-  //         <Form.Item
-  //           name="11"
-  //           style={{ display: 'inline-block', width: 'calc(50% - 8px)' }}
-  //         >
-  //           <InputNumber />
-  //         </Form.Item>
-  //       </Form.Item>
-  //     );
-  //   });
-  // }
+  if (tasks) {
+    const workTimeForm = tasks.map((list, index) => {
+      return (
+        <Form.Item label={list.name} key={index}>
+          <Form.Item
+            name={list.code}
+            style={{ display: 'inline-block', width: 'calc(50% - 8px)' }}
+          >
+            <InputNumber />
+          </Form.Item>
+          <Form.Item
+            name="11"
+            style={{ display: 'inline-block', width: 'calc(50% - 8px)' }}
+          >
+            <InputNumber />
+          </Form.Item>
+        </Form.Item>
+      );
+    });
+  }
 
   return (
     <>
@@ -73,20 +66,14 @@ const ProjectForm = ({
         labelCol={{
           span: 4,
         }}
-        // onFinish={onSubmit}
+        onFinish={onSubmit}
         wrapperCol={{
           span: 14,
         }}
         layout="horizontal"
-        // initialValues={{
-        //   size: componentSize,
-        //   type: projectInfo.code_type.id,
-        //   customer: projectInfo.customer.id,
-        //   project: projectInfo.name,
-        //   service: projectInfo.code_service.id,
-        //   status: projectInfo.code_status.id,
-        // }}
-        initialValues={formInitValues}
+        initialValues={{
+          size: componentSize,
+        }}
         onValuesChange={onFormLayoutChange}
         size={componentSize}
       >
@@ -98,7 +85,7 @@ const ProjectForm = ({
           </Radio.Group>
         </Form.Item>
         <Form.Item label="구분" name="type">
-          <Select disabled={editdisabled}>
+          <Select>
             {code_types.map((type, index) => {
               return (
                 <Select.Option key={index} value={type.id}>
@@ -109,7 +96,7 @@ const ProjectForm = ({
           </Select>
         </Form.Item>
         <Form.Item label="고객사" name="customer">
-          <Select disabled={editdisabled}>
+          <Select>
             {customers.map((customer, index) => {
               return (
                 <Select.Option key={index} value={customer.id}>
@@ -125,7 +112,6 @@ const ProjectForm = ({
           rules={[{ required: true, message: '프로젝트명을 입력해 주세요.' }]}
         >
           <Input
-            disabled={editdisabled}
             className="project-name"
             size="large"
             placeholder="프로젝트명을 입력해 주세요!!"
@@ -133,7 +119,7 @@ const ProjectForm = ({
         </Form.Item>
         <Form.Item label="서비스" name="service">
           {/* 서비스 선택시..reduce update 적용 필요 */}
-          <Select disabled={editdisabled}>
+          <Select onChange={onChange}>
             {code_services.map((service, index) => {
               return (
                 <Select.Option key={index} value={service.id}>
@@ -144,7 +130,7 @@ const ProjectForm = ({
           </Select>
         </Form.Item>
         <Form.Item label="상태" name="status">
-          <Select disabled={editdisabled}>
+          <Select>
             {code_statuses.map((status, index) => {
               return (
                 <Select.Option key={index} value={status.id}>
@@ -155,39 +141,45 @@ const ProjectForm = ({
           </Select>
         </Form.Item>
         <Form.Item label="시작일" name="startDate">
-          <DatePicker disabled={editdisabled} />
+          <DatePicker />
         </Form.Item>
         <Form.Item label="수주금액" name="price">
-          <InputNumber disabled={editdisabled} />
+          <InputNumber />
         </Form.Item>
         <Form.Item label="비고" name="description">
-          <Input.TextArea
-            size="large"
-            id="description"
-            disabled={editdisabled}
-          />
+          <Input.TextArea size="large" id="description" />
         </Form.Item>
         {/* {ProjectTaskForm 추가..}} */}
-        {projectTaskInfo ? (
-          <ProjectTaskForm
-            code_tasks={code_tasks}
-            service_id={projectInfo.code_service.id}
-            projectTask={projectTask}
-            projectTaskInfo={projectTaskInfo}
-            editdisabled={editdisabled}
-          />
+        {tasks ? (
+          tasks.map((list, index) => {
+            return (
+              <Form.Item label={list.name} key={index}>
+                <Form.Item
+                  name={list.code}
+                  style={{ display: 'inline-block', width: 'calc(50% - 8px)' }}
+                >
+                  <InputNumber />
+                </Form.Item>
+                <Form.Item
+                  name="11"
+                  style={{ display: 'inline-block', width: 'calc(50% - 8px)' }}
+                >
+                  <InputNumber />
+                </Form.Item>
+              </Form.Item>
+            );
+          })
         ) : (
-          <h1>로딩중</h1>
+          <h1>서비스 입력 대기중</h1>
         )}
-        <Divider />
-        {/* <Form.Item>
+        <Form.Item>
           <Button id="submit-button" size="large" htmlType="submit">
             Submit
           </Button>
-        </Form.Item> */}
+        </Form.Item>
       </Form>
     </>
   );
 };
 
-export default ProjectForm;
+export default ProjectFormView;

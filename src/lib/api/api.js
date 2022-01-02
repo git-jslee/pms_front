@@ -28,15 +28,22 @@ export const apiCodebook = () =>
   ]);
 
 // 프로젝트 리스트
-export const apiProjects = () => axios.get(`${API_URL}/projects`);
+export const apiProjectList = () => axios.get(`${API_URL}/projects`);
+
+// 프로젝트 View
+export const apiProject = (id) => axios.get(`${API_URL}/projects/${id}`);
+
+// 프로젝트 Task
+export const apiProjectTaskId = (id) =>
+  axios.get(`${API_URL}/project-tasks?project.id=${id}`);
 
 // 프로젝트 등록
-export const apiAddProject = (datas, values, tasks, code_tasks) =>
+export const apiAddProject = (datas, values, tasks) =>
   axios
     .post(`${API_URL}/projects`, ...datas)
     .then((result) => {
       console.log('>>프로젝트 등록 성공');
-      tasks.map((task, index) => {
+      tasks.map((task) => {
         axios.post(`${API_URL}/project-tasks`, {
           project: result.data.id,
           code_task: task.id,
@@ -45,6 +52,9 @@ export const apiAddProject = (datas, values, tasks, code_tasks) =>
         console.log('>>task>>', task);
         console.log('>>planTime>>', values);
       });
+    })
+    .then(() => {
+      console.log('Project Tasks 등록 성공');
     })
     .catch((error) => {
       console.error(`에러가 발생했습니다.  ${error.message}`);

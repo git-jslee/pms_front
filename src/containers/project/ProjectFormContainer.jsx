@@ -1,12 +1,13 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCodebook } from '../../modules/codebook';
-import ProjectForm from '../../components/project/ProjectForm';
+import ProjectFormView from '../../components/project/ProjectFormView';
 import { selectedService } from '../../modules/addPorject';
 import { apiAddProject, apiAddProjectTasks } from '../../lib/api/api';
-import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const ProjectFormContainer = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const {
     code_types,
@@ -109,13 +110,14 @@ const ProjectFormContainer = () => {
     //   .catch((error) => {
     //     console.log(`에러가 발생했습니다.  ${error.message}`);
     //   });
-    apiAddProject(datas, values, tasks, code_tasks);
+    apiAddProject(datas, values, tasks);
+    navigate('/project');
   };
 
   return (
     <>
       {code_types ? (
-        <ProjectForm
+        <ProjectFormView
           code_types={code_types}
           code_services={code_services}
           code_statuses={code_statuses}
