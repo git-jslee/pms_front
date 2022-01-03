@@ -5,6 +5,7 @@ import projectlist from './projectList';
 import codebook from './codebook';
 import addProject from './addPorject';
 import project from './projectForm';
+import customerList from './customerList';
 
 const rootReducer = combineReducers({
   auth,
@@ -13,6 +14,7 @@ const rootReducer = combineReducers({
   codebook,
   addProject,
   project,
+  customerList,
 });
 
 export default rootReducer;

@@ -62,3 +62,12 @@ export const apiAddProject = (datas, values, tasks) =>
 
 // 프로젝트 tasks 등록
 export const apiAddProjectTasks = () => axios.post(`${API_URL}/project-tasks`);
+
+// 고객 정보 조회
+export const apiCustomerList = () =>
+  axios.get(`${API_URL}
+/customers`);
+
+// 고객 등록
+export const apiAddCustomer = (data) =>
+  axios.post(`${API_URL}/customers`, data);

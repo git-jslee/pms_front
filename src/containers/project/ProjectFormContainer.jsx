@@ -1,13 +1,18 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCodebook } from '../../modules/codebook';
 import ProjectFormView from '../../components/project/ProjectFormView';
 import { selectedService } from '../../modules/addPorject';
-import { apiAddProject, apiAddProjectTasks } from '../../lib/api/api';
+import {
+  apiAddProject,
+  apiAddProjectTasks,
+  apiCustomerList,
+} from '../../lib/api/api';
 import { useNavigate } from 'react-router-dom';
 
 const ProjectFormContainer = () => {
   const navigate = useNavigate();
+  const [customers, setCustomers] = useState('');
   const dispatch = useDispatch();
   const {
     code_types,
@@ -21,7 +26,7 @@ const ProjectFormContainer = () => {
     code_services: codebook.code_services,
     code_statuses: codebook.code_statuses,
     code_tasks: codebook.code_tasks,
-    status: codebook.stagus,
+    status: codebook.status,
     error: codebook.error,
   }));
 
@@ -50,6 +55,18 @@ const ProjectFormContainer = () => {
   useEffect(() => {
     dispatch(getCodebook());
   }, [dispatch]);
+
+  // 컴포넌트 렌더링시 고객 정보 가져오기..redux 사용안함
+  useEffect(() => {
+    apiCustomerList()
+      .then((result) => {
+        setCustomers(result.data);
+      })
+      .catch((error) => {
+        console.error('에러발생', error);
+      });
+  }, []);
+  console.log('>>>customers>>', customers);
 
   //   컴포넌트가 처음 렌더링 될 때 serviceType 디스패치
   useEffect(() => {
@@ -116,12 +133,13 @@ const ProjectFormContainer = () => {
 
   return (
     <>
-      {code_types ? (
+      {code_types && customers ? (
         <ProjectFormView
           code_types={code_types}
           code_services={code_services}
           code_statuses={code_statuses}
           code_tasks={code_tasks}
+          customers={customers}
           tasks={tasks}
           onChange={onChange}
           onSubmit={onSubmit}

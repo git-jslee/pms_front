@@ -20,6 +20,7 @@ const ProjectFormView = ({
   code_services,
   code_statuses,
   tasks,
+  customers,
   onChange,
   onSubmit,
 }) => {
@@ -28,10 +29,6 @@ const ProjectFormView = ({
   const onFormLayoutChange = ({ size }) => {
     setComponentSize(size);
   };
-  const customers = [
-    { id: 1, name: 'crea' },
-    { id: 2, name: 'cwcc' },
-  ];
 
   //   const onChange = (item) => {
   //     const getTasks = code_tasks.filter((v) => v.code_service.id === item);

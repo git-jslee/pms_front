@@ -41,6 +41,7 @@ const codebook = handleActions(
       code_services: payload[1].data,
       code_statuses: payload[2].data,
       code_tasks: payload[3].data,
+      status: true,
     }),
     // 코드북 조회 실패
     [CODEBOOK_FAILURE]: (state, { payload, error }) => ({
