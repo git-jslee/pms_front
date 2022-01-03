@@ -16,6 +16,7 @@ import ProjectView from './pages/ProjectView';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import AddPorjectPage from './pages/AddPorjectPage';
+import AddCustomerPage from './pages/AddCustomerPage';
 
 function App() {
   const { user } = useSelector(({ auth }) => ({ user: auth.auth }));
@@ -29,6 +30,7 @@ function App() {
         <Route path="/project/:id" element={<ProjectViewPage />} />
         <Route path="/addproject/" element={<AddPorjectPage />} />
         <Route path="/customer" element={<CustomerPage />} />
+        <Route path="/addcustomer" element={<AddCustomerPage />} />
         <Route path="/work" element={<WorkPage />} />
         <Route path="/antd" element={<AntdPage />} />
         <Route path="/login" element={<LoginPage />} />
