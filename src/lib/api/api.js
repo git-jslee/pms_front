@@ -60,6 +60,15 @@ export const apiAddProject = (datas, values, tasks) =>
       console.error(`에러가 발생했습니다.  ${error.message}`);
     });
 
+// 프로젝트 카운트
+export const apiProjectCount = () =>
+  axios.all([
+    axios.get(`${API_URL}/projects/count?code_status.id=1`),
+    axios.get(`${API_URL}/projects/count?code_status.id=2`),
+    axios.get(`${API_URL}/projects/count?code_status.id=3`),
+    axios.get(`${API_URL}/projects/count?code_status.id=4`),
+  ]);
+
 // 프로젝트 tasks 등록
 export const apiAddProjectTasks = () => axios.post(`${API_URL}/project-tasks`);
 
