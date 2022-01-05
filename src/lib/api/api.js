@@ -27,6 +27,9 @@ export const apiCodebook = () =>
     axios.get(`${API_URL}/code-tasks`),
   ]);
 
+// 코드 진행상태 - code-progresses
+export const apiCodeProgress = () => axios.get('/code-progresses');
+
 // 프로젝트 리스트
 export const apiProjectList = () => axios.get(`${API_URL}/projects`);
 
@@ -72,6 +75,10 @@ export const apiProjectCount = () =>
 // 프로젝트 tasks 등록
 export const apiAddProjectTasks = () => axios.post(`${API_URL}/project-tasks`);
 
+// 고객사&진행중 프로젝트 리스트
+export const apiCustomer_ProjectList = (id) =>
+  axios.get(`${API_URL}/projects?customer.id=${id}&code_status.id=2`);
+
 // 고객 정보 조회
 export const apiCustomerList = () =>
   axios.get(`${API_URL}
@@ -80,3 +87,15 @@ export const apiCustomerList = () =>
 // 고객 등록
 export const apiAddCustomer = (data) =>
   axios.post(`${API_URL}/customers`, data);
+
+// 작업 등록
+export const apiAddWork = (datas) => axios.post(`${API_URL}/works`, ...datas);
+
+// 작업 리스트
+export const apiWorkList = () => axios.get(`${API_URL}/works`);
+
+// 사용자별 작업 조회
+// works?user_info.users_permissions_user=3
+
+// 사용자 리스트
+export const apiUserList = () => axios.get(`${API_URL}/user-infos`);

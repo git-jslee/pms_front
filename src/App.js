@@ -17,6 +17,8 @@ import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import AddPorjectPage from './pages/AddPorjectPage';
 import AddCustomerPage from './pages/AddCustomerPage';
+import WorkFormPage from './pages/WorkFormPage';
+import AddWorkFormPage from './pages/AddWorkFormPage';
 
 function App() {
   const { user } = useSelector(({ auth }) => ({ user: auth.auth }));
@@ -31,7 +33,8 @@ function App() {
         <Route path="/addproject/" element={<AddPorjectPage />} />
         <Route path="/customer" element={<CustomerPage />} />
         <Route path="/addcustomer" element={<AddCustomerPage />} />
-        <Route path="/work" element={<WorkPage />} />
+        <Route path="/work" element={<WorkFormPage />} />
+        <Route path="/addwork" element={<AddWorkFormPage />} />
         <Route path="/antd" element={<AntdPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
