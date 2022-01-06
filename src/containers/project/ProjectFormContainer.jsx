@@ -52,9 +52,10 @@ const ProjectFormContainer = () => {
   //   }
 
   // 컴포넌트가 처음 렌더링 될 때 codebook 디스패치
-  useEffect(() => {
-    dispatch(getCodebook());
-  }, [dispatch]);
+  // codebook container 로 기능 이관 22/01/06
+  // useEffect(() => {
+  //   dispatch(getCodebook());
+  // }, [dispatch]);
 
   // 컴포넌트 렌더링시 고객 정보 가져오기..redux 사용안함
   useEffect(() => {

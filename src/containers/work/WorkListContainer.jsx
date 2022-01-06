@@ -12,6 +12,7 @@ const WorkListContainer = () => {
     code_tasks: codebook.code_tasks,
   }));
   console.log('code_tasks: ', code_tasks);
+
   // 컴포넌트 렌더링 시 작업 리스트 정보 가져옴
   useEffect(() => {
     apiWorkList(selectedUserId)
@@ -26,7 +27,7 @@ const WorkListContainer = () => {
   return (
     <>
       {workList && selectedUserId ? (
-        <WorkListTable lists={workList} />
+        <WorkListTable lists={workList} code_tasks={code_tasks} />
       ) : (
         <div>로딩중</div>
       )}

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Table, Button, Space } from 'antd';
 
-const WorkListTable = ({ lists }) => {
+const WorkListTable = ({ lists, code_tasks }) => {
   console.log('worklisttable', lists);
   const columns = [
     {
@@ -73,13 +73,21 @@ const WorkListTable = ({ lists }) => {
 
   const tableData = [];
   const tableList = lists.map((list, index) => {
+    console.log('1.code_tasks', code_tasks);
+    console.log('2-1.list_name', list.project_task.code_task);
+    // task ID 에서 code_tasks 활용하여 task name 추출
+    const taskName = code_tasks.filter(
+      (code) => code.id === list.project_task.code_task,
+    );
+    console.log('taskName', taskName);
+
     const array = {
       key: list.id,
       id: list.id,
       customer: list.customer.name,
       projectName: list.project.name,
-      service: '',
-      task: '',
+      service: taskName[0].code_service.code,
+      task: taskName[0].name,
       user: list.user_info.name,
       workingDay: list.workingDay,
       workingTime: list.workingTime,
