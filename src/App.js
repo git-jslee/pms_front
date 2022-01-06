@@ -1,7 +1,7 @@
 import 'antd/dist/antd.css';
 import './App.css';
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 //page import
@@ -21,13 +21,16 @@ import WorkFormPage from './pages/WorkFormPage';
 import AddWorkFormPage from './pages/AddWorkFormPage';
 
 function App() {
-  const { user } = useSelector(({ auth }) => ({ user: auth.auth }));
-  // if (!user) {return <LoginPage /> }
+  // const { user } = useSelector(({ auth }) => ({ user: auth.auth }));
+  // if (!user) {
+  //   return <LoginPage />;
+  // }
 
   return (
     <>
       <Routes>
         <Route path="/" element={<MainPage />} />
+        {/* <Route path="/" element={<ProjectPage />} /> */}
         <Route path="/project" element={<ProjectPage />} />
         <Route path="/project/:id" element={<ProjectViewPage />} />
         <Route path="/addproject/" element={<AddPorjectPage />} />

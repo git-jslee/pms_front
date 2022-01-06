@@ -1,19 +1,8 @@
 import React, { useState } from 'react';
-import {
-  Form,
-  Input,
-  Table,
-  Button,
-  Radio,
-  Select,
-  DatePicker,
-  InputNumber,
-  Divider,
-  message,
-  Space,
-} from 'antd';
+import { Table, Button, Space } from 'antd';
 
 const WorkListTable = ({ lists }) => {
+  console.log('worklisttable', lists);
   const columns = [
     {
       title: 'ID',
@@ -93,7 +82,7 @@ const WorkListTable = ({ lists }) => {
       task: '',
       user: list.user_info.name,
       workingDay: list.workingDay,
-      workingTime: lists.workingTime,
+      workingTime: list.workingTime,
       action: 'View',
     };
     tableData.push(array);

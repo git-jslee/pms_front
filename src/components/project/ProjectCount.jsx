@@ -10,7 +10,7 @@ const ProjectCount = ({ count }) => {
         <span>[보류: {count[2].data}건] .. </span>
         <span>[시작전: {count[0].data}건] .. </span>
       </div> */}
-      <ul class="serviceStats stats6 clearfix">
+      <ul className="serviceStats stats6 clearfix">
         <li>
           <p className="tit">완료</p>
           <p className="num">

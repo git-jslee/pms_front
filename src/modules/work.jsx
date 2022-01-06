@@ -4,6 +4,7 @@ import { createAction, handleActions } from 'redux-actions';
 const SET_CUSTOMER = 'work/SET_CUSTOMER';
 const SET_PROJECT = 'work/SET_PROJECT';
 const SET_TASK = 'work/SET_TASK';
+const SET_WORKER = 'work/SET_WORKER';
 
 export const setCustomer = createAction(
   SET_CUSTOMER,
@@ -11,6 +12,7 @@ export const setCustomer = createAction(
 );
 export const setProject = createAction(SET_PROJECT, (projectId) => projectId);
 export const setTask = createAction(SET_TASK, (taskId) => taskId);
+export const set_worker = createAction(SET_WORKER, (userInfoId) => userInfoId);
 
 const initialState = {
   customerId: null,
@@ -56,6 +58,10 @@ const work = handleActions(
         progress: false,
       },
       progress: action.payload.progress,
+    }),
+    [SET_WORKER]: (state, action) => ({
+      ...state,
+      selectedUserId: action.payload.userInfoId,
     }),
   },
   initialState,

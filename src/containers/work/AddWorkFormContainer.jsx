@@ -39,7 +39,7 @@ const AddWorkFormContainer = () => {
 
   // 2. Form 에서 고객 선택시
   const customerOnChange = (id) => {
-    console.log('2.고객 선택', id);
+    // console.log('2.고객 선택', id);
 
     // 고객정보 디스패치
     dispatch(setCustomer({ customerId: id }));
@@ -66,7 +66,7 @@ const AddWorkFormContainer = () => {
     // 프로젝트(서비스)에 해당하는 task 데이터 가져오기
     apiProjectTaskId(id)
       .then((result) => {
-        console.log('3.1 task 정보', result.data);
+        // console.log('3.1 task 정보', result.data);
         setTasks(result.data);
         dispatch(setTask({ taskId: 888 }));
       })
@@ -77,11 +77,11 @@ const AddWorkFormContainer = () => {
 
   // 4. 프로젝트 선태 후 Task 선택 시
   const taskOnChange = (id) => {
-    console.log('4.Task 선택', id);
+    // console.log('4.Task 선택', id);
     // 진행상태 데이터 가져오기
     apiCodeProgress()
       .then((result) => {
-        console.log('4-1. progress 정보', result.data);
+        // console.log('4-1. progress 정보', result.data);
         setProgress(result.data);
       })
       .catch((error) => {
@@ -91,7 +91,7 @@ const AddWorkFormContainer = () => {
 
   // onSubmit
   const onSubmit = (values) => {
-    console.log('submit', values);
+    // console.log('submit', values);
     const auth =
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNjQxMDA4NzE5LCJleHAiOjE2NDM2MDA3MTl9.axMN2VemKxDxPeZJ_zfvhGm8FmMUVd5MkPe_lED0ocM';
     const datas = [
