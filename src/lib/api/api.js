@@ -93,8 +93,9 @@ export const apiAddWork = (datas) => axios.post(`${API_URL}/works`, ...datas);
 
 // 작업 리스트
 // /works?user_info.id=1
+// 정렬...works?_sort=workingDay:DESC
 export const apiWorkList = (id) =>
-  axios.get(`${API_URL}/works?user_info.id=${id}`);
+  axios.get(`${API_URL}/works?user_info.id=${id}&_sort=workingDay:DESC`);
 
 // 사용자별 작업 조회
 // works?user_info.users_permissions_user=3
