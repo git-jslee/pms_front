@@ -30,11 +30,18 @@ export const apiCodebook = () =>
 // 코드 진행상태 - code-progresses
 export const apiCodeProgress = () => axios.get('/code-progresses');
 
+// getList
+export const getList = (path) => axios.get(`${API_URL}/${path}`);
+
 // 프로젝트 리스트
 export const apiProjectList = () => axios.get(`${API_URL}/projects`);
 
 // 프로젝트 View
 export const apiProject = (id) => axios.get(`${API_URL}/projects/${id}`);
+
+// insert
+export const apiInsert = (path, auth_data) =>
+  axios.post(`${API_URL}/${path}`, ...auth_data);
 
 // 프로젝트 Task
 export const apiProjectTaskId = (id) =>

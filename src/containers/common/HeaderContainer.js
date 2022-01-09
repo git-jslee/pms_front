@@ -4,20 +4,17 @@ import Header from '../../components/common/Header';
 import { logout } from '../../modules/auth';
 
 const HeaderContainer = () => {
-    const { user } = useSelector(({ auth }) => ({ user: auth.auth}));
-    const dispatch = useDispatch();
-    const onLogout = () => {
-        dispatch(logout());
-        try {
-            sessionStorage.removeItem('user'); //세션 스토리지에서 user 제거
-        } catch (e) {
-            console.log(e);
-        }
+  const { user } = useSelector(({ auth }) => ({ user: auth.auth }));
+  const dispatch = useDispatch();
+  const onLogout = () => {
+    dispatch(logout());
+    try {
+      sessionStorage.removeItem('user'); //세션 스토리지에서 user 제거
+    } catch (e) {
+      console.log(e);
     }
-    return (
-        <Header user={user} onLogout={onLogout} />
-        // <Header />
-    );
+  };
+  return <Header user={user} onLogout={onLogout} />;
 };
 
 export default HeaderContainer;

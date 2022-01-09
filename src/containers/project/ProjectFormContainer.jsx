@@ -9,6 +9,7 @@ import {
   apiCustomerList,
 } from '../../lib/api/api';
 import { useNavigate } from 'react-router-dom';
+import tbl_insert from '../../modules/tbl_insert';
 
 const ProjectFormContainer = () => {
   const navigate = useNavigate();
@@ -40,7 +41,7 @@ const ProjectFormContainer = () => {
 
   //웹토큰 가져오기..값 변경시에만 실행되게 설정 변경..
   const { auth } = useSelector(({ auth }) => ({
-    jwt: auth.auth,
+    auth: auth.auth,
   }));
   console.log('>>auth>>', auth);
 
@@ -96,10 +97,9 @@ const ProjectFormContainer = () => {
   };
 
   // 프로젝트 등록 기능 구현//redux 사용 안함
-  const onSubmit = (values) => {
-    console.log('>>>onSubmit>>>', values);
-    const auth =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNjQxMDA4NzE5LCJleHAiOjE2NDM2MDA3MTl9.axMN2VemKxDxPeZJ_zfvhGm8FmMUVd5MkPe_lED0ocM';
+  const onSubmit = async (values) => {
+    const jwt = auth.jwt;
+    console.log('jwt', jwt);
     const datas = [
       {
         customer: values.customer,
@@ -112,7 +112,7 @@ const ProjectFormContainer = () => {
       },
       {
         headers: {
-          Authorization: 'Bearer ' + auth,
+          Authorization: 'Bearer ' + jwt,
         },
       },
     ];
@@ -128,13 +128,18 @@ const ProjectFormContainer = () => {
     //   .catch((error) => {
     //     console.log(`에러가 발생했습니다.  ${error.message}`);
     //   });
-    apiAddProject(datas, values, tasks);
-    navigate('/project');
+
+    // apiAddProject(datas, values, tasks); -> 22/1/8일 수정
+    const test = await tbl_insert('projects', datas);
+    console.log('testtesttest', test);
+
+    // navigate('/project');
   };
+  console.log({ auth: auth, customers: customers });
 
   return (
     <>
-      {code_types && customers ? (
+      {auth && customers ? (
         <ProjectFormView
           code_types={code_types}
           code_services={code_services}
@@ -146,7 +151,7 @@ const ProjectFormContainer = () => {
           onSubmit={onSubmit}
         />
       ) : (
-        <h1>로딩중</h1>
+        <h1>로그인 하세요</h1>
       )}
     </>
   );

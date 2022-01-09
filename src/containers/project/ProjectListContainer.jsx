@@ -5,11 +5,12 @@ import ProjectListTable from '../../components/project/ProjectListTable';
 
 const ProjectListContainer = () => {
   const dispatch = useDispatch();
-  const { data, status, error } = useSelector(({ projectlist }) => ({
+  const { data, error, loading } = useSelector(({ projectlist, loading }) => ({
     data: projectlist.data,
-    status: projectlist.status,
     error: projectlist.error,
+    loading: loading['project_list/GET_PROJECTLIST'],
   }));
+  console.log('loading', loading);
 
   // 컴포넌트가 처음 렌더링 될 때 프로젝트 전체 리스트 정보 가져옴
   // 페이지 이동 후 재 접속시.. 프로젝트 리스트 다시 가져옴...코드 수정 필요..
@@ -22,13 +23,21 @@ const ProjectListContainer = () => {
       console.log('프로젝트 리스트 가져오기 오류');
       console.log(error);
     }
-    if (status) {
-      console.log('프로젝트 리스트 가져오기 성공');
-      console.log(status);
-    }
-  }, [error, status]);
+    // if (status) {
+    //   console.log('프로젝트 리스트 가져오기 성공');
+    //   console.log(status);
+    // }
+  }, [error]);
 
-  return <>{data ? <ProjectListTable lists={data} /> : <div>로딩중</div>}</>;
+  return (
+    <>
+      {loading === false ? (
+        <ProjectListTable lists={data} loading={loading} />
+      ) : (
+        <div>로딩중</div>
+      )}
+    </>
+  );
 };
 
 export default ProjectListContainer;
