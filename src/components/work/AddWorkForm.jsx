@@ -75,8 +75,6 @@ const AddWorkForm = ({
     form.setFieldsValue({ workingDay: moment(today), user_info: userinfo.id });
   }, [form]);
 
-  console.log(']]]]]]', userinfo);
-
   return (
     <>
       <Form

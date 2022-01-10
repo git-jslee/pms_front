@@ -29,8 +29,8 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path="/" element={<MainPage />} />
-        {/* <Route path="/" element={<ProjectPage />} /> */}
+        {/* <Route path="/" element={<MainPage />} /> */}
+        <Route path="/" element={<ProjectPage />} />
         <Route path="/project" element={<ProjectPage />} />
         <Route path="/project/:id" element={<ProjectViewPage />} />
         <Route path="/addproject/" element={<AddPorjectPage />} />

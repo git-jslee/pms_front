@@ -26,7 +26,7 @@ const WorkListContainer = () => {
 
   return (
     <>
-      {workList && selectedUserId ? (
+      {workList && code_tasks && selectedUserId ? (
         <WorkListTable lists={workList} code_tasks={code_tasks} />
       ) : (
         <div>로딩중</div>

@@ -8,7 +8,7 @@ const SiteHeader = () => {
       <Link to="/project">Project</Link>
       <Link to="/work">Work</Link>
       <Link to="/customer">Customer</Link>
-      <Link to="/login">로그인</Link>
+      {/* <Link to="/login">로그인</Link> */}
     </div>
   );
 };

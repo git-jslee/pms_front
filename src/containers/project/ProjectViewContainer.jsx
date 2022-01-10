@@ -68,6 +68,7 @@ const ProjectViewContainer = () => {
   }, []);
 
   // 프로젝트 view 정보 디스패치
+  // 수정 필요...api 호출 2번 하는 문제..
   useEffect(() => {
     dispatch(getProject(projectInfo));
   }, [dispatch]);

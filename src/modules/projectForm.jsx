@@ -8,10 +8,10 @@ const GET_PROJECT_FAILURE = 'project/GET_PROJECT_FAILURE';
 const PROJECT_VALUES = 'project/PROJECT_INITVALUES';
 const CHANGE_EDITMODE = 'project/CHANGE_EDITMODE';
 
-export const getProject = () => async (dispatch) => {
-  const id = 51;
+export const getProject = (id) => async (dispatch) => {
   dispatch({ type: GET_PROJECT });
   try {
+    // 수정 필요 - 프로젝트 정보 2번 호출하는 현상
     const response = await apiProject(id);
     dispatch({
       type: GET_PROJECT_SUCCESS,

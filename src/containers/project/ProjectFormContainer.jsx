@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import moment from 'moment';
 import { getCodebook } from '../../modules/codebook';
 import ProjectFormView from '../../components/project/ProjectFormView';
 import { selectedService } from '../../modules/addPorject';
@@ -43,7 +44,7 @@ const ProjectFormContainer = () => {
   const { auth } = useSelector(({ auth }) => ({
     auth: auth.auth,
   }));
-  console.log('>>auth>>', auth);
+  // console.log('>>auth>>', auth);
 
   // code_task 정보 가져오기 & 선택된 서비스ID 에 해당되는 task 만들기
   //   if (serviceId) {
@@ -68,7 +69,7 @@ const ProjectFormContainer = () => {
         console.error('에러발생', error);
       });
   }, []);
-  console.log('>>>customers>>', customers);
+  // console.log('>>>customers>>', customers);
 
   //   컴포넌트가 처음 렌더링 될 때 serviceType 디스패치
   useEffect(() => {
@@ -100,6 +101,8 @@ const ProjectFormContainer = () => {
   const onSubmit = async (values) => {
     const jwt = auth.jwt;
     console.log('jwt', jwt);
+    const startDate = values.startDate || '';
+    const endDate = values.endDate || '';
     const datas = [
       {
         customer: values.customer,
@@ -107,8 +110,11 @@ const ProjectFormContainer = () => {
         name: values.project,
         code_service: values.service,
         code_status: values.status,
+        planStartDate: moment(values.planDate[0].format('YYYY-MM-DD')),
+        planEndDate: moment(values.planDate[1].format('YYYY-MM-DD')),
+        startDate: moment(startDate),
+        endDate: moment(endDate),
         price: parseInt(values.price),
-        planStartDate: values.startDate,
       },
       {
         headers: {
@@ -130,16 +136,35 @@ const ProjectFormContainer = () => {
     //   });
 
     // apiAddProject(datas, values, tasks); -> 22/1/8일 수정
-    const test = await tbl_insert('projects', datas);
-    console.log('testtesttest', test);
+    console.log('onClick', values);
+    const result = await tbl_insert('projects', datas);
+    console.log('1. project', result.data);
+    tasks.map((task) => {
+      tbl_insert('project-tasks', [
+        {
+          project: result.data.id,
+          code_task: task.id,
+          planTime: values[task.code],
+        },
+        {
+          headers: {
+            Authorization: 'Bearer ' + jwt,
+          },
+        },
+      ]);
+      console.log('>>task>>', task);
+      console.log('>>planTime>>', values);
+    });
 
-    // navigate('/project');
+    // console.log('2. tasks', test2);
+
+    navigate('/project');
   };
   console.log({ auth: auth, customers: customers });
 
   return (
     <>
-      {auth && customers ? (
+      {auth && customers && code_types ? (
         <ProjectFormView
           code_types={code_types}
           code_services={code_services}

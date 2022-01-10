@@ -29,6 +29,7 @@ const ProjectFormView = ({
   const onFormLayoutChange = ({ size }) => {
     setComponentSize(size);
   };
+  const { RangePicker } = DatePicker;
 
   //   const onChange = (item) => {
   //     const getTasks = code_tasks.filter((v) => v.code_service.id === item);
@@ -81,7 +82,7 @@ const ProjectFormView = ({
             <Radio.Button value="large">Large</Radio.Button>
           </Radio.Group>
         </Form.Item>
-        <Form.Item label="구분" name="type">
+        <Form.Item label="구분" name="type" rules={[{ required: true }]}>
           <Select>
             {code_types.map((type, index) => {
               return (
@@ -92,7 +93,7 @@ const ProjectFormView = ({
             })}
           </Select>
         </Form.Item>
-        <Form.Item label="고객사" name="customer">
+        <Form.Item label="고객사" name="customer" rules={[{ required: true }]}>
           <Select>
             {customers.map((customer, index) => {
               return (
@@ -114,7 +115,7 @@ const ProjectFormView = ({
             placeholder="프로젝트명을 입력해 주세요!!"
           />
         </Form.Item>
-        <Form.Item label="서비스" name="service">
+        <Form.Item label="서비스" name="service" rules={[{ required: true }]}>
           {/* 서비스 선택시..reduce update 적용 필요 */}
           <Select onChange={onChange}>
             {code_services.map((service, index) => {
@@ -126,7 +127,7 @@ const ProjectFormView = ({
             })}
           </Select>
         </Form.Item>
-        <Form.Item label="상태" name="status">
+        <Form.Item label="상태" name="status" rules={[{ required: true }]}>
           <Select>
             {code_statuses.map((status, index) => {
               return (
@@ -137,38 +138,45 @@ const ProjectFormView = ({
             })}
           </Select>
         </Form.Item>
+        <Form.Item label="계획일" name="planDate" rules={[{ required: true }]}>
+          <RangePicker />
+        </Form.Item>
         <Form.Item label="시작일" name="startDate">
+          <DatePicker />
+        </Form.Item>
+        <Form.Item label="종료일" name="endDate">
           <DatePicker />
         </Form.Item>
         <Form.Item label="수주금액" name="price">
           <InputNumber />
         </Form.Item>
-        <Form.Item label="비고" name="description">
-          <Input.TextArea size="large" id="description" />
-        </Form.Item>
+
         {/* {ProjectTaskForm 추가..}} */}
+        <Divider />
         {tasks ? (
           tasks.map((list, index) => {
             return (
-              <Form.Item label={list.name} key={index}>
+              <div style={{ display: 'inline-block', width: '300px' }}>
                 <Form.Item
+                  key={list.code}
+                  label={list.name}
                   name={list.code}
-                  style={{ display: 'inline-block', width: 'calc(50% - 8px)' }}
+                  // style={{ display: 'inline-block', width: 'calc(50% - 8px)' }}
+                  style={{ width: '500%' }}
+                  rules={[{ required: true }]}
                 >
                   <InputNumber />
                 </Form.Item>
-                <Form.Item
-                  name="11"
-                  style={{ display: 'inline-block', width: 'calc(50% - 8px)' }}
-                >
-                  <InputNumber />
-                </Form.Item>
-              </Form.Item>
+              </div>
             );
           })
         ) : (
-          <h1>서비스 입력 대기중</h1>
+          <h1>Task 작업 시간</h1>
         )}
+        <Divider />
+        <Form.Item label="비고" name="description">
+          <Input.TextArea size="large" id="description" />
+        </Form.Item>
         <Form.Item>
           <Button id="submit-button" size="large" htmlType="submit">
             Submit

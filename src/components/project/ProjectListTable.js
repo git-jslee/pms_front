@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, Table, Space } from 'antd';
 
-const ProjectListTable = ({ lists }) => {
+const ProjectListTable = ({ lists, loading }) => {
   const navigate = useNavigate();
   const columns = [
     {

@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment';
 
 export const projectInitValues = (projectInfo, projectTaskInfo) => {
   if (projectInfo === '' || projectTaskInfo === '') return {};
@@ -12,6 +13,12 @@ export const projectInitValues = (projectInfo, projectTaskInfo) => {
     project: projectInfo.name,
     service: projectInfo.code_service.id,
     status: projectInfo.code_status.id,
+    planDate: [
+      moment(projectInfo.planStartDate),
+      moment(projectInfo.planEndDate),
+    ],
+    startDate: moment(projectInfo.startDate),
+    endDate: moment(projectInfo.endDate),
     ...obj,
   };
 };

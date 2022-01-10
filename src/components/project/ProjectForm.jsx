@@ -39,6 +39,8 @@ const ProjectForm = ({
   const projectTask = projectInfo.project_tasks;
   console.log('>>>projectInfo>>>>', projectInfo);
   console.log('>>>codeTask>>>>', code_tasks);
+  console.log('formInitValues', formInitValues);
+  const { RangePicker } = DatePicker;
 
   //   const onChange = (item) => {
   //     const getTasks = code_tasks.filter((v) => v.code_service.id === item);
@@ -154,19 +156,19 @@ const ProjectForm = ({
             })}
           </Select>
         </Form.Item>
+        <Form.Item label="계획일" name="planDate">
+          <RangePicker disabled={editdisabled} />
+        </Form.Item>
         <Form.Item label="시작일" name="startDate">
+          <DatePicker disabled={editdisabled} />
+        </Form.Item>
+        <Form.Item label="종료일" name="endDate">
           <DatePicker disabled={editdisabled} />
         </Form.Item>
         <Form.Item label="수주금액" name="price">
           <InputNumber disabled={editdisabled} />
         </Form.Item>
-        <Form.Item label="비고" name="description">
-          <Input.TextArea
-            size="large"
-            id="description"
-            disabled={editdisabled}
-          />
-        </Form.Item>
+        <Divider />
         {/* {ProjectTaskForm 추가..}} */}
         {projectTaskInfo ? (
           <ProjectTaskForm
@@ -185,6 +187,13 @@ const ProjectForm = ({
             Submit
           </Button>
         </Form.Item> */}
+        <Form.Item label="비고" name="description">
+          <Input.TextArea
+            size="large"
+            id="description"
+            disabled={editdisabled}
+          />
+        </Form.Item>
       </Form>
     </>
   );

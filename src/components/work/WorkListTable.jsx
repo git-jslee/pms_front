@@ -72,8 +72,9 @@ const WorkListTable = ({ lists, code_tasks }) => {
   ];
 
   const tableData = [];
+  console.log('1.code_tasks', code_tasks);
+  console.log('1.lists', lists);
   const tableList = lists.map((list, index) => {
-    console.log('1.code_tasks', code_tasks);
     console.log('2-1.list_name', list.project_task.code_task);
     // task ID 에서 code_tasks 활용하여 task name 추출
     const taskName = code_tasks.filter(

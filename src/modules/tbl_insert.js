@@ -1,15 +1,18 @@
 import React from 'react';
 import { apiInsert } from '../lib/api/api';
+import * as api from '../lib/api/api';
 
-const tbl_insert = async (path, auth_data) => {
+const tbl_insert = (path, auth_data) => {
   console.log('insert', { path, auth_data });
   //   const promise = new Promise((resolve, reject) => {
   //     // resolve 는 성공, reject 는 실패
   //     apiInsert(path, auth_data);
   //   });
   //   return promise;
-  const promise = await apiInsert(path, auth_data);
-  return promise;
+
+  const response = api.insertData(path, auth_data);
+
+  return response;
 
   //   apiInsert(path, auth_data)
   //     .then((result) => {
