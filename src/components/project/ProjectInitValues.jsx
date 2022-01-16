@@ -1,10 +1,11 @@
 import React from 'react';
 import moment from 'moment';
 
-export const projectInitValues = (projectInfo, projectTaskInfo) => {
-  if (projectInfo === '' || projectTaskInfo === '') return {};
+export const projectInitValues = (projectInfo, pidTaskList) => {
+  console.log('pidTaskList', pidTaskList);
+  if (projectInfo === undefined || pidTaskList === undefined) return {};
   let obj = {};
-  const tasksmap = projectTaskInfo.map((value) => {
+  const tasksmap = pidTaskList.map((value) => {
     obj[value.code_task.code] = value.planTime;
   });
   return {

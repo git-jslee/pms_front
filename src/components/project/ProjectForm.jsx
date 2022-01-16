@@ -24,9 +24,10 @@ const ProjectForm = ({
   // onChange,
   // onSubmit,
   projectInfo,
-  projectTaskInfo,
+  pidTaskList,
   formInitValues,
   editdisabled,
+  calPidWorktimeAndProgress,
 }) => {
   const [componentSize, setComponentSize] = useState('default');
   const onFormLayoutChange = ({ size }) => {
@@ -36,10 +37,9 @@ const ProjectForm = ({
     { id: 1, name: 'crea' },
     { id: 2, name: 'cwcc' },
   ];
+  if (projectInfo === undefined) return <h1>로딩중</h1>;
   const projectTask = projectInfo.project_tasks;
-  console.log('>>>projectInfo>>>>', projectInfo);
-  console.log('>>>codeTask>>>>', code_tasks);
-  console.log('formInitValues', formInitValues);
+  console.log('>>>calPidWorktimeAndProgress>>>>', calPidWorktimeAndProgress);
   const { RangePicker } = DatePicker;
 
   //   const onChange = (item) => {
@@ -170,13 +170,14 @@ const ProjectForm = ({
         </Form.Item>
         <Divider />
         {/* {ProjectTaskForm 추가..}} */}
-        {projectTaskInfo ? (
+        {pidTaskList ? (
           <ProjectTaskForm
             code_tasks={code_tasks}
             service_id={projectInfo.code_service.id}
             projectTask={projectTask}
-            projectTaskInfo={projectTaskInfo}
+            pidTaskList={pidTaskList}
             editdisabled={editdisabled}
+            calPidWorktimeAndProgress={calPidWorktimeAndProgress}
           />
         ) : (
           <h1>로딩중</h1>

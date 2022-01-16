@@ -1,19 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { apiProject, apiProjectTaskId } from '../../lib/api/api';
+import { apiProject, apiProjectTaskId, apiWorkId } from '../../lib/api/api';
 import { getProject, projectValues } from '../../modules/projectForm';
 import { getCodebook } from '../../modules/codebook';
 import ProjectForm from '../../components/project/ProjectForm';
+import project, { getProjectId, getProjectWork } from '../../modules/project';
 import {
   projectInitValues,
   tasksInitValues,
 } from '../../components/project/ProjectInitValues';
+import calPidWorktimeAndProgress from '../../modules/calPidWorktimeAndProgress';
+import { Spin } from 'antd';
 
 const ProjectViewContainer = () => {
   const { id } = useParams();
-  const [projectInfo, setProjectInfo] = useState('');
-  const [projectTaskInfo, setProjectTaskInfo] = useState('');
+  // const [projectInfo, setProjectInfo] = useState('');
+  // const [projectTaskInfo, setProjectTaskInfo] = useState('');
+  // const [workInfo, setWorkInfo] = useState('');
+  // const [calTime, setCalTime] = useState();
   const dispatch = useDispatch();
   // 코드북 가져오기
   const {
@@ -28,14 +33,42 @@ const ProjectViewContainer = () => {
     code_services: codebook.code_services,
     code_statuses: codebook.code_statuses,
     code_tasks: codebook.code_tasks,
-    status: codebook.stagus,
+    status: codebook.status,
     error: codebook.error,
   }));
 
-  // 편집모드 정보 가져오기
-  const { editdisabled } = useSelector(({ project }) => ({
-    editdisabled: project.editdisabled,
+  // 코드북 수정
+  // 코드북 가져오기
+  const { code_book } = useSelector(({ codebook }) => ({
+    code_book: {
+      type: codebook.code_types,
+      service: codebook.code_services,
+      status: codebook.code_statuses,
+      task: codebook.code_tasks,
+    },
   }));
+  console.log('code_book', code_book);
+
+  // 편집모드 & 로딩 정보 가져오기
+  const { editdisabled, loading1, loading2, loading3 } = useSelector(
+    ({ projectForm, project, loading }) => ({
+      editdisabled: projectForm.editdisabled,
+      loading1: loading['project/GET_PROJECTLIST'],
+      loading2: loading['project/GET_PROJECTID'],
+      loading3: loading['project/GET_PROJECTWORK'],
+    }),
+  );
+  console.log('loading', loading1, loading2, loading3);
+
+  // 프로젝트 정보 가져오기
+  const { projectInfo, pidTaskList, pidWorktime } = useSelector(
+    ({ project }) => ({
+      projectInfo: project.data.projectInfo,
+      pidTaskList: project.data.tasks,
+      pidWorktime: project.data.works,
+    }),
+  );
+
   console.log(']]]] editmode ]]]]', editdisabled);
 
   // 컴포넌트가 처음 렌더링 될 때 codebook 디스패치
@@ -43,68 +76,45 @@ const ProjectViewContainer = () => {
     dispatch(getCodebook());
   }, [dispatch]);
 
-  // 프로젝트 view 정보 가져오기
+  // 프로젝트 ID 정보 가져오기
   useEffect(() => {
-    apiProject(id)
-      .then((result) => {
-        console.log('>>projectview성공>>', result.data);
-        setProjectInfo(result.data);
-      })
-      .catch((error) => {
-        console.error('에러발생', error);
-      });
+    // apiProject(id)
+    //   .then((result) => {
+    //     console.log('>>projectview성공>>', result.data);
+    //     setProjectInfo(result.data);
+    //   })
+    //   .catch((error) => {
+    //     console.error('에러발생', error);
+    //   });
+    dispatch(getProjectId(id));
   }, []);
 
-  // 프로젝트별 task 정보 가져오기
+  // 프로젝트별 task & work 정보 가져오기
   useEffect(() => {
-    apiProjectTaskId(id)
-      .then((result) => {
-        console.log('>>projectTaskview성공>>', result.data);
-        setProjectTaskInfo(result.data);
-      })
-      .catch((error) => {
-        console.error('에러발생', error);
-      });
+    dispatch(getProjectWork(id));
   }, []);
-
-  // 프로젝트 view 정보 디스패치
-  // 수정 필요...api 호출 2번 하는 문제..
-  useEffect(() => {
-    dispatch(getProject(projectInfo));
-  }, [dispatch]);
-
-  // 디스패치 성공/실패 코드 추가 필요
-
-  //from initialValues 리딕스..
-  //   useEffect(() => {
-  //     dispatch(projectValues(projectInitValues(projectInfo)));
-  //   }, [projectInfo]);
-  if (projectInfo !== '' || projectTaskInfo !== '') {
-    console.log('>>>>projectInfo>>>', projectInfo);
-    console.log('>>>>projectTaskInfo>>>', projectTaskInfo);
-    console.log(
-      '>>>>projectInitValues',
-      projectInitValues(projectInfo, projectTaskInfo),
-    );
-    // console.log('>>>>projectTaskInitValues', tasksInitValues(projectTaskInfo));
-  }
 
   return (
     <>
-      {projectInfo === '' || projectTaskInfo === '' ? (
-        <h1>정보가져오는중</h1>
-      ) : (
-        // <h1>프로젝트폼..</h1>
+      {projectInfo && pidTaskList && pidWorktime ? (
         <ProjectForm
           projectInfo={projectInfo}
-          projectTaskInfo={projectTaskInfo}
-          formInitValues={projectInitValues(projectInfo, projectTaskInfo)}
+          pidTaskList={pidTaskList}
+          formInitValues={projectInitValues(projectInfo, pidTaskList)}
           code_types={code_types}
           code_services={code_services}
           code_statuses={code_statuses}
           code_tasks={code_tasks}
           editdisabled={editdisabled}
+          calPidWorktimeAndProgress={calPidWorktimeAndProgress(
+            id,
+            pidTaskList,
+            pidWorktime,
+          )}
         />
+      ) : (
+        // <h1>프로젝트폼..</h1>
+        <Spin tip="Loading..." />
       )}
     </>
   );

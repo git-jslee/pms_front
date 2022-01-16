@@ -7,8 +7,8 @@ const EditActionButtonContainer = () => {
   const dispatch = useDispatch();
 
   // 편집모드 정보 가져오기
-  const { editdisabled } = useSelector(({ project }) => ({
-    editdisabled: project.editdisabled,
+  const { editdisabled } = useSelector(({ projectForm }) => ({
+    editdisabled: projectForm.editdisabled,
   }));
 
   const onClick = () => {

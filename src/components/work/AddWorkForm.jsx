@@ -101,7 +101,7 @@ const AddWorkForm = ({
             <Radio.Button value="large">Large</Radio.Button>
           </Radio.Group>
         </Form.Item>
-        <Form.Item label="고객명" name="customer">
+        <Form.Item label="고객명" name="customer" rules={[{ required: true }]}>
           <Select onChange={customerOnChange}>
             {customers.map((customer, index) => {
               return (
@@ -112,7 +112,11 @@ const AddWorkForm = ({
             })}
           </Select>
         </Form.Item>
-        <Form.Item label="프로젝트명" name="project">
+        <Form.Item
+          label="프로젝트명"
+          name="project"
+          rules={[{ required: true }]}
+        >
           <Select disabled={formDisabled.project} onChange={projectOnChange}>
             {projectList
               ? projectList.map((list) => {
@@ -125,7 +129,11 @@ const AddWorkForm = ({
               : []}
           </Select>
         </Form.Item>
-        <Form.Item label="작업명" name="project_task">
+        <Form.Item
+          label="작업명"
+          name="project_task"
+          rules={[{ required: true }]}
+        >
           <Select disabled={formDisabled.task} onChange={taskOnChange}>
             {tasks
               ? tasks.map((list) => {
@@ -138,13 +146,25 @@ const AddWorkForm = ({
               : []}
           </Select>
         </Form.Item>
-        <Form.Item label="작업일" name="workingDay">
+        <Form.Item
+          label="작업일"
+          name="workingDay"
+          rules={[{ required: true }]}
+        >
           <DatePicker format={'YYYY-MM-DD'} />
         </Form.Item>
-        <Form.Item label="작업시간" name="workingTime">
+        <Form.Item
+          label="작업시간"
+          name="workingTime"
+          rules={[{ required: true }]}
+        >
           <InputNumber />
         </Form.Item>
-        <Form.Item label="진행상태" name="code_progress">
+        <Form.Item
+          label="진행상태"
+          name="code_progress"
+          rules={[{ required: true }]}
+        >
           <Select disabled={formDisabled.progress}>
             {progress
               ? progress.map((list) => {

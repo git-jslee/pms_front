@@ -1,6 +1,8 @@
 import axios from 'axios';
 import { API_URL } from '../../config/constants';
 
+// https://docs-v3.strapi.io/developer-docs/latest/developer-resources/content-api/content-api.html#filters
+
 // 로그인
 export const loginUser = (username, password) =>
   axios.post(`${API_URL}/auth/local`, {
@@ -30,8 +32,16 @@ export const apiCodebook = () =>
 // 코드 진행상태 - code-progresses
 export const apiCodeProgress = () => axios.get('/code-progresses');
 
-// == getList
+// == getList(날짜별 조회 기능 추가 필요)
 export const getList = (path) => axios.get(`${API_URL}/${path}`);
+
+// === getPathId
+export const getListPathId = (path, id) =>
+  axios.get(`${API_URL}/${path}/${id}`);
+
+// == getProjectWork==?? 이름 변경
+export const getProjectWork = (path, id) =>
+  axios.get(`${API_URL}/${path}?project.id=${id}`);
 
 // insert
 export const insertData = (path, auth_data) =>
@@ -39,6 +49,13 @@ export const insertData = (path, auth_data) =>
 
 // 프로젝트 리스트
 export const apiProjectList = () => axios.get(`${API_URL}/projects`);
+
+// 프로젝트 리스트 기간별 조회
+// projects?planStartDate_gte=2021-11-01&planStartDate_lte=2021-12-01
+export const getProjectFiltered = (start, end) =>
+  axios.get(
+    `${API_URL}/projects?planStartDate_gte=${start}&planStartDate_lte=${end}`,
+  );
 
 // 프로젝트 View
 export const apiProject = (id) => axios.get(`${API_URL}/projects/${id}`);
@@ -109,3 +126,6 @@ export const apiWorkList = (id) =>
 
 // 사용자 리스트
 export const apiUserList = () => axios.get(`${API_URL}/user-infos`);
+
+// Project 별 work..
+export const apiWorkId = (id) => axios.get(`${API_URL}/works?project.id=${id}`);

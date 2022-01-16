@@ -5,6 +5,7 @@ const SET_CUSTOMER = 'work/SET_CUSTOMER';
 const SET_PROJECT = 'work/SET_PROJECT';
 const SET_TASK = 'work/SET_TASK';
 const SET_WORKER = 'work/SET_WORKER';
+const SET_INIT = 'work/SET_INIT';
 
 export const setCustomer = createAction(
   SET_CUSTOMER,
@@ -13,6 +14,7 @@ export const setCustomer = createAction(
 export const setProject = createAction(SET_PROJECT, (projectId) => projectId);
 export const setTask = createAction(SET_TASK, (taskId) => taskId);
 export const set_worker = createAction(SET_WORKER, (userInfoId) => userInfoId);
+export const set_init = createAction(SET_INIT);
 
 const initialState = {
   customerId: null,
@@ -28,6 +30,14 @@ const initialState = {
 
 const work = handleActions(
   {
+    [SET_INIT]: (state, action) => ({
+      ...state,
+      formDisabled: {
+        project: true,
+        task: true,
+        progress: true,
+      },
+    }),
     [SET_CUSTOMER]: (state, action) => ({
       ...state,
       customerId: action.payload.customerId,

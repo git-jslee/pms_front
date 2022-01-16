@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import styled from 'styled-components';
+import palette from '../../lib/styles/palette';
 import {
   Form,
   Input,
@@ -12,7 +14,25 @@ import {
   Switch,
   Divider,
   message,
+  Row,
+  Col,
+  Empty,
 } from 'antd';
+
+const FormBox = styled.div`
+  position: relative;
+  /* border: 2px solid gray;
+  background-color: ${palette.gray[1]}; */
+  /* display: flex; */
+  justify-content: center;
+  align-items: center;
+  .taskbox-level > div {
+    /* width: 250px; */
+  }
+  .taxkbox-wrappe {
+    /* width: 150px; */
+  }
+`;
 
 const ProjectFormView = ({
   code_types,
@@ -61,12 +81,13 @@ const ProjectFormView = ({
   return (
     <>
       <Form
+        //columns -> 24, 기본 4, 14
         labelCol={{
-          span: 4,
+          span: 6,
         }}
         onFinish={onSubmit}
         wrapperCol={{
-          span: 14,
+          span: 15,
         }}
         layout="horizontal"
         initialValues={{
@@ -148,31 +169,36 @@ const ProjectFormView = ({
           <DatePicker />
         </Form.Item>
         <Form.Item label="수주금액" name="price">
-          <InputNumber />
+          {/* <InputNumber /> */}
+          <InputNumber addonBefore="+" addonAfter="￦" defaultValue={0} />
         </Form.Item>
-
         {/* {ProjectTaskForm 추가..}} */}
         <Divider />
-        {tasks ? (
-          tasks.map((list, index) => {
-            return (
-              <div style={{ display: 'inline-block', width: '300px' }}>
-                <Form.Item
-                  key={list.code}
-                  label={list.name}
-                  name={list.code}
-                  // style={{ display: 'inline-block', width: 'calc(50% - 8px)' }}
-                  style={{ width: '500%' }}
-                  rules={[{ required: true }]}
-                >
-                  <InputNumber />
-                </Form.Item>
-              </div>
-            );
-          })
-        ) : (
-          <h1>Task 작업 시간</h1>
-        )}
+        <Row style={{ width: '100%' }}>
+          {tasks ? (
+            tasks.map((list, index) => {
+              return (
+                <Col key={list.code} span={12} style={{ padding: '5px 10px' }}>
+                  <Form.Item
+                    name={list.code}
+                    label={list.name}
+                    rules={[
+                      {
+                        required: true,
+                      },
+                    ]}
+                    // noStyle
+                  >
+                    {/* <InputNumber /> */}
+                    <InputNumber addonAfter="일" />
+                  </Form.Item>
+                </Col>
+              );
+            })
+          ) : (
+            <Empty />
+          )}
+        </Row>
         <Divider />
         <Form.Item label="비고" name="description">
           <Input.TextArea size="large" id="description" />

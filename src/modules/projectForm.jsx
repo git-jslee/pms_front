@@ -1,12 +1,12 @@
 import { createAction, handleActions } from 'redux-actions';
 import { apiProject } from '../lib/api/api';
 
-const GET_PROJECT = 'project/GET_PROJECT';
-const GET_PROJECT_SUCCESS = 'project/GET_PROJECT_SUCCESS';
-const GET_PROJECT_FAILURE = 'project/GET_PROJECT_FAILURE';
+const GET_PROJECT = 'projectForm/GET_PROJECT';
+const GET_PROJECT_SUCCESS = 'projectForm/GET_PROJECT_SUCCESS';
+const GET_PROJECT_FAILURE = 'projectForm/GET_PROJECT_FAILURE';
 
-const PROJECT_VALUES = 'project/PROJECT_INITVALUES';
-const CHANGE_EDITMODE = 'project/CHANGE_EDITMODE';
+const PROJECT_VALUES = 'projectForm/PROJECT_INITVALUES';
+const CHANGE_EDITMODE = 'projectForm/CHANGE_EDITMODE';
 
 export const getProject = (id) => async (dispatch) => {
   dispatch({ type: GET_PROJECT });
@@ -39,7 +39,7 @@ const initialState = {
   error: null,
 };
 
-const project = handleActions(
+const projectForm = handleActions(
   {
     // 프로젝트 정보 가져오기 성공
     [GET_PROJECT_SUCCESS]: (state, { payload }) => ({
@@ -68,4 +68,4 @@ const project = handleActions(
   initialState,
 );
 
-export default project;
+export default projectForm;

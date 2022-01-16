@@ -3,12 +3,17 @@ import { Form, Input, Select, Tooltip, Button, Space, Typography } from 'antd';
 const { Option } = Select;
 
 const Demo = () => {
-  const onFinish = values => {
+  const onFinish = (values) => {
     console.log('Received values of form: ', values);
   };
 
   return (
-    <Form name="complex-form" onFinish={onFinish} labelCol={{ span: 8 }} wrapperCol={{ span: 16 }}>
+    <Form
+      name="complex-form"
+      onFinish={onFinish}
+      labelCol={{ span: 8 }}
+      wrapperCol={{ span: 16 }}
+    >
       <Form.Item label="Username">
         <Space>
           <Form.Item
@@ -55,7 +60,11 @@ const Demo = () => {
         <Form.Item
           name="month"
           rules={[{ required: true }]}
-          style={{ display: 'inline-block', width: 'calc(50% - 8px)', margin: '0 8px' }}
+          style={{
+            display: 'inline-block',
+            width: 'calc(50% - 8px)',
+            margin: '0 8px',
+          }}
         >
           <Input placeholder="Input birth month" />
         </Form.Item>

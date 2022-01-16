@@ -10,9 +10,11 @@ import {
   apiAddWork,
 } from '../../lib/api/api';
 import projectlist from '../../modules/projectList';
-import { setCustomer, setProject, setTask } from '../../modules/work';
+import { setCustomer, setProject, setTask, set_init } from '../../modules/work';
+import { useNavigate } from 'react-router-dom';
 
 const AddWorkFormContainer = () => {
+  const navigate = useNavigate();
   const [customers, setCustomers] = useState('');
   const [projectList, setProjectList] = useState('');
   const [tasks, setTasks] = useState('');
@@ -35,6 +37,11 @@ const AddWorkFormContainer = () => {
       .catch((error) => {
         console.error('에러발생', error);
       });
+    // 컴포턴트 빠져나갈시..뒷정리 하기
+    return () => {
+      console.log('cleanup');
+      dispatch(set_init());
+    };
   }, []);
 
   // 2. Form 에서 고객 선택시
@@ -114,6 +121,7 @@ const AddWorkFormContainer = () => {
     apiAddWork(datas)
       .then((result) => {
         console.log('작업 등록 성공', result);
+        navigate('/work');
       })
       .catch((error) => {
         console.error('에러발생', error);
