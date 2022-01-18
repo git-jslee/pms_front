@@ -5,6 +5,7 @@ import HeaderContainer from '../containers/common/HeaderContainer';
 import SiteHeader from '../components/SiteHeader';
 import ProjectViewContainer from '../containers/project/ProjectViewContainer';
 import EditActionButtonContainer from '../containers/project/EditActionButtonContainer';
+import ProjectViewDetail from '../components/project/ProjectViewDetail';
 
 const ProjectViewPage = () => {
   return (
@@ -13,6 +14,9 @@ const ProjectViewPage = () => {
       <SiteHeader />
       <h1>프로젝트뷰 페이지</h1>
       <EditActionButtonContainer />
+      <hr />
+      <ProjectViewDetail />
+      <hr />
       <ProjectViewContainer />
     </>
   );

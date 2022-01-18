@@ -18,6 +18,7 @@ const ProjectListContainer = () => {
   // 페이지 이동 후 재 접속시.. 프로젝트 리스트 다시 가져옴...코드 수정 필요..
   useEffect(() => {
     dispatch(getProjectList());
+    // getProjectList();
   }, []);
 
   // useEffect(() => {

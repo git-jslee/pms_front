@@ -1,3 +1,4 @@
+import { ListConsumer } from 'antd/lib/list';
 import React from 'react';
 
 const calPidWorktimeAndProgress = (id, pidTaskList, pidWorktime) => {
@@ -16,12 +17,20 @@ const calPidWorktimeAndProgress = (id, pidTaskList, pidWorktime) => {
           progress = [v2.workingDay, v2.code_progress.code];
         }
       });
-    const taskCalValue = {
-      [list.code_task.code]: [list.planTime, totalTime, progress[1]],
+    // const taskCalValue = {
+    //   [list.code_task.code]: [list.planTime, totalTime, progress[1]],
+    // };
+    // const assignObject = Object.assign(calTaskObj, taskCalValue);
+    return {
+      id: list.code_task.id,
+      code: list.code_task.code,
+      name: list.code_task.name,
+      planDay: list.planTime,
+      totalTime: totalTime,
+      progress: progress[1] || 0,
     };
-    const assignObject = Object.assign(calTaskObj, taskCalValue);
   });
-  return calTaskObj;
+  return calWorktime;
 };
 
 export default calPidWorktimeAndProgress;

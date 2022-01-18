@@ -2,6 +2,7 @@
 import { createAction, handleActions } from 'redux-actions';
 import * as api from '../lib/api/api';
 import { startLoading, finishLoading } from './loading';
+import createRequestThunk from '../lib/api/createRequestThunk';
 
 // 프로젝트 리스트
 const GET_PROJECTLIST = 'project/GET_PROJECTLIST';
@@ -39,11 +40,13 @@ export const getProjectList = () => async (dispatch) => {
   }
 };
 
+// export const getProjectList = createRequestThunk(GET_PROJECTLIST, api.getList);
+// console.log('getProjectList', getProjectList());
+
 export const getProjectId = (id) => async (dispatch) => {
   dispatch({ type: GET_PROJECTID }); // 요청 시작을 알림
   dispatch(startLoading(GET_PROJECTID));
   try {
-    // 수정 필요 - 프로젝트 정보 2번 호출하는 현상
     const response = await api.getListPathId('projects', id);
     dispatch({
       type: GET_PROJECTID_SUCCESS,

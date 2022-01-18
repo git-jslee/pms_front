@@ -170,7 +170,8 @@ const ProjectForm = ({
         </Form.Item>
         <Divider />
         {/* {ProjectTaskForm 추가..}} */}
-        {pidTaskList ? (
+        {/* 22/01/17 프로젝트 테스크폼 상단으로 변경..projectviewdetail */}
+        {/* {pidTaskList ? (
           <ProjectTaskForm
             code_tasks={code_tasks}
             service_id={projectInfo.code_service.id}
@@ -181,7 +182,7 @@ const ProjectForm = ({
           />
         ) : (
           <h1>로딩중</h1>
-        )}
+        )} */}
         <Divider />
         {/* <Form.Item>
           <Button id="submit-button" size="large" htmlType="submit">
