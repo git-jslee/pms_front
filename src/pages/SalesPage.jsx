@@ -1,7 +1,7 @@
 import React from 'react';
 import HeaderContainer from '../containers/common/HeaderContainer';
 import SiteHeader from '../components/SiteHeader';
-import SalesListTable from '../components/sales/SalesListTable';
+import SalesListContainer from '../containers/sales/SalesListContainer';
 import FormTemplate from '../components/common/FormTemplate';
 import SalesSubMenu from '../components/sales/SalesSubMenu';
 import SalesSummaryTable from '../components/sales/SalesSummaryTable';
@@ -15,7 +15,7 @@ const SalesPage = () => {
         <SalesSubMenu />
         <hr />
         <SalesSummaryTable />
-        <SalesListTable />
+        <SalesListContainer />
       </FormTemplate>
     </>
   );

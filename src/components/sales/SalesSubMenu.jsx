@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Link } from 'react';
 import styled from 'styled-components';
 import Button from '../common/Button';
 
@@ -22,7 +22,7 @@ const SalesSubMenu = () => {
     <>
       <SubMenuBlock>
         <h1>서브 - 매출현황</h1>
-        <Button>등록</Button>
+        <Button to="/addsales">등록</Button>
       </SubMenuBlock>
     </>
   );

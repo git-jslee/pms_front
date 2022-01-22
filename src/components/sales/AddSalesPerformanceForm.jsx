@@ -12,6 +12,7 @@ import {
   Row,
   Col,
   Radio,
+  Space,
 } from 'antd';
 
 const AddSalesPerformanceForm = ({
@@ -22,12 +23,13 @@ const AddSalesPerformanceForm = ({
   onChangeDivision,
   onSubmit,
   divisionId,
+  calResult,
+  onChangeRadio,
+  salesValueOnchange,
+  profitMarginOnchange,
+  radioValue,
+  profitMarginValue,
 }) => {
-  const [radioValue, setRadioValue] = useState(true);
-  const [salesValue, setSalesValue] = useState();
-  const [profitValue, setProfitValue] = useState();
-  const [marginValue, setMarginValue] = useState();
-  const [initValues, setInitvalues] = useState({ sales_name: '테스트' });
   if (divisionId) {
     console.log('>>>', division);
     const result = division.filter((v) => {
@@ -36,27 +38,7 @@ const AddSalesPerformanceForm = ({
     console.log('>>>', result[0].item);
   }
 
-  const onChangeRadio = (e) => {
-    console.log('radio checked', e.target.value);
-    setRadioValue(e.target.value);
-  };
-  const salesValueOnchange = (e) => {
-    console.log('salesValueOnchange', e.target.value);
-    setSalesValue(e.target.value);
-  };
-  const profitValueOnchange = (e) => {
-    console.log('profitValueOnchange', e.target.value);
-    setProfitValue(e.target.value);
-  };
-
-  useEffect(() => {
-    setInitvalues({
-      margin: parseInt(profitValue) / parseInt(salesValue),
-      sales_name: '테스트1,',
-    });
-  }, [salesValue, profitValue]);
-
-  console.log('===', initValues);
+  console.log('==calresult', calResult);
 
   return (
     <>
@@ -70,7 +52,7 @@ const AddSalesPerformanceForm = ({
         }}
         onFinish={onSubmit}
         layout="horizontal"
-        initialValues={initValues}
+        // initialValues={}
         // onValuesChange={onFormLayoutChange}
       >
         <Row>
@@ -205,40 +187,75 @@ const AddSalesPerformanceForm = ({
               />
             </Form.Item>
           </Col>
-          <Col offset={1} span={1}>
+          <Col offset={1} span={2}>
             <Radio.Group onChange={onChangeRadio} value={radioValue}>
-              <Radio value={true}>A</Radio>
-              <Radio value={false}>B</Radio>
+              <Radio value={true}>매출이익</Radio>
+              <Radio value={false}>마진</Radio>
             </Radio.Group>
           </Col>
           <Col offset={0} span={6}>
-            <Form.Item
-              label="매출이익"
-              name="sales_profit"
-              rules={[{ required: true }]}
-              onChange={profitValueOnchange}
-            >
-              <InputNumber
-                style={{
-                  width: '100%',
-                }}
-                formatter={(value) =>
-                  `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                }
-                parser={(value) => value.replace(/\$\s?|(,*)/g, '')}
-                disabled={!radioValue}
-              />
-            </Form.Item>
+            {radioValue ? (
+              <Form.Item
+                label="매출이익"
+                name="sales_profit"
+                rules={[{ required: true }]}
+                onChange={profitMarginOnchange}
+              >
+                <InputNumber
+                  style={{
+                    width: '100%',
+                  }}
+                  formatter={(value) =>
+                    `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                  }
+                  parser={(value) => value.replace(/\$\s?|(,*)/g, '')}
+                  disabled={!radioValue}
+                />
+              </Form.Item>
+            ) : (
+              <Form.Item
+                label="마진"
+                name="margin"
+                rules={[{ required: true }]}
+                onChange={profitMarginOnchange}
+              >
+                <InputNumber
+                  style={{
+                    width: '100%',
+                  }}
+                />
+              </Form.Item>
+            )}
           </Col>
-          <Col offset={2} span={6}>
-            <Form.Item label="마진" name="margin" rules={[{ required: true }]}>
-              <InputNumber
-                style={{
-                  width: '100%',
-                }}
-                disabled={radioValue}
-              />
-            </Form.Item>
+          <Col offset={1} span={6}>
+            {/* {radioValue ? (
+              <Space>
+                <span>마진 : </span>
+                <span>{calResult}</span>
+              </Space>
+            ) : (
+              <Space>
+                <span>매출이익 : </span>
+                <span>{calResult}</span>
+              </Space>
+            )} */}
+            {profitMarginValue.margin || profitMarginValue.sales_profit ? (
+              radioValue ? (
+                <Space>
+                  <span>마진 : </span>
+                  <span>{calResult.margin}</span>
+                </Space>
+              ) : (
+                <Space>
+                  <span>매출이익 : </span>
+                  <span>{calResult.profit}</span>
+                </Space>
+              )
+            ) : (
+              <Space>
+                <span>...</span>
+              </Space>
+            )}
           </Col>
         </Row>
         <Row>
