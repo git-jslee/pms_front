@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Select, Radio } from 'antd';
 
-const WorkFilterForm = ({ userList, user_info_id, userOnChange }) => {
+const WorkFilterForm = ({ userList, workerId, userOnChange }) => {
   const [form] = Form.useForm();
   const [value, setValue] = useState('Worker');
   const optionsWithDisabled = [
@@ -17,7 +17,7 @@ const WorkFilterForm = ({ userList, user_info_id, userOnChange }) => {
   // Form 에서 로그인 사용자 선택
   useEffect(() => {
     form.setFieldsValue({
-      user: user_info_id,
+      user: workerId,
     });
   }, []);
 
@@ -39,7 +39,7 @@ const WorkFilterForm = ({ userList, user_info_id, userOnChange }) => {
               {userList.map((list) => {
                 return (
                   <Select.Option key={list.id} value={list.id}>
-                    {list.name}
+                    {list.username}
                   </Select.Option>
                 );
               })}

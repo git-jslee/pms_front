@@ -39,7 +39,7 @@ export const salesCodebook = () =>
   ]);
 
 // 코드 진행상태 - code-progresses
-export const apiCodeProgress = () => axios.get('/code-progresses');
+export const apiCodeProgress = () => axios.get(`${API_URL}/code-progresses`);
 
 // == getList(날짜별 조회 기능 추가 필요)
 export const getList = (path) => axios.get(`${API_URL}/${path}`);
@@ -128,13 +128,16 @@ export const apiAddWork = (datas) => axios.post(`${API_URL}/works`, ...datas);
 // /works?user_info.id=1
 // 정렬...works?_sort=workingDay:DESC
 export const apiWorkList = (id) =>
-  axios.get(`${API_URL}/works?user_info.id=${id}&_sort=workingDay:DESC`);
+  // axios.get(`${API_URL}/works?user_info.id=${id}&_sort=workingDay:DESC`);
+  axios.get(
+    `${API_URL}/works?users_permissions_user.id=${id}&_sort=workingDay:DESC`,
+  );
 
 // 사용자별 작업 조회
 // works?user_info.users_permissions_user=3
 
 // 사용자 리스트
-export const apiUserList = () => axios.get(`${API_URL}/user-infos`);
+export const apiUserList = () => axios.get(`${API_URL}/users`);
 
 // Project 별 work..
 export const apiWorkId = (id) => axios.get(`${API_URL}/works?project.id=${id}`);

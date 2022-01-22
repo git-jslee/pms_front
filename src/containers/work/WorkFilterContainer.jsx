@@ -11,7 +11,7 @@ const WorkFilterContainer = () => {
   }));
   const [userList, setUserList] = useState('');
   //로그인 안했을때 오류 발생 개선 필요
-  const [workerId, setWorkerId] = useState(auth.user.user_info.id);
+  const [workerId, setWorkerId] = useState(auth.user.id);
 
   // 인증 정보 가져오기
 
@@ -41,7 +41,7 @@ const WorkFilterContainer = () => {
       {userList ? (
         <WorkFilterForm
           userList={userList}
-          user_info_id={auth.user.user_info.id}
+          workerId={workerId}
           userOnChange={userOnChange}
         />
       ) : (

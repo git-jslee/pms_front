@@ -99,7 +99,7 @@ const AddWorkFormContainer = () => {
   // onSubmit
   const onSubmit = (values) => {
     // console.log('submit', values);
-    const auth =
+    const jwt =
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNjQxMDA4NzE5LCJleHAiOjE2NDM2MDA3MTl9.axMN2VemKxDxPeZJ_zfvhGm8FmMUVd5MkPe_lED0ocM';
     const datas = [
       {
@@ -109,12 +109,13 @@ const AddWorkFormContainer = () => {
         workingDay: moment(values.workingDay.format('YYYY-MM-DD')),
         workingTime: parseInt(values.workingTime),
         code_progress: values.code_progress,
-        user_info: values.user_info,
+        // user_info: values.user_info,
+        users_permissions_user: auth.user.id,
         description: values.description,
       },
       {
         headers: {
-          Authorization: 'Bearer ' + auth,
+          Authorization: 'Bearer ' + jwt,
         },
       },
     ];
@@ -134,7 +135,7 @@ const AddWorkFormContainer = () => {
       {customers && auth ? (
         <AddWorkForm
           customers={customers}
-          userinfo={auth.user.user_info}
+          // userinfo={auth.user.user_info}
           projectList={projectList}
           customerOnChange={customerOnChange}
           projectOnChange={projectOnChange}

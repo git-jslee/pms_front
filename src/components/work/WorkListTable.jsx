@@ -89,7 +89,7 @@ const WorkListTable = ({ lists, code_tasks }) => {
       projectName: list.project.name,
       service: taskName[0].code_service.code,
       task: taskName[0].name,
-      user: list.user_info.name,
+      user: list.users_permissions_user.username,
       workingDay: list.workingDay,
       workingTime: list.workingTime,
       action: 'View',

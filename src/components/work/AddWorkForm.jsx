@@ -16,7 +16,7 @@ import projectlist from '../../modules/projectList';
 
 const AddWorkForm = ({
   customers,
-  userinfo,
+  // user,
   projectList,
   tasklist,
   code_progress,
@@ -72,7 +72,7 @@ const AddWorkForm = ({
   // 작업자 정보 자동 입력
   // dayjs 로 구현시..에러 발생 변경 필요 moment -> dayjs
   useEffect(() => {
-    form.setFieldsValue({ workingDay: moment(today), user_info: userinfo.id });
+    form.setFieldsValue({ workingDay: moment(today) });
   }, [form]);
 
   return (
@@ -177,15 +177,15 @@ const AddWorkForm = ({
               : []}
           </Select>
         </Form.Item>
-        <Form.Item label="작업자" name="user_info">
+        {/* <Form.Item label="작업자" name="user_info">
           <Select disabled={true}>
-            {userinfo ? (
-              <Select.Option value={userinfo.id}>{userinfo.name}</Select.Option>
+            {user ? (
+              <Select.Option value={user.id}>{user.username}</Select.Option>
             ) : (
               <Select.Option>...</Select.Option>
             )}
           </Select>
-        </Form.Item>
+        </Form.Item> */}
         <Form.Item label="비고" name="description">
           <Input.TextArea size="large" id="description" />
         </Form.Item>
