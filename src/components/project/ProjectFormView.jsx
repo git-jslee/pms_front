@@ -7,13 +7,9 @@ import {
   Button,
   Radio,
   Select,
-  Cascader,
   DatePicker,
   InputNumber,
-  TreeSelect,
-  Switch,
   Divider,
-  message,
   Row,
   Col,
   Empty,
@@ -49,6 +45,7 @@ const ProjectFormView = ({
   const onFormLayoutChange = ({ size }) => {
     setComponentSize(size);
   };
+  console.log('code_types', code_types);
   const { RangePicker } = DatePicker;
 
   //   const onChange = (item) => {

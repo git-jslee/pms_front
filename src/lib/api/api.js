@@ -29,6 +29,15 @@ export const apiCodebook = () =>
     axios.get(`${API_URL}/code-tasks`),
   ]);
 
+// sales 코드북
+export const salesCodebook = () =>
+  axios.all([
+    axios.get(`${API_URL}/scode-probabilities`),
+    axios.get(`${API_URL}/scode-divisions`),
+    axios.get(`${API_URL}/scode-items`),
+    axios.get(`${API_URL}/scode-teams`),
+  ]);
+
 // 코드 진행상태 - code-progresses
 export const apiCodeProgress = () => axios.get('/code-progresses');
 

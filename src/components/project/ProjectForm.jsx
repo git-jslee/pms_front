@@ -41,6 +41,7 @@ const ProjectForm = ({
   const projectTask = projectInfo.project_tasks;
   console.log('>>>calPidWorktimeAndProgress>>>>', calPidWorktimeAndProgress);
   const { RangePicker } = DatePicker;
+  console.log('code_types', code_types);
 
   //   const onChange = (item) => {
   //     const getTasks = code_tasks.filter((v) => v.code_service.id === item);

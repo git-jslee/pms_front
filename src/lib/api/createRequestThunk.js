@@ -11,9 +11,10 @@ export default function createRequestThunk(type, request) {
     dispatch(startLoading(type));
     try {
       const response = await request(params);
+      console.log('thunk-response', response);
       dispatch({
         type: SUCCESS,
-        payload: response.data,
+        payload: response,
       }); //성공
       dispatch(finishLoading(type));
     } catch (e) {

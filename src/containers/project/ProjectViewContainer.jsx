@@ -87,16 +87,16 @@ const ProjectViewContainer = () => {
     //     console.error('에러발생', error);
     //   });
     dispatch(getProjectId(id));
-  }, []);
+  }, [dispatch]);
 
   // 프로젝트별 task & work 정보 가져오기
   useEffect(() => {
     dispatch(getProjectWork(id));
-  }, []);
+  }, [dispatch]);
 
   return (
     <>
-      {projectInfo && pidTaskList && pidWorktime ? (
+      {projectInfo && pidTaskList && pidWorktime && code_types ? (
         <ProjectForm
           projectInfo={projectInfo}
           pidTaskList={pidTaskList}
