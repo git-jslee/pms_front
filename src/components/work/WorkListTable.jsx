@@ -30,19 +30,14 @@ const WorkListTable = ({ lists, code_tasks }) => {
       dataIndex: 'task',
     },
     {
-      title: '계획시간',
-      key: 'planTime',
-      dataIndex: 'planTime',
-    },
-    {
-      title: '누적시간',
-      key: 'cumulativeTime',
-      dataIndex: 'cumulativeTime',
-    },
-    {
       title: '작업시간',
       key: 'workingTime',
       dataIndex: 'workingTime',
+    },
+    {
+      title: '진행률',
+      key: 'progress',
+      dataIndex: 'progress',
     },
     {
       title: '작업자',
@@ -89,6 +84,7 @@ const WorkListTable = ({ lists, code_tasks }) => {
       projectName: list.project.name,
       service: taskName[0].code_service.code,
       task: taskName[0].name,
+      progress: list.code_progress.code,
       user: list.users_permissions_user.username,
       workingDay: list.workingDay,
       workingTime: list.workingTime,
