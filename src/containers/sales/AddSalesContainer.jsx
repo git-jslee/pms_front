@@ -82,16 +82,15 @@ const AddSalesContainer = () => {
     let _profit;
     let _margin;
     if (radioValue) {
-      _profit = profitMarginValue.sales_profit;
-      _margin = calResult.margin;
+      _profit = parseInt(profitMarginValue.sales_profit);
+      _margin = parseInt(calResult.margin);
     } else {
-      _margin = profitMarginValue.margin;
-      _profit = calResult.profit;
+      _margin = parseInt(profitMarginValue.margin);
+      _profit = parseInt(calResult.profit);
     }
     const datas = [
       {
         customer: values.customer,
-        scode_probability: values.probability,
         name: values.sales_name,
         scode_division: values.division,
         scode_item: values.item,
@@ -106,15 +105,20 @@ const AddSalesContainer = () => {
     ];
     const result = await tbl_insert('sales-performances', datas);
     console.log('1. sales-performances', result.data);
+    // probability 5 -> 100% 의미함
+    const _type = values.probability === 5 ? 'fixed' : 'forecasted';
+    const paymentDate = values.payment_date || '';
     const result2 = await tbl_insert('sales-profits', [
       {
         sales_performance: result.data.id,
-        type: 'plan',
+        type: _type,
+        scode_probability: values.probability,
         sales: values.sales,
         sales_profit: _profit,
         profit_margin: _margin,
         sales_rec_date: moment(values.sales_rec_date.format('YYYY-MM-DD')),
-        payment_date: moment(values.payment_date.format('YYYY-MM-DD')),
+        payment_date: moment(paymentDate),
+        description: values.memo,
       },
       {
         headers: {

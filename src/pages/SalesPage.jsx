@@ -4,7 +4,7 @@ import SiteHeader from '../components/SiteHeader';
 import SalesListContainer from '../containers/sales/SalesListContainer';
 import FormTemplate from '../components/common/FormTemplate';
 import SalesSubMenu from '../components/sales/SalesSubMenu';
-import SalesSummaryTable from '../components/sales/SalesSummaryTable';
+import SalesSummaryContainer from '../containers/sales/SalesSummaryContainer';
 
 const SalesPage = () => {
   return (
@@ -14,7 +14,8 @@ const SalesPage = () => {
       <FormTemplate>
         <SalesSubMenu />
         <hr />
-        <SalesSummaryTable />
+        <SalesSummaryContainer />
+        <hr />
         <SalesListContainer />
       </FormTemplate>
     </>

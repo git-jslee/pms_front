@@ -1,7 +1,7 @@
 import React from 'react';
 import { Table, Tag, Space, Button } from 'antd';
 
-const SalesListTable = ({ list }) => {
+const SalesListTable = ({ tableData }) => {
   const columns = [
     {
       title: 'No',
@@ -39,6 +39,11 @@ const SalesListTable = ({ list }) => {
       dataIndex: 'team',
     },
     {
+      title: '확정여부',
+      key: 'type',
+      dataIndex: 'type',
+    },
+    {
       title: '매출',
       key: 'sales',
       dataIndex: 'sales',
@@ -50,43 +55,29 @@ const SalesListTable = ({ list }) => {
     },
     {
       title: '마진',
-      key: 'margine',
+      key: 'margin',
       dataIndex: 'margin',
     },
     {
-      title: '매출인식일',
+      title: 'ACTION',
       key: 'sales_rec_date',
       dataIndex: 'sales_rec_date',
     },
   ];
 
-  const data = [
-    {
-      key: '1',
-      name: 'John Brown',
-      age: 32,
-      address: 'New York No. 1 Lake Park',
-      tags: ['nice', 'developer'],
-    },
-    {
-      key: '2',
-      name: 'Jim Green',
-      age: 42,
-      address: 'London No. 1 Lake Park',
-      tags: ['loser'],
-    },
-    {
-      key: '3',
-      name: 'Joe Black',
-      age: 32,
-      address: 'Sidney No. 1 Lake Park',
-      tags: ['cool', 'teacher'],
-    },
-  ];
+  // const data = [
+  //   {
+  //     key: '1',
+  //     name: 'John Brown',
+  //     age: 32,
+  //     address: 'New York No. 1 Lake Park',
+  //     tags: ['nice', 'developer'],
+  //   },
+  // ];
 
   return (
     <>
-      <Table columns={columns} dataSource={data} />
+      <Table columns={columns} dataSource={tableData} />
     </>
   );
 };

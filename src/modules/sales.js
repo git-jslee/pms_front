@@ -1,4 +1,4 @@
-import { handleActions } from 'redux-actions';
+import { createAction, handleActions } from 'redux-actions';
 import * as api from '../lib/api/api';
 import { startLoading, finishLoading } from './loading';
 
@@ -6,6 +6,9 @@ import { startLoading, finishLoading } from './loading';
 const GET_SALESLIST = 'sales/GET_SALESLIST';
 const GET_SALESLIST_SUCCESS = 'sales/GET_SALESLIST_SUCCESS';
 const GET_SALESLIST_FAILURE = 'sales/GET_SALESLIST_FAILURE';
+
+// 매출현황 요약..100%, 90%, 70%, 50%,..
+const SET_SALESSUMMARY = 'sales/SET_SALESSUMMARY';
 
 export const getSalesList = () => async (dispatch) => {
   dispatch({ type: GET_SALESLIST }); //요청 시작을 알림
@@ -28,8 +31,14 @@ export const getSalesList = () => async (dispatch) => {
   }
 };
 
+export const setSummary = createAction(
+  SET_SALESSUMMARY,
+  (summaryData) => summaryData,
+);
+
 const initialState = {
   data: '',
+  summary: '',
   error: null,
 };
 
@@ -44,6 +53,11 @@ const sales = handleActions(
     [GET_SALESLIST_FAILURE]: (state, { payload }) => ({
       ...state,
       error: true,
+    }),
+    // 영업Summary Data
+    [SET_SALESSUMMARY]: (state, { payload }) => ({
+      ...state,
+      summary: payload,
     }),
   },
   initialState,

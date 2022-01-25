@@ -260,7 +260,11 @@ const AddSalesPerformanceForm = ({
         </Row>
         <Row>
           <Col offset={2} span={6}>
-            <Form.Item label="매출인식일자" name="sales_rec_date">
+            <Form.Item
+              label="매출인식일자"
+              name="sales_rec_date"
+              rules={[{ required: true }]}
+            >
               <DatePicker
                 style={{
                   width: '100%',
@@ -277,7 +281,11 @@ const AddSalesPerformanceForm = ({
               />
             </Form.Item>
           </Col>
-          <Col offset={2} span={6}></Col>
+          <Col offset={2} span={6}>
+            <Form.Item label="메모" name="memo">
+              <Input.TextArea size="medium" id="memo" />
+            </Form.Item>
+          </Col>
         </Row>
         <Divider />
         <Col span={12}>
@@ -285,11 +293,13 @@ const AddSalesPerformanceForm = ({
             <Input.TextArea size="large" id="description" />
           </Form.Item>
         </Col>
-        <Form.Item>
-          <Button id="submit-button" size="large" htmlType="submit">
-            Submit
-          </Button>
-        </Form.Item>
+        <Col offset={4}>
+          <Form.Item>
+            <Button id="submit-button" size="large" htmlType="submit">
+              Submit
+            </Button>
+          </Form.Item>
+        </Col>
       </Form>
     </>
   );
