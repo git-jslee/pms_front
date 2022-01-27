@@ -1,7 +1,9 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Table, Tag, Space, Button } from 'antd';
 
 const SalesListTable = ({ tableData }) => {
+  const navigate = useNavigate();
   const columns = [
     {
       title: 'No',
@@ -40,8 +42,8 @@ const SalesListTable = ({ tableData }) => {
     },
     {
       title: '확정여부',
-      key: 'type',
-      dataIndex: 'type',
+      key: 'confirmed',
+      dataIndex: 'confirmed',
     },
     {
       title: '매출',
@@ -59,11 +61,32 @@ const SalesListTable = ({ tableData }) => {
       dataIndex: 'margin',
     },
     {
-      title: 'ACTION',
+      title: '매출인식일',
       key: 'sales_rec_date',
       dataIndex: 'sales_rec_date',
     },
+    {
+      title: 'ACTION',
+      key: 'action',
+      render: (text, record) => (
+        <Space size="small">
+          <Button
+            onClick={() => {
+              actionOnClick(record.key);
+            }}
+          >
+            View
+          </Button>
+        </Space>
+      ),
+    },
   ];
+
+  const actionOnClick = (id) => {
+    console.log('키..', id);
+    // project..view..코드 작성
+    navigate(`/sales/${id}`);
+  };
 
   // const data = [
   //   {

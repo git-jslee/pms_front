@@ -1,18 +1,29 @@
 import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import AddSalesPerformanceForm from '../../components/sales/AddSalesPerformanceForm';
+import { getSalesId } from '../../modules/sales';
+import SalesViewDetailTable from '../../components/sales/SalesViewDetailTable';
+import SalesUpdateForm from '../../components/sales/SalesUpdateForm';
+import { changeMode } from '../../modules/sales';
 import tbl_insert from '../../modules/tbl_insert';
+import tbl_update from '../../modules/tbl_update';
 import moment from 'moment';
 import { useNavigate } from 'react-router-dom';
 
-const AddSalesContainer = () => {
+const SalesDetailContainer = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   //웹토큰 가져오기..값 변경시에만 실행되게 설정 변경..
   const { auth } = useSelector(({ auth }) => ({
     auth: auth.auth,
   }));
-
-  const [divisionId, setDivisionId] = useState(null);
+  const { id } = useParams();
+  const [tableData, setTableData] = useState();
+  const { list, loading, mode } = useSelector(({ sales, loading }) => ({
+    list: sales.detail,
+    loading: loading['sales/GET_SALESID'],
+    mode: sales.mode,
+  }));
   const [radioValue, setRadioValue] = useState(true);
   const [salesValue, setSalesValue] = useState();
   const [profitMarginValue, setProfitMarginValue] = useState({
@@ -20,26 +31,56 @@ const AddSalesContainer = () => {
     sales_profit: null,
   });
   const [calResult, setCalResult] = useState({});
-  const { probability, division, team } = useSelector(({ codebook }) => ({
+
+  const { probability } = useSelector(({ codebook }) => ({
     probability: codebook.sales.probability,
-    division: codebook.sales.division,
-    team: codebook.sales.team,
   }));
 
-  const { customer } = useSelector(({ customerList }) => ({
-    customer: customerList.data,
-  }));
+  console.log('salesid', list);
 
-  const onChangeDivision = (e) => {
-    console.log('onchangedivision', e);
-    setDivisionId(e);
-  };
-  console.log('divisionid', divisionId);
+  useEffect(() => {
+    dispatch(getSalesId(id));
+    dispatch(
+      changeMode({
+        mode: 'VIEW',
+      }),
+    );
+  }, [dispatch]);
 
+  useEffect(() => {
+    console.log('---useEffect 실행---');
+
+    if (!list) {
+      console.log('리턴실행..');
+      return;
+    }
+    const sales_profits = list.sales_profits;
+    const salesProfitData = [];
+    const summaryData = {};
+    const data = sales_profits.map((list, index) => {
+      // 매출, 매출이익, 마진 정보 가져오기, 가장 최근 입력 데이터 가져옴
+      const array = {
+        key: list.id,
+        no: index + 1,
+        probability: list.scode_probability,
+        // type: list.type,
+        confirmed: list.confirmed ? 'YES' : 'NO',
+        sales: list.sales,
+        profit: list.sales_profit,
+        margin: list.profit_margin,
+        sales_rec_date: list.sales_rec_date,
+        payment_date: list.payment_date,
+        description: list.description,
+      };
+      return array;
+    });
+    setTableData(data.reverse());
+  }, [list]);
+
+  // 매출이익 마진 계산
   const onChangeRadio = (e) => {
     setRadioValue(e.target.value);
   };
-  // 매출이익 마진 계산
   const salesValueOnchange = (e) => {
     const number = e.target.value;
     console.log('0.salesvalueonchange', number);
@@ -74,8 +115,15 @@ const AddSalesContainer = () => {
     }
   }, [radioValue, salesValue, profitMarginValue]);
 
-  // sales 테이블 insert
-  //sales-performances, /sales-profits
+  const buttonOnClick = () => {
+    console.log('edit 버튼 클릭');
+    dispatch(
+      changeMode({
+        mode: 'EDIT',
+      }),
+    );
+  };
+
   const onSubmit = async (values) => {
     console.log('onSubmit', values);
     const jwt = auth.jwt;
@@ -88,16 +136,12 @@ const AddSalesContainer = () => {
       _margin = parseInt(profitMarginValue.margin);
       _profit = parseInt(calResult.profit);
     }
+
     const datas = [
       {
-        customer: values.customer,
-        name: values.sales_name,
-        scode_division: values.division,
-        scode_item: values.item,
-        scode_team: values.team,
         sales_rec_date: moment(values.sales_rec_date.format('YYYY-MM-DD')),
-        count: 1,
-        description: values.description,
+        count: list.sales_profits.length + 1,
+        // description: values.description,
       },
       {
         headers: {
@@ -105,15 +149,14 @@ const AddSalesContainer = () => {
         },
       },
     ];
-    const result = await tbl_insert('sales-performances', datas);
-    console.log('1. sales-performances', result.data);
-    // probability 5 -> 100% 의미함
-    const _type = values.probability === 5 ? 'fixed' : 'forecasted';
+    const result = await tbl_update('sales-performances', id, datas);
+    console.log('1. sales-performances_update', result.data);
+
     const paymentDate = values.payment_date || '';
     const result2 = await tbl_insert('sales-profits', [
       {
-        sales_performance: result.data.id,
-        confirmed: values.confirmed,
+        sales_performance: id,
+        confirmed: values.confirmed || false,
         scode_probability: values.probability,
         sales: values.sales,
         sales_profit: _profit,
@@ -129,27 +172,42 @@ const AddSalesContainer = () => {
       },
     ]);
     console.log('2. sales-profits', result2.data);
-    navigate('/sales');
+    dispatch(getSalesId(id));
+    dispatch(
+      changeMode({
+        mode: 'VIEW',
+      }),
+    );
+    // navigate(`/sales/${id}`);
   };
+
+  console.log('probability', probability);
 
   return (
     <>
-      {probability && division && team && customer ? (
-        <AddSalesPerformanceForm
-          probability={probability}
-          division={division}
-          team={team}
-          customer={customer}
-          onChangeDivision={onChangeDivision}
-          onSubmit={onSubmit}
-          divisionId={divisionId}
-          calResult={calResult}
-          onChangeRadio={onChangeRadio}
-          salesValueOnchange={salesValueOnchange}
-          profitMarginOnchange={profitMarginOnchange}
-          radioValue={radioValue}
-          profitMarginValue={profitMarginValue}
-        />
+      {list ? (
+        mode === 'VIEW' ? (
+          <SalesViewDetailTable
+            list={list}
+            tableData={tableData}
+            buttonOnClick={buttonOnClick}
+          />
+        ) : probability ? (
+          <SalesUpdateForm
+            list={list}
+            tableData={tableData}
+            probability={probability}
+            profitMarginValue={profitMarginValue}
+            radioValue={radioValue}
+            calResult={calResult}
+            onSubmit={onSubmit}
+            onChangeRadio={onChangeRadio}
+            salesValueOnchange={salesValueOnchange}
+            profitMarginOnchange={profitMarginOnchange}
+          />
+        ) : (
+          <h1>salesupdatefrom 로딩중</h1>
+        )
       ) : (
         <h1>로딩중</h1>
       )}
@@ -157,4 +215,4 @@ const AddSalesContainer = () => {
   );
 };
 
-export default AddSalesContainer;
+export default SalesDetailContainer;

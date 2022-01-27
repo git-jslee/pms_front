@@ -1,49 +1,123 @@
-import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
-import palette from '../../lib/styles/palette';
+import React from 'react';
 import {
   Form,
   Input,
+  Table,
+  Descriptions,
+  Badge,
+  Space,
   Button,
-  Select,
-  DatePicker,
-  InputNumber,
   Divider,
   Row,
   Col,
-  Radio,
-  Space,
   Switch,
+  Select,
+  InputNumber,
+  Radio,
+  DatePicker,
 } from 'antd';
+// import Button from '../common/Button';
 
-const AddSalesPerformanceForm = ({
+const SalesUpdateForm = ({
   probability,
-  division,
-  team,
-  customer,
-  onChangeDivision,
+  list,
+  tableData,
   onSubmit,
-  divisionId,
-  calResult,
-  onChangeRadio,
-  salesValueOnchange,
-  profitMarginOnchange,
   radioValue,
+  salesValueOnchange,
+  onChangeRadio,
+  profitMarginOnchange,
+  calResult,
   profitMarginValue,
 }) => {
-  if (divisionId) {
-    console.log('>>>', division);
-    const result = division.filter((v) => {
-      return v.id === divisionId;
-    });
-    console.log('>>>', result[0].item);
-  }
-
-  console.log('==calresult', calResult);
+  const sales_profits = list.sales_profits;
+  const sales_profit = sales_profits[sales_profits.length - 1];
+  console.log('probability', probability);
   console.log('profitMarginValue', profitMarginValue);
 
+  const columns = [
+    {
+      title: 'No',
+      dataIndex: 'no',
+      key: 'no',
+    },
+    {
+      title: '확률',
+      key: 'probability',
+      dataIndex: 'probability',
+    },
+    {
+      title: '확정여부',
+      key: 'confirmed',
+      dataIndex: 'confirmed',
+    },
+    {
+      title: '매출',
+      key: 'sales',
+      dataIndex: 'sales',
+    },
+    {
+      title: '매출이익',
+      key: 'profit',
+      dataIndex: 'profit',
+    },
+    {
+      title: '마진',
+      key: 'margin',
+      dataIndex: 'margin',
+    },
+    {
+      title: '매출인식일',
+      key: 'sales_rec_date',
+      dataIndex: 'sales_rec_date',
+    },
+    {
+      title: '결제일자',
+      key: 'payment_date',
+      dataIndex: 'payment_date',
+    },
+    {
+      title: '메모',
+      key: 'description',
+      dataIndex: 'description',
+    },
+  ];
+  console.log('******', list.name);
   return (
     <>
+      <Descriptions title="Sales Update" bordered>
+        <Descriptions.Item label="매출확률">100%</Descriptions.Item>
+        <Descriptions.Item label="매출처">{list.name}</Descriptions.Item>
+        <Descriptions.Item label="매출확정여부">
+          {sales_profit.confirmed ? 'Yes' : 'No'}
+        </Descriptions.Item>
+        <Descriptions.Item label="건 명" span={2}>
+          {list.name}
+        </Descriptions.Item>
+        <Descriptions.Item label="Status">
+          <Badge status="processing" text="Running" />
+        </Descriptions.Item>
+        <Descriptions.Item label="매출구분">
+          {list.scode_division.name}
+        </Descriptions.Item>
+        <Descriptions.Item label="매풀품목">
+          {list.scode_item.name}
+        </Descriptions.Item>
+        <Descriptions.Item label="사업부">
+          {list.scode_division.name}
+        </Descriptions.Item>
+        <Descriptions.Item label="매 출">
+          {sales_profit.sales}
+        </Descriptions.Item>
+        <Descriptions.Item label="매출이익">
+          {sales_profit.sales_profit}
+        </Descriptions.Item>
+        <Descriptions.Item label="마 진">
+          {sales_profit.profit_margin}
+        </Descriptions.Item>
+        {/* <Descriptions.Item label="비 고">{list.description}</Descriptions.Item> */}
+      </Descriptions>
+      <Divider />
       <Form
         //columns -> 24, 기본 4, 14
         labelCol={{
@@ -58,26 +132,7 @@ const AddSalesPerformanceForm = ({
         // onValuesChange={onFormLayoutChange}
       >
         <Row>
-          {/* <Col offset={3} span={8}> */}
-          <Col></Col>
-          <Col span={12}>
-            <Form.Item
-              label="매출처"
-              name="customer"
-              rules={[{ required: true }]}
-            >
-              <Select>
-                {customer.map((list, index) => {
-                  return (
-                    <Select.Option key={index} value={list.id}>
-                      {list.name}
-                    </Select.Option>
-                  );
-                })}
-              </Select>
-            </Form.Item>
-          </Col>
-          <Col offset={1} span={5}>
+          <Col offset={2} span={6}>
             <Form.Item label="매출확정여부" name="confirmed">
               <Switch />
             </Form.Item>
@@ -90,91 +145,22 @@ const AddSalesPerformanceForm = ({
               //   wrapperCol={{ offset: 0, span: 8 }}
             >
               <Select>
-                {probability.map((list, index) => {
-                  return (
-                    <Select.Option key={index} value={list.id}>
-                      {list.name}%
-                    </Select.Option>
-                  );
-                })}
+                {probability ? (
+                  probability.map((list, index) => {
+                    return (
+                      <Select.Option key={index} value={list.id}>
+                        {list.name}%
+                      </Select.Option>
+                    );
+                  })
+                ) : (
+                  <></>
+                )}
               </Select>
             </Form.Item>
           </Col>
+          <Col span={8}></Col>
         </Row>
-        <Row>
-          <Col span={12}>
-            <Form.Item
-              label={<div className="form-lavel">건 명</div>}
-              name="sales_name"
-              rules={[
-                { required: true, message: '프로젝트명을 입력해 주세요.' },
-              ]}
-            >
-              <Input
-                className="project-name"
-                size="large"
-                placeholder="프로젝트명을 입력해 주세요!!"
-              />
-            </Form.Item>
-          </Col>
-          <Col offset={12}></Col>
-        </Row>
-        <Row>
-          <Col offset={2} span={6}>
-            <Form.Item
-              label="매출구분"
-              name="division"
-              rules={[{ required: true }]}
-            >
-              <Select onChange={onChangeDivision}>
-                {division.map((list, index) => {
-                  return (
-                    <Select.Option key={index} value={list.id}>
-                      {list.name}
-                    </Select.Option>
-                  );
-                })}
-              </Select>
-            </Form.Item>
-          </Col>
-          <Col offset={2} span={6}>
-            <Form.Item
-              label="매출품목"
-              name="item"
-              rules={[{ required: true }]}
-            >
-              <Select>
-                {divisionId
-                  ? division
-                      .filter((v) => {
-                        return v.id === divisionId;
-                      })[0]
-                      .item.map((list, index) => {
-                        return (
-                          <Select.Option key={index} value={list.id}>
-                            {list.name}
-                          </Select.Option>
-                        );
-                      })
-                  : ''}
-              </Select>
-            </Form.Item>
-          </Col>
-          <Col offset={2} span={6}>
-            <Form.Item label="사업부" name="team" rules={[{ required: true }]}>
-              <Select>
-                {team.map((list, index) => {
-                  return (
-                    <Select.Option key={index} value={list.id}>
-                      {list.name}
-                    </Select.Option>
-                  );
-                })}
-              </Select>
-            </Form.Item>
-          </Col>
-        </Row>
-        <Divider />
         <Row>
           <Col offset={2} span={6}>
             <Form.Item
@@ -235,17 +221,6 @@ const AddSalesPerformanceForm = ({
             )}
           </Col>
           <Col offset={1} span={6}>
-            {/* {radioValue ? (
-              <Space>
-                <span>마진 : </span>
-                <span>{calResult}</span>
-              </Space>
-            ) : (
-              <Space>
-                <span>매출이익 : </span>
-                <span>{calResult}</span>
-              </Space>
-            )} */}
             {profitMarginValue.margin || profitMarginValue.sales_profit ? (
               radioValue ? (
                 <Space>
@@ -294,7 +269,6 @@ const AddSalesPerformanceForm = ({
             </Form.Item>
           </Col>
         </Row>
-        <Divider />
         <Col span={12}>
           <Form.Item label="비고" name="description">
             <Input.TextArea size="large" id="description" />
@@ -303,13 +277,15 @@ const AddSalesPerformanceForm = ({
         <Col offset={4}>
           <Form.Item>
             <Button id="submit-button" size="large" htmlType="submit">
-              Submit
+              Update
             </Button>
           </Form.Item>
         </Col>
       </Form>
+      <Divider />
+      <Table columns={columns} dataSource={tableData} />
     </>
   );
 };
 
-export default AddSalesPerformanceForm;
+export default SalesUpdateForm;

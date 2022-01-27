@@ -1,16 +1,14 @@
-import React from 'react';
-import { apiInsert } from '../lib/api/api';
 import * as api from '../lib/api/api';
 
-const tbl_insert = async (path, auth_data) => {
-  console.log('insert', { path, auth_data });
+const tbl_update = async (path, id, auth_data) => {
+  console.log('update', { path, auth_data });
   //   const promise = new Promise((resolve, reject) => {
   //     // resolve 는 성공, reject 는 실패
   //     apiInsert(path, auth_data);
   //   });
   //   return promise;
 
-  const response = await api.insertData(path, auth_data);
+  const response = await api.updateData(path, id, auth_data);
 
   return response;
 
@@ -25,4 +23,4 @@ const tbl_insert = async (path, auth_data) => {
   //     });
 };
 
-export default tbl_insert;
+export default tbl_update;

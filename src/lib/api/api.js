@@ -44,6 +44,17 @@ export const apiCodeProgress = () => axios.get(`${API_URL}/code-progresses`);
 // == getList(날짜별 조회 기능 추가 필요)
 export const getList = (path) => axios.get(`${API_URL}/${path}`);
 
+// == getSalesList(날짜별 조회 기능 추가 필요)
+// projects?planStartDate_gte=2021-11-01&planStartDate_lte=2021-12-01
+export const getSalesListByMonth = (start, end) =>
+  axios.get(
+    `${API_URL}/sales-performances?planStartDate_gte=${start}&planStartDate_lte=${end}`,
+  );
+
+//getSalesId
+export const getSalesId = (id) =>
+  axios.get(`${API_URL}/sales-performances/${id}`);
+
 // === getPathId
 export const getListPathId = (path, id) =>
   axios.get(`${API_URL}/${path}/${id}`);
@@ -55,6 +66,10 @@ export const getProjectWork = (path, id) =>
 // insert
 export const insertData = (path, auth_data) =>
   axios.post(`${API_URL}/${path}`, ...auth_data);
+
+// update //put/sales-performances/:id
+export const updateData = (path, id, auth_data) =>
+  axios.put(`${API_URL}/${path}/${id}`, ...auth_data);
 
 // 프로젝트 리스트
 export const apiProjectList = () => axios.get(`${API_URL}/projects`);

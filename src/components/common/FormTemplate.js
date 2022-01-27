@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 
 // 화면 전체를 채움
 const FormTemplateBlock = styled.div`
-  position: absolute;
+  /* position: absolute; */
   left: 0;
   top: 100px;
   bottom: 0;

@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSalesList } from '../../modules/sales';
 import SalesListTable from '../../components/sales/SalesListTable';
-import { setSummary } from '../../modules/sales';
+// import { setSummary } from '../../modules/sales';
+// import sumSalesValueByMonth from '../../modules/sales/sumSalesValueByMonth';
 
 const SalesListContainer = () => {
   const dispatch = useDispatch();
-  const [salesSummary, setSalesSummary] = useState({});
+  // const [salesSummary, setSalesSummary] = useState({});
   const [tableData, setTableData] = useState();
   const { lists, loading } = useSelector(({ sales, loading }) => ({
     lists: sales.data,
@@ -17,7 +18,6 @@ const SalesListContainer = () => {
 
   useEffect(() => {
     dispatch(getSalesList());
-    // getProjectList();
   }, [dispatch]);
 
   // table data
@@ -30,7 +30,7 @@ const SalesListContainer = () => {
       return;
     }
     const salesProfitData = [];
-    const summaryData = {};
+    // const summaryData = {};
     const data = lists.map((list, index) => {
       // 매출, 매출이익, 마진 정보 가져오기, 가장 최근 입력 데이터 가져옴
       const sales_profit = list.sales_profits[list.sales_profits.length - 1];
@@ -44,45 +44,29 @@ const SalesListContainer = () => {
         division: list.scode_division.name,
         item: list.scode_item.name,
         team: list.scode_team.name,
-        type: sales_profit.type,
+        confirmed: sales_profit.confirmed ? 'Yes' : 'No',
         sales: sales_profit.sales,
         profit: sales_profit.sales_profit,
         margin: sales_profit.profit_margin,
+        sales_rec_date: sales_profit.sales_rec_date,
       };
       return array;
     });
 
-    const arrData = salesProfitData.map((value) => {
-      console.log('summaryDataValue', summaryData[value.scode_probability]);
-      // 값이 없을경우 생성
-      if (summaryData[value.scode_probability] === undefined) {
-        summaryData[value.scode_probability] = [
-          value.sales,
-          value.sales_profit,
-        ];
-      } else {
-        // 값이 있을경우 기존 값에 추가
-        console.log(
-          '%%계산',
-          summaryData[value.scode_probability][1],
-          value.sales_profit,
-        );
-        summaryData[value.scode_probability] = [
-          summaryData[value.scode_probability][0] + value.sales,
-          summaryData[value.scode_probability][1] + value.sales_profit,
-        ];
-      }
-    });
-
-    setSalesSummary(summaryData);
+    // 예상매출, 예상매출이익, 실제매출액, 실제매출이익 합계산
+    // SalesStatisticsConatainer 로 이동..
+    // const summaryData = sumSalesValueByMonth(salesProfitData);
+    // console.log('sumSalesByMonth', summaryData);
+    // setSalesSummary(summaryData);
     setTableData(data);
   }, [lists]);
 
-  useEffect(() => {
-    dispatch(setSummary(salesSummary));
-  }, [salesSummary]);
+  // 예상매출, 예상매출이익, 실제매출액, 실제매출이익 합계산
+  // SalesStatisticsConatainer 로 이동..
+  // useEffect(() => {
+  //   dispatch(setSummary(salesSummary));
+  // }, [salesSummary]);
 
-  console.log('salesSummary', salesSummary);
   return (
     <>
       {loading === false ? (
