@@ -15,6 +15,10 @@ const AddSalesContainer = () => {
   const [divisionId, setDivisionId] = useState(null);
   const [radioValue, setRadioValue] = useState(true);
   const [salesValue, setSalesValue] = useState();
+  const [checked, setChecked] = useState({
+    checked: false,
+    name: '매출확정-N',
+  });
   const [profitMarginValue, setProfitMarginValue] = useState({
     margin: null,
     sales_profit: null,
@@ -108,13 +112,14 @@ const AddSalesContainer = () => {
     const result = await tbl_insert('sales-performances', datas);
     console.log('1. sales-performances', result.data);
     // probability 5 -> 100% 의미함
-    const _type = values.probability === 5 ? 'fixed' : 'forecasted';
+    const _confirmed = checked.checked === true ? true : false;
+    const _probability = checked.checked === true ? 5 : values.probability;
     const paymentDate = values.payment_date || '';
     const result2 = await tbl_insert('sales-profits', [
       {
         sales_performance: result.data.id,
-        confirmed: values.confirmed,
-        scode_probability: values.probability,
+        confirmed: _confirmed,
+        scode_probability: _probability,
         sales: values.sales,
         sales_profit: _profit,
         profit_margin: _margin,
@@ -131,6 +136,24 @@ const AddSalesContainer = () => {
     console.log('2. sales-profits', result2.data);
     navigate('/sales');
   };
+
+  const onChangeSwitch = (e) => {
+    console.log('스위치button', e);
+    if (e) {
+      const value = {
+        checked: true,
+        name: '매출확정-Y',
+      };
+      setChecked(value);
+    } else {
+      const value = {
+        checked: false,
+        name: '매출확정-N',
+      };
+      setChecked(value);
+    }
+  };
+  console.log('ckecked', checked);
 
   return (
     <>
@@ -149,6 +172,8 @@ const AddSalesContainer = () => {
           profitMarginOnchange={profitMarginOnchange}
           radioValue={radioValue}
           profitMarginValue={profitMarginValue}
+          checked={checked}
+          onChangeSwitch={onChangeSwitch}
         />
       ) : (
         <h1>로딩중</h1>

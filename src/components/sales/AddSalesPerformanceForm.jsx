@@ -30,6 +30,8 @@ const AddSalesPerformanceForm = ({
   profitMarginOnchange,
   radioValue,
   profitMarginValue,
+  checked,
+  onChangeSwitch,
 }) => {
   if (divisionId) {
     console.log('>>>', division);
@@ -78,18 +80,19 @@ const AddSalesPerformanceForm = ({
             </Form.Item>
           </Col>
           <Col offset={1} span={5}>
-            <Form.Item label="매출확정여부" name="confirmed">
-              <Switch />
+            <Form.Item label={checked.name} name="confirmed">
+              <Switch onChange={onChangeSwitch} />
             </Form.Item>
           </Col>
           <Col span={6}>
             <Form.Item
               label="매출확률"
               name="probability"
-              rules={[{ required: true }]}
+              rules={[{ required: !checked.checked }]}
+
               //   wrapperCol={{ offset: 0, span: 8 }}
             >
-              <Select>
+              <Select disabled={checked.checked}>
                 {probability.map((list, index) => {
                   return (
                     <Select.Option key={index} value={list.id}>
