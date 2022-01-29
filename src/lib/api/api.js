@@ -48,7 +48,7 @@ export const getList = (path) => axios.get(`${API_URL}/${path}`);
 // projects?planStartDate_gte=2021-11-01&planStartDate_lte=2021-12-01
 export const getSalesListByMonth = (start, end) =>
   axios.get(
-    `${API_URL}/sales-performances?planStartDate_gte=${start}&planStartDate_lte=${end}`,
+    `${API_URL}/sales-performance?sales_rec_date_gte=${start}&sales_rec_date_lte=${end}`,
   );
 
 //getSalesId
@@ -79,6 +79,13 @@ export const apiProjectList = () => axios.get(`${API_URL}/projects`);
 export const getProjectFiltered = (start, end) =>
   axios.get(
     `${API_URL}/projects?planStartDate_gte=${start}&planStartDate_lte=${end}`,
+  );
+
+// sales 리스트 기간별 조회
+// projects?planStartDate_gte=2021-11-01&planStartDate_lte=2021-12-01
+export const getSalesFiltered = (start, end) =>
+  axios.get(
+    `${API_URL}/sales-performances?sales_rec_date_gte=${start}&sales_rec_date_lte=${end}`,
   );
 
 // 프로젝트 View

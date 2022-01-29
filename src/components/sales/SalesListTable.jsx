@@ -9,11 +9,13 @@ const SalesListTable = ({ tableData }) => {
       title: 'No',
       dataIndex: 'no',
       key: 'no',
+      align: 'center',
     },
     {
       title: '매출확률',
       dataIndex: 'probability',
       key: 'probability',
+      align: 'center',
     },
     {
       title: '매출처',
@@ -44,22 +46,26 @@ const SalesListTable = ({ tableData }) => {
       title: '확정여부',
       key: 'confirmed',
       dataIndex: 'confirmed',
+      align: 'center',
     },
     {
       title: '매출',
       key: 'sales',
       dataIndex: 'sales',
+      align: 'right',
     },
     {
       title: '매출이익',
       key: 'profit',
       dataIndex: 'profit',
+      align: 'right',
     },
-    {
-      title: '마진',
-      key: 'margin',
-      dataIndex: 'margin',
-    },
+    // {
+    //   title: '마진',
+    //   key: 'margin',
+    //   dataIndex: 'margin',
+    //   align: 'right',
+    // },
     {
       title: '매출인식일',
       key: 'sales_rec_date',

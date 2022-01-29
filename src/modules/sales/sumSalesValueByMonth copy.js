@@ -1,17 +1,9 @@
 // 기간별 예상매출, 예상매출이익, 실제매출액, 실제매출이익 합계산
 
 const sumSalesValueByMonth = (salesListValue) => {
-  const returnData = {
-    1: [0, 0],
-    2: [0, 0],
-    3: [0, 0],
-    4: [0, 0],
-    5: [0, 0],
-    99: [0, 0],
-  };
+  const returnData = {};
 
-  const sumSalesList = salesListValue.map((list) => {
-    const value = list.sales_profits[list.count - 1];
+  const sumSalesList = salesListValue.map((value) => {
     // 매출 확정 일경우
     if (value.confirmed === true) {
       returnData[99] = [value.sales, value.sales_profit];

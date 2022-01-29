@@ -1,6 +1,7 @@
 import { createAction, handleActions } from 'redux-actions';
 import * as api from '../lib/api/api';
 import { startLoading, finishLoading } from './loading';
+import moment from 'moment';
 
 // 매출현황 리스트
 const GET_SALESLIST = 'sales/GET_SALESLIST';
@@ -23,11 +24,14 @@ const SET_SALESSUMMARY = 'sales/SET_SALESSUMMARY';
 // edit 버튼틀릭시 모드 변경 VIEW -> EDIT
 const CHANGE_MODE = 'sales/CHANGE_MODE';
 
-export const getSalesList = () => async (dispatch) => {
+// sales 날짜 검색 기능
+const SET_STARTENDOFMONTH = 'sales/SET_STARTENDOFMONTH';
+
+export const getSalesList = (startOfMonth, endOfMonth) => async (dispatch) => {
   dispatch({ type: GET_SALESLIST }); //요청 시작을 알림
   dispatch(startLoading(GET_SALESLIST)); //loading true
   try {
-    const response = await api.getList('sales-performances');
+    const response = await api.getSalesFiltered(startOfMonth, endOfMonth);
     dispatch({
       type: GET_SALESLIST_SUCCESS,
       payload: response,
@@ -48,7 +52,7 @@ export const getSalesStatistics = () => async (dispatch) => {
   dispatch({ type: GET_SALESSTATISTICS }); //요청 시작을 알림
   dispatch(startLoading(GET_SALESSTATISTICS)); //loading true
   try {
-    const response = await api.getList('sales-performances');
+    const response = await api.getSalesListByMonth('sales-performances');
     dispatch({
       type: GET_SALESSTATISTICS_SUCCESS,
       payload: response,
@@ -94,11 +98,17 @@ export const setSummary = createAction(
 // VIEW - EDIT 모드 변경
 export const changeMode = createAction(CHANGE_MODE, (mode) => mode);
 
+export const setStartEndOfMonth = createAction(
+  SET_STARTENDOFMONTH,
+  (month) => month,
+);
+
 const initialState = {
   data: '',
   detail: '',
   mode: 'VIEW',
   summary: '',
+  month: [moment().format('YYYY-MM'), moment().format('YYYY-MM')],
   error: null,
 };
 
@@ -133,6 +143,11 @@ const sales = handleActions(
     [CHANGE_MODE]: (state, { payload }) => ({
       ...state,
       mode: payload.mode,
+    }),
+    //start month & end month
+    [SET_STARTENDOFMONTH]: (state, { payload }) => ({
+      ...state,
+      month: payload,
     }),
   },
   initialState,
