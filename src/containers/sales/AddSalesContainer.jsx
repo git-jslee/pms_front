@@ -17,7 +17,7 @@ const AddSalesContainer = () => {
   const [salesValue, setSalesValue] = useState();
   const [checked, setChecked] = useState({
     checked: false,
-    name: '매출확정-N',
+    name: '매출예정',
   });
   const [profitMarginValue, setProfitMarginValue] = useState({
     margin: null,
@@ -142,13 +142,13 @@ const AddSalesContainer = () => {
     if (e) {
       const value = {
         checked: true,
-        name: '매출확정-Y',
+        name: '매출확정',
       };
       setChecked(value);
     } else {
       const value = {
         checked: false,
-        name: '매출확정-N',
+        name: '매출예정',
       };
       setChecked(value);
     }

@@ -31,6 +31,10 @@ const SalesDetailContainer = () => {
     sales_profit: null,
   });
   const [calResult, setCalResult] = useState({});
+  const [checked, setChecked] = useState({
+    checked: false,
+    name: '매출예정',
+  });
 
   const { probability } = useSelector(({ codebook }) => ({
     probability: codebook.sales.probability,
@@ -151,13 +155,15 @@ const SalesDetailContainer = () => {
     ];
     const result = await tbl_update('sales-performances', id, datas);
     console.log('1. sales-performances_update', result.data);
-
+    // probability 5 -> 100% 의미함
+    const _confirmed = checked.checked === true ? true : false;
+    const _probability = checked.checked === true ? 5 : values.probability;
     const paymentDate = values.payment_date || '';
     const result2 = await tbl_insert('sales-profits', [
       {
         sales_performance: id,
-        confirmed: values.confirmed || false,
-        scode_probability: values.probability,
+        confirmed: _confirmed,
+        scode_probability: _probability,
         sales: values.sales,
         sales_profit: _profit,
         profit_margin: _margin,
@@ -180,6 +186,24 @@ const SalesDetailContainer = () => {
     );
     // navigate(`/sales/${id}`);
   };
+
+  const onChangeSwitch = (e) => {
+    console.log('스위치button', e);
+    if (e) {
+      const value = {
+        checked: true,
+        name: '매출확정',
+      };
+      setChecked(value);
+    } else {
+      const value = {
+        checked: false,
+        name: '매출예정',
+      };
+      setChecked(value);
+    }
+  };
+  console.log('ckecked', checked);
 
   console.log('probability', probability);
 
@@ -204,6 +228,8 @@ const SalesDetailContainer = () => {
             onChangeRadio={onChangeRadio}
             salesValueOnchange={salesValueOnchange}
             profitMarginOnchange={profitMarginOnchange}
+            checked={checked}
+            onChangeSwitch={onChangeSwitch}
           />
         ) : (
           <h1>salesupdatefrom 로딩중</h1>
