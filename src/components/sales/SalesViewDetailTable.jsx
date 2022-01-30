@@ -1,10 +1,17 @@
 import React from 'react';
-import { Table, Descriptions, Badge, Space, Divider } from 'antd';
-import Button from '../common/Button';
+import { Table, Descriptions, Badge, Space, Divider, Button } from 'antd';
+// import Button from '../common/Button';
 
-const SalesViewDetailTable = ({ list, tableData, buttonOnClick }) => {
+const SalesViewDetailTable = ({
+  list,
+  tableData,
+  buttonOnClick,
+  updateForm,
+  mode,
+}) => {
   const sales_profits = list.sales_profits;
   const sales_profit = sales_profits[sales_profits.length - 1];
+  const modename = mode === 'VIEW' ? 'EDIT' : 'VIEW';
   console.log('sales_pofir_length', sales_profit);
   console.log('tabledata', tableData);
   const columns = [
@@ -58,7 +65,7 @@ const SalesViewDetailTable = ({ list, tableData, buttonOnClick }) => {
 
   return (
     <>
-      <Button onClick={buttonOnClick}>UPDATE</Button>
+      <Button onClick={buttonOnClick}>{modename}</Button>
       <Descriptions title="Sales View" bordered>
         <Descriptions.Item label="매출확률">
           {sales_profit.scode_probability}
@@ -91,8 +98,16 @@ const SalesViewDetailTable = ({ list, tableData, buttonOnClick }) => {
         <Descriptions.Item label="마 진">
           {sales_profit.profit_margin}
         </Descriptions.Item>
-        <Descriptions.Item label="비 고">{list.description}</Descriptions.Item>
+        {/* edit 모드일때 discription 안보이게 */}
+        {mode === 'VIEW' ? (
+          <Descriptions.Item label="비 고">
+            {list.description}
+          </Descriptions.Item>
+        ) : (
+          ''
+        )}
       </Descriptions>
+      {updateForm}
       <Divider />
       <Table columns={columns} dataSource={tableData} />
     </>

@@ -121,11 +121,19 @@ const SalesDetailContainer = () => {
 
   const buttonOnClick = () => {
     console.log('edit 버튼 클릭');
-    dispatch(
-      changeMode({
-        mode: 'EDIT',
-      }),
-    );
+    if (mode === 'VIEW') {
+      dispatch(
+        changeMode({
+          mode: 'EDIT',
+        }),
+      );
+    } else if (mode === 'EDIT') {
+      dispatch(
+        changeMode({
+          mode: 'VIEW',
+        }),
+      );
+    }
   };
 
   const onSubmit = async (values) => {
@@ -207,32 +215,45 @@ const SalesDetailContainer = () => {
 
   console.log('probability', probability);
 
+  const updateForm = () => {
+    return (
+      <>
+        <SalesUpdateForm
+          list={list}
+          tableData={tableData}
+          probability={probability}
+          profitMarginValue={profitMarginValue}
+          radioValue={radioValue}
+          calResult={calResult}
+          onSubmit={onSubmit}
+          onChangeRadio={onChangeRadio}
+          salesValueOnchange={salesValueOnchange}
+          profitMarginOnchange={profitMarginOnchange}
+          checked={checked}
+          onChangeSwitch={onChangeSwitch}
+        />
+      </>
+    );
+  };
+
   return (
     <>
-      {list ? (
+      {list && probability ? (
         mode === 'VIEW' ? (
           <SalesViewDetailTable
             list={list}
             tableData={tableData}
             buttonOnClick={buttonOnClick}
-          />
-        ) : probability ? (
-          <SalesUpdateForm
-            list={list}
-            tableData={tableData}
-            probability={probability}
-            profitMarginValue={profitMarginValue}
-            radioValue={radioValue}
-            calResult={calResult}
-            onSubmit={onSubmit}
-            onChangeRadio={onChangeRadio}
-            salesValueOnchange={salesValueOnchange}
-            profitMarginOnchange={profitMarginOnchange}
-            checked={checked}
-            onChangeSwitch={onChangeSwitch}
+            mode={mode}
           />
         ) : (
-          <h1>salesupdatefrom 로딩중</h1>
+          <SalesViewDetailTable
+            list={list}
+            tableData={tableData}
+            buttonOnClick={buttonOnClick}
+            mode={mode}
+            updateForm={updateForm()}
+          />
         )
       ) : (
         <h1>로딩중</h1>
