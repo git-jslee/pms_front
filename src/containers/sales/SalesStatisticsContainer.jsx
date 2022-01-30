@@ -28,6 +28,7 @@ const SalesStatisticsContainer = () => {
         const response = await api.getSalesFiltered(startOfMonth, endOfMonth);
         console.log(`response[${i}]`, response.data);
         const sum = sumSalesValueByMonth(response.data);
+        // console.log(`***sum..[${i}]****`, sum);
         obj[i] = sum;
       }
 

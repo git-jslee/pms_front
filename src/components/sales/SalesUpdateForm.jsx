@@ -19,6 +19,7 @@ import {
 // import Button from '../common/Button';
 
 const SalesUpdateForm = ({
+  initialValues,
   probability,
   list,
   tableData,
@@ -51,7 +52,7 @@ const SalesUpdateForm = ({
         }}
         onFinish={onSubmit}
         layout="horizontal"
-        // initialValues={}
+        initialValues={initialValues}
         // onValuesChange={onFormLayoutChange}
       >
         <Row>

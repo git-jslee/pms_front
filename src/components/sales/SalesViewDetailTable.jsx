@@ -90,10 +90,10 @@ const SalesViewDetailTable = ({
           {list.scode_division.name}
         </Descriptions.Item>
         <Descriptions.Item label="매 출">
-          {sales_profit.sales}
+          {sales_profit.sales.toLocaleString('ko-KR')}
         </Descriptions.Item>
         <Descriptions.Item label="매출이익">
-          {sales_profit.sales_profit}
+          {sales_profit.sales_profit.toLocaleString('ko-KR')}
         </Descriptions.Item>
         <Descriptions.Item label="마 진">
           {sales_profit.profit_margin}

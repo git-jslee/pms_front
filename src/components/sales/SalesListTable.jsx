@@ -12,6 +12,12 @@ const SalesListTable = ({ tableData }) => {
       align: 'center',
     },
     {
+      title: '확정여부',
+      key: 'confirmed',
+      dataIndex: 'confirmed',
+      align: 'center',
+    },
+    {
       title: '매출확률',
       dataIndex: 'probability',
       key: 'probability',
@@ -41,12 +47,6 @@ const SalesListTable = ({ tableData }) => {
       title: '사업부',
       key: 'team',
       dataIndex: 'team',
-    },
-    {
-      title: '확정여부',
-      key: 'confirmed',
-      dataIndex: 'confirmed',
-      align: 'center',
     },
     {
       title: '매출',

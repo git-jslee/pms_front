@@ -51,6 +51,17 @@ const SalesDetailContainer = () => {
     );
   }, [dispatch]);
 
+  // update form 관련 값 설정
+  // useEffect(() => {
+  //   const sales_profits = list.sales_profits;
+  //   const sales_profit = sales_profits[sales_profits.length - 1];
+  //   setSalesValue(sales_profit.sales);
+  //   setProfitMarginValue({
+  //     margin: null,
+  //     sales_profit: sales_profit.sales_profit,
+  //   });
+  // }, []);
+
   useEffect(() => {
     console.log('---useEffect 실행---');
 
@@ -122,11 +133,18 @@ const SalesDetailContainer = () => {
   const buttonOnClick = () => {
     console.log('edit 버튼 클릭');
     if (mode === 'VIEW') {
+      const sales_profits = list.sales_profits;
+      const sales_profit = sales_profits[sales_profits.length - 1];
       dispatch(
         changeMode({
           mode: 'EDIT',
         }),
       );
+      setSalesValue(sales_profit.sales);
+      setProfitMarginValue({
+        margin: null,
+        sales_profit: sales_profit.sales_profit,
+      });
     } else if (mode === 'EDIT') {
       dispatch(
         changeMode({
@@ -212,13 +230,25 @@ const SalesDetailContainer = () => {
     }
   };
   console.log('ckecked', checked);
-
   console.log('probability', probability);
+  console.log('salesValue', salesValue);
+  console.log('profitMarginValue', profitMarginValue);
 
   const updateForm = () => {
+    const sales_profits = list.sales_profits;
+    const sales_profit = sales_profits[sales_profits.length - 1];
+    const initialValues = {
+      sales: sales_profit.sales,
+      sales_profit: sales_profit.sales_profit,
+      probability: sales_profit.scode_probability,
+      // sales_rec_date: sales_profit.sales_rec_date,
+    };
+    // setSalesValue(sales_profit.sales);
+
     return (
       <>
         <SalesUpdateForm
+          initialValues={initialValues}
           list={list}
           tableData={tableData}
           probability={probability}
