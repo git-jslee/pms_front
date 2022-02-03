@@ -10,6 +10,7 @@ import LoginPage from './LoginPage';
 import { useNavigate } from 'react-router-dom';
 // import FilterMonth from '../components/common/FilterMonth';
 import FilterMonthContainer from '../containers/common/FilterMonthContainer';
+import FormTemplate from '../components/common/FormTemplate';
 
 const ProjectPage = () => {
   const { user } = useSelector(({ auth }) => ({ user: auth.auth }));
@@ -26,19 +27,22 @@ const ProjectPage = () => {
     <>
       <HeaderContainer />
       <SiteHeader />
-      <h1>프로젝트 페이지</h1>
+
       {user === null ? (
-        <></>
+        <LoginPage />
       ) : (
         <>
-          <Link to="/addproject">
-            <Button>프로젝트 등록</Button>
-          </Link>
-          <FilterMonthContainer />
-          <hr />
-          <ProjectCountContainer />
-          <hr />
-          <ProjectListContainer />
+          <FormTemplate>
+            <h1>프로젝트 페이지</h1>
+            <Link to="/addproject">
+              <Button>프로젝트 등록</Button>
+            </Link>
+            <FilterMonthContainer />
+            <hr />
+            <ProjectCountContainer />
+            <hr />
+            <ProjectListContainer />
+          </FormTemplate>
         </>
       )}
     </>

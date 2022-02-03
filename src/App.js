@@ -34,6 +34,8 @@ function App() {
       <Routes>
         {/* <Route path="/" element={<MainPage />} /> */}
         <Route path="/" element={<ProjectPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
         <Route path="/project" element={<ProjectPage />} />
         <Route path="/project/:id" element={<ProjectViewPage />} />
         <Route path="/addproject/" element={<AddPorjectPage />} />
@@ -41,9 +43,6 @@ function App() {
         <Route path="/addcustomer" element={<AddCustomerPage />} />
         <Route path="/work" element={<WorkFormPage />} />
         <Route path="/addwork" element={<AddWorkFormPage />} />
-        <Route path="/antd" element={<AntdPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
         <Route path="/sales" element={<SalesPage />} />
         <Route path="/sales/:id" element={<SalesViewPage />} />
         <Route path="/addsales" element={<AddSalesPage />} />

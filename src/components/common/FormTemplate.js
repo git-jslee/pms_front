@@ -12,7 +12,7 @@ const FormTemplateBlock = styled.div`
   top: 100px;
   bottom: 0;
   right: 0;
-  background: ${palette.gray[2]};
+  /* background: ${palette.gray[2]}; */
   display: flex;
   flex-direction: column;
   /* justify-content: center; */
@@ -26,7 +26,7 @@ const WhiteBox = styled.div`
   margin-top: 10px;
   padding: 1rem;
   width: 1400px;
-  /* height: 100%; */
+  /* height: 100vh; */
   background: white;
   border-radius: 2px;
 `;
