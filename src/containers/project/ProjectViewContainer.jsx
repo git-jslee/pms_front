@@ -5,20 +5,25 @@ import { apiProject, apiProjectTaskId, apiWorkId } from '../../lib/api/api';
 import { getProject, projectValues } from '../../modules/projectForm';
 import { getCodebook } from '../../modules/codebook';
 import ProjectForm from '../../components/project/ProjectForm';
-import project, { getProjectId, getProjectWork } from '../../modules/project';
+import { getProjectId, getProjectWork } from '../../modules/project';
 import {
   projectInitValues,
   tasksInitValues,
 } from '../../components/project/ProjectInitValues';
 import calPidWorktimeAndProgress from '../../modules/calPidWorktimeAndProgress';
 import { Spin } from 'antd';
+import ProjectInfoTable from '../../components/project/ProjectInfoTable';
+import ProjectUpdateForm from '../../components/project/ProjectUpdateForm';
+import moment from 'moment';
+import tbl_update from '../../modules/tbl_update';
+import { changeMode } from '../../modules/common';
 
 const ProjectViewContainer = () => {
   const { id } = useParams();
-  // const [projectInfo, setProjectInfo] = useState('');
-  // const [projectTaskInfo, setProjectTaskInfo] = useState('');
-  // const [workInfo, setWorkInfo] = useState('');
-  // const [calTime, setCalTime] = useState();
+  const { auth } = useSelector(({ auth }) => ({
+    auth: auth.auth,
+  }));
+
   const dispatch = useDispatch();
   // 코드북 가져오기
   const {
@@ -35,6 +40,10 @@ const ProjectViewContainer = () => {
     code_tasks: codebook.code_tasks,
     status: codebook.status,
     error: codebook.error,
+  }));
+
+  const { mode } = useSelector(({ common }) => ({
+    mode: common.mode,
   }));
 
   // 코드북 수정
@@ -69,8 +78,6 @@ const ProjectViewContainer = () => {
     }),
   );
 
-  console.log(']]]] editmode ]]]]', editdisabled);
-
   // 컴포넌트가 처음 렌더링 될 때 codebook 디스패치
   useEffect(() => {
     dispatch(getCodebook());
@@ -78,14 +85,6 @@ const ProjectViewContainer = () => {
 
   // 프로젝트 ID 정보 가져오기
   useEffect(() => {
-    // apiProject(id)
-    //   .then((result) => {
-    //     console.log('>>projectview성공>>', result.data);
-    //     setProjectInfo(result.data);
-    //   })
-    //   .catch((error) => {
-    //     console.error('에러발생', error);
-    //   });
     dispatch(getProjectId(id));
   }, [dispatch]);
 
@@ -94,26 +93,75 @@ const ProjectViewContainer = () => {
     dispatch(getProjectWork(id));
   }, [dispatch]);
 
+  //onSubmit -> Update
+  const onSubmit = async (values) => {
+    console.log('1.onsubmit', values);
+    const jwt = auth.jwt;
+    const _startDate = values.startDate ? moment(values.startDate) : null;
+    const _endDate = values.endDate ? moment(values.endDate) : null;
+
+    const datas = [
+      {
+        code_status: values.status,
+        planStartDate: moment(values.planStartDate.format('YYYY-MM-DD')),
+        planEndDate: moment(values.planEndDate.format('YYYY-MM-DD')),
+        startDate: _startDate,
+        endDate: _endDate,
+        price: values.price,
+        remark: values.description,
+        // description: values.description,
+      },
+      {
+        headers: {
+          Authorization: 'Bearer ' + jwt,
+        },
+      },
+    ];
+    const result = await tbl_update('projects', id, datas);
+    console.log('2.update 결과', result);
+
+    dispatch(getProjectId(id));
+    dispatch(changeMode({ mode: 'VIEW' }));
+  };
+
+  //UpdateForm
+  const updateForm = () => {
+    if (mode === 'VIEW') return;
+    const _startDate = projectInfo.startDate
+      ? moment(projectInfo.startDate)
+      : null;
+    const _endDate = projectInfo.endDate ? moment(projectInfo.endDate) : null;
+    console.log('_endDate', _endDate);
+    const initialValues = {
+      status: projectInfo.code_status.id,
+      planStartDate: moment(projectInfo.planStartDate),
+      planEndDate: moment(projectInfo.planEndDate),
+      startDate: _startDate,
+      endDate: _endDate,
+      price: projectInfo.price,
+      description: projectInfo.remark,
+    };
+    return (
+      <>
+        <ProjectUpdateForm
+          code_statuses={code_statuses}
+          initialValues={initialValues}
+          onSubmit={onSubmit}
+        />
+      </>
+    );
+  };
+
   return (
     <>
-      {projectInfo && pidTaskList && pidWorktime && code_types ? (
-        <ProjectForm
-          projectInfo={projectInfo}
-          pidTaskList={pidTaskList}
-          formInitValues={projectInitValues(projectInfo, pidTaskList)}
-          code_types={code_types}
-          code_services={code_services}
-          code_statuses={code_statuses}
-          code_tasks={code_tasks}
-          editdisabled={editdisabled}
-          calPidWorktimeAndProgress={calPidWorktimeAndProgress(
-            id,
-            pidTaskList,
-            pidWorktime,
-          )}
-        />
+      {!loading2 && projectInfo ? (
+        <>
+          <ProjectInfoTable
+            projectInfo={projectInfo}
+            updateForm={updateForm()}
+          />
+        </>
       ) : (
-        // <h1>프로젝트폼..</h1>
         <Spin tip="Loading..." />
       )}
     </>

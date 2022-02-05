@@ -3,21 +3,24 @@ import { Link, useParams } from 'react-router-dom';
 import Button from '../components/common/Button';
 import HeaderContainer from '../containers/common/HeaderContainer';
 import SiteHeader from '../components/SiteHeader';
+import FormTemplate from '../components/common/FormTemplate';
 import ProjectViewContainer from '../containers/project/ProjectViewContainer';
-import EditActionButtonContainer from '../containers/project/EditActionButtonContainer';
 import ProjectViewDetail from '../components/project/ProjectViewDetail';
+import ProjectStatisticsContainer from '../containers/project/ProjectStatisticsContainer';
+import ModeChangeButtonContainer from '../containers/common/ModeChangeButtonContainer';
 
 const ProjectViewPage = () => {
   return (
     <>
       <HeaderContainer />
       <SiteHeader />
-      <h1>프로젝트뷰 페이지</h1>
-      <EditActionButtonContainer />
-      <hr />
-      <ProjectViewDetail />
-      <hr />
-      <ProjectViewContainer />
+      <FormTemplate>
+        <ModeChangeButtonContainer />
+        <ProjectStatisticsContainer />
+        {/* <ProjectViewDetail /> */}
+        <hr />
+        <ProjectViewContainer />
+      </FormTemplate>
     </>
   );
 };

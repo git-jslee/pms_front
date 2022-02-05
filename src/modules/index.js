@@ -10,6 +10,7 @@ import projectForm from './projectForm';
 import customerList from './customerList';
 import work from './work';
 import sales from './sales';
+import common from './common';
 
 const rootReducer = combineReducers({
   auth,
@@ -22,6 +23,7 @@ const rootReducer = combineReducers({
   customerList,
   work,
   sales,
+  common,
 });
 
 export default rootReducer;
