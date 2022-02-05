@@ -1,6 +1,12 @@
+body {
+  overflow: overlay;
+}
+
 .header {
   margin: 3px;
   /* padding-top: 64px; */
+  width: 1400px;
+  margin: 3px auto;
 }
 
 .header a {

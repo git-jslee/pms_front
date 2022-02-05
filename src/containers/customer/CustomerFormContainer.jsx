@@ -1,13 +1,18 @@
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import CustomerForm from '../../components/customer/CustomerForm';
 import { addCustomer } from '../../modules/customerForm';
+import { useNavigate } from 'react-router-dom';
 
 const CustomerFormContainer = () => {
+  const navigate = useNavigate();
+  const { auth } = useSelector(({ auth }) => ({
+    auth: auth.auth,
+  }));
   // 고객등록 폼 작성 후 submit 클릭시
   const onSubmit = (values) => {
     console.log('고객등록-onSubmit..');
-    const auth =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNjQxMDA4NzE5LCJleHAiOjE2NDM2MDA3MTl9.axMN2VemKxDxPeZJ_zfvhGm8FmMUVd5MkPe_lED0ocM';
+    const jwt = auth.jwt;
     const datas = [
       {
         name_eng: values.name_eng,
@@ -15,13 +20,14 @@ const CustomerFormContainer = () => {
       },
       {
         headers: {
-          Authorization: 'Bearer ' + auth,
+          Authorization: 'Bearer ' + jwt,
         },
       },
     ];
     try {
       addCustomer(datas);
       // 고객등록 성공시 페이지 이동 기능 구현 필요
+      navigate('/customer');
     } catch (error) {
       console.log('고객등록 에러', error);
     }

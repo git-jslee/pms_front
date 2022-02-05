@@ -99,8 +99,7 @@ const AddWorkFormContainer = () => {
   // onSubmit
   const onSubmit = (values) => {
     // console.log('submit', values);
-    const jwt =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNjQxMDA4NzE5LCJleHAiOjE2NDM2MDA3MTl9.axMN2VemKxDxPeZJ_zfvhGm8FmMUVd5MkPe_lED0ocM';
+    const jwt = auth.jwt;
     const datas = [
       {
         customer: values.customer,

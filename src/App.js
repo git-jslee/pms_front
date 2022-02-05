@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux';
 //page import
 import SiteHeader from './components/SiteHeader';
 import MainPage from './pages/MainPage';
+import ErrorPage from './pages/ErrorPage';
 import ProjectPage from './pages/ProjectPage';
 import CustomerPage from './pages/CustomerPage';
 import WorkPage from './pages/WorkPage';
@@ -46,6 +47,7 @@ function App() {
         <Route path="/sales" element={<SalesPage />} />
         <Route path="/sales/:id" element={<SalesViewPage />} />
         <Route path="/addsales" element={<AddSalesPage />} />
+        <Route path="/*" element={<ErrorPage />} />
       </Routes>
     </>
   );
