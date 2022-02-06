@@ -12,18 +12,20 @@ const lists = [
   { id: 'w180', planDay: 8, totalTime: 1, progress: 10 },
   { id: 'w190', planDay: 10, totalTime: 0, progress: undefined },
 ];
+// code: "w100", id: 1 ,name: "기획 구성", planDay: 0, progress: 25, sort: 100, totalTime: 4
 
-const ProjectStatistics = () => {
+const ProjectStatistics = ({ statistic }) => {
+  console.log('**statistic', statistic);
   let planTotal = 0;
   let totalWorkingTime = 0;
-  lists.map((list) => {
+  statistic.map((list) => {
     planTotal = planTotal + list.planDay;
     totalWorkingTime = totalWorkingTime + list.totalTime;
   });
 
   return (
     <>
-      <h1>프로젝트 Detail</h1>
+      <h3>Project Statistic</h3>
       <div className="site-statistic-demo-card">
         <Row gutter={16}>
           <Col span={6}>
@@ -53,7 +55,7 @@ const ProjectStatistics = () => {
           <Col span={6}>
             <Card>
               <Statistic
-                title="증/감"
+                title="계획대비 실행시간"
                 value={planTotal * 8 - totalWorkingTime}
                 // precision={2}
                 valueStyle={{ color: '#3f8600' }}
@@ -79,16 +81,29 @@ const ProjectStatistics = () => {
       <br />
       <div>
         <Row gutter={16}>
-          {lists.map((list) => {
+          {statistic.map((list) => {
             return (
               <div>
-                <span>{list.id}</span>
+                <span>{list.name}</span>
                 <Col>
-                  <Progress
-                    type="circle"
-                    percent={list.progress}
-                    format={() => `${list.planDay * 8} / ${list.totalTime}`}
-                  />
+                  <Card>
+                    {/* <span>{list.id}</span> */}
+                    <Statistic
+                      title="계획 / 실행"
+                      value={`${list.planDay * 8} / ${list.totalTime}`}
+                      // precision={1}
+                      valueStyle={{ color: '#3f8600' }}
+                      // prefix={<ArrowUpOutlined />}
+                      suffix="h"
+                    />
+                    <Progress
+                      // type="circle"
+                      steps={5}
+                      percent={list.progress}
+                      // width={80}
+                      // format={() => `${list.planDay * 8} / ${list.totalTime}`}
+                    />
+                  </Card>
                 </Col>
               </div>
             );

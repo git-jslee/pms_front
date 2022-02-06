@@ -37,7 +37,9 @@ const ProjectFormContainer = () => {
     serviceId: addProject.serviceId,
   }));
   const tasks = serviceId
-    ? code_tasks.filter((v) => v.code_service.id === serviceId)
+    ? code_tasks
+        .filter((v) => v.code_service.id === serviceId)
+        .sort((a, b) => a.sort - b.sort)
     : null;
 
   //웹토큰 가져오기..값 변경시에만 실행되게 설정 변경..

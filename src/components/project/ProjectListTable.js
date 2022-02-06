@@ -82,7 +82,11 @@ const ProjectListTable = ({ lists, loading }) => {
 
   return (
     <>
-      <Table columns={columns} dataSource={tableData} />
+      <Table
+        columns={columns}
+        dataSource={tableData}
+        pagination={{ pageSize: 30 }}
+      />
     </>
   );
 };

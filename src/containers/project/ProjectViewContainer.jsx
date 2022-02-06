@@ -17,6 +17,8 @@ import ProjectUpdateForm from '../../components/project/ProjectUpdateForm';
 import moment from 'moment';
 import tbl_update from '../../modules/tbl_update';
 import { changeMode } from '../../modules/common';
+import ProjectWorkList from '../../components/project/ProjectWorkList';
+import { ListConsumer } from 'antd/lib/list';
 
 const ProjectViewContainer = () => {
   const { id } = useParams();
@@ -70,13 +72,12 @@ const ProjectViewContainer = () => {
   console.log('loading', loading1, loading2, loading3);
 
   // 프로젝트 정보 가져오기
-  const { projectInfo, pidTaskList, pidWorktime } = useSelector(
-    ({ project }) => ({
-      projectInfo: project.data.projectInfo,
-      pidTaskList: project.data.tasks,
-      pidWorktime: project.data.works,
-    }),
-  );
+  const { projectInfo, pidTaskList, works } = useSelector(({ project }) => ({
+    projectInfo: project.data.projectInfo,
+    pidTaskList: project.data.tasks,
+    works: project.data.works,
+  }));
+  const [workList, setWorkList] = useState();
 
   // 컴포넌트가 처음 렌더링 될 때 codebook 디스패치
   useEffect(() => {
@@ -92,6 +93,27 @@ const ProjectViewContainer = () => {
   useEffect(() => {
     dispatch(getProjectWork(id));
   }, [dispatch]);
+
+  // work list
+  useEffect(() => {
+    if (!works) return;
+    const result = works
+      .map((list, index) => {
+        return {
+          key: list.id,
+          no: index,
+          task: list.project_task.code_task,
+          workingDay: list.workingDay,
+          workingTime: list.workingTime,
+          progress: list.code_progress.code,
+          worker: list.users_permissions_user.username,
+          description: list.description,
+        };
+      })
+      .sort((a, b) => new Date(b.workingDay) - new Date(a.workingDay));
+    console.log('+++++result', result);
+    setWorkList(result);
+  }, [works]);
 
   //onSubmit -> Update
   const onSubmit = async (values) => {
@@ -152,6 +174,8 @@ const ProjectViewContainer = () => {
     );
   };
 
+  console.log('workList', workList);
+
   return (
     <>
       {!loading2 && projectInfo ? (
@@ -160,6 +184,7 @@ const ProjectViewContainer = () => {
             projectInfo={projectInfo}
             updateForm={updateForm()}
           />
+          <ProjectWorkList tableData={workList} />
         </>
       ) : (
         <Spin tip="Loading..." />
