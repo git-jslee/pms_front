@@ -1,17 +1,17 @@
 import React from 'react';
-import { Statistic, Card, Row, Col, Progress } from 'antd';
+import { Statistic, Card, Row, Col, Progress, Divider } from 'antd';
 
-const lists = [
-  { id: 'w100', planDay: 5, totalTime: 12, progress: 10 },
-  { id: 'w120', planDay: 2, totalTime: 0, progress: undefined },
-  { id: 'w130', planDay: 3, totalTime: 4, progress: 10 },
-  { id: 'w140', planDay: 7, totalTime: 6, progress: 50 },
-  { id: 'w150', planDay: 6, totalTime: 0, progress: undefined },
-  { id: 'w160', planDay: 5, totalTime: 20, progress: 75 },
-  { id: 'w170', planDay: 4, totalTime: 5, progress: 10 },
-  { id: 'w180', planDay: 8, totalTime: 1, progress: 10 },
-  { id: 'w190', planDay: 10, totalTime: 0, progress: undefined },
-];
+// const lists = [
+//   { id: 'w100', planDay: 5, totalTime: 12, progress: 10 },
+//   { id: 'w120', planDay: 2, totalTime: 0, progress: undefined },
+//   { id: 'w130', planDay: 3, totalTime: 4, progress: 10 },
+//   { id: 'w140', planDay: 7, totalTime: 6, progress: 50 },
+//   { id: 'w150', planDay: 6, totalTime: 0, progress: undefined },
+//   { id: 'w160', planDay: 5, totalTime: 20, progress: 75 },
+//   { id: 'w170', planDay: 4, totalTime: 5, progress: 10 },
+//   { id: 'w180', planDay: 8, totalTime: 1, progress: 10 },
+//   { id: 'w190', planDay: 10, totalTime: 0, progress: undefined },
+// ];
 // code: "w100", id: 1 ,name: "기획 구성", planDay: 0, progress: 25, sort: 100, totalTime: 4
 
 const ProjectStatistics = ({ statistic }) => {
@@ -55,7 +55,7 @@ const ProjectStatistics = ({ statistic }) => {
           <Col span={6}>
             <Card>
               <Statistic
-                title="계획대비 실행시간"
+                title="완료예정"
                 value={planTotal * 8 - totalWorkingTime}
                 // precision={2}
                 valueStyle={{ color: '#3f8600' }}
@@ -77,6 +77,7 @@ const ProjectStatistics = ({ statistic }) => {
             </Card>
           </Col>
         </Row>
+        <Divider />
       </div>
       <br />
       <div>

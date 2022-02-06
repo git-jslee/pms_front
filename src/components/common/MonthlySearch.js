@@ -1,10 +1,10 @@
 import React, { Link, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import Button from '../common/Button';
+import Button from './Button';
 import { DatePicker, Space } from 'antd';
 import moment from 'moment';
-import { setStartEndOfMonth } from '../../modules/sales';
+import { setStartEndOfMonth } from '../../modules/common';
 
 const { RangePicker } = DatePicker;
 
@@ -27,42 +27,32 @@ const SubMenuBlock = styled.div`
   }
 `;
 
-const SalesSubMenu = () => {
-  const dispatch = useDispatch();
-  const { startMonth, endMonth } = useSelector(({ sales }) => ({
-    startMonth: sales.month[0],
-    endMonth: sales.month[1],
-  }));
-  const dateFormat = 'YYYY-MM';
-
+const MonthlySearch = ({ name, defaultValue, onChange }) => {
   // useEffect(() => {
   //   dispatch(setStartEndOfMonth(thisMonth));
   // }, [dispatch]);
 
-  const onChange = (value) => {
-    console.log('onchange', value);
-    if (value !== null) {
-      const month = [
-        moment(value[0]).format('YYYY-MM'),
-        moment(value[1]).format('YYYY-MM'),
-      ];
-      dispatch(setStartEndOfMonth(month));
-    }
-  };
+  // const onChange = (value) => {
+  //   console.log('onchange', value);
+  //   if (value !== null) {
+  //     const month = [
+  //       moment(value[0]).format('YYYY-MM'),
+  //       moment(value[1]).format('YYYY-MM'),
+  //     ];
+  //     dispatch(setStartEndOfMonth(month));
+  //   }
+  // };
   return (
     <>
       <SubMenuBlock>
-        <h1>매출현황</h1>
-        <Button to="/addsales">등록</Button>
+        <h1>{name}</h1>
+        <Button to="/addproject">등록</Button>
         <div className="search">
           <span>조회</span>
           <Space direction="vertical" size={12}>
             <RangePicker
               picker="month"
-              defaultValue={[
-                moment(startMonth, dateFormat),
-                moment(endMonth, dateFormat),
-              ]}
+              defaultValue={defaultValue}
               onChange={onChange}
             />
           </Space>
@@ -72,4 +62,4 @@ const SalesSubMenu = () => {
   );
 };
 
-export default SalesSubMenu;
+export default MonthlySearch;

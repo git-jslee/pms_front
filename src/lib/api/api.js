@@ -51,6 +51,10 @@ export const getSalesListByMonth = (start, end) =>
     `${API_URL}/sales-performance?sales_rec_date_gte=${start}&sales_rec_date_lte=${end}`,
   );
 
+// == 프로젝트 월별 조회
+export const getProjectListByMonth = (start, end) =>
+  axios.get(`${API_URL}/projects?startDate_gte=${start}&startDate_lte=${end}`);
+
 //getSalesId
 export const getSalesId = (id) =>
   axios.get(`${API_URL}/sales-performances/${id}`);

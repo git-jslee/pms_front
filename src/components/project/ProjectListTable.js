@@ -6,6 +6,11 @@ const ProjectListTable = ({ lists, loading }) => {
   const navigate = useNavigate();
   const columns = [
     {
+      title: 'No',
+      dataIndex: 'no',
+      key: 'no',
+    },
+    {
       title: '구분',
       dataIndex: 'type',
       key: 'type',
@@ -60,15 +65,19 @@ const ProjectListTable = ({ lists, loading }) => {
   ];
 
   const tableData = [];
+  if (!lists) {
+    return <Table columns={columns} />;
+  }
   const tableList = lists.map((list, index) => {
     const array = {
       key: list.id,
+      no: index + 1,
       type: list.code_type.name,
       customer: list.customer.name,
       name: list.name,
       service: list.code_service.name,
       status: list.code_status.name,
-      startdate: list.planStartDate,
+      startdate: list.startDate,
       action: 'View',
     };
     tableData.push(array);
