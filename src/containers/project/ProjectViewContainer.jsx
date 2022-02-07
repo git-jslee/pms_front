@@ -101,7 +101,7 @@ const ProjectViewContainer = () => {
       .map((list, index) => {
         return {
           key: list.id,
-          no: index,
+          no: index + 1,
           task: list.project_task.code_task,
           workingDay: list.workingDay,
           workingTime: list.workingTime,

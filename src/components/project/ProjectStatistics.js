@@ -14,7 +14,7 @@ import { Statistic, Card, Row, Col, Progress, Divider } from 'antd';
 // ];
 // code: "w100", id: 1 ,name: "기획 구성", planDay: 0, progress: 25, sort: 100, totalTime: 4
 
-const ProjectStatistics = ({ statistic }) => {
+const ProjectStatistics = ({ statistic, duration }) => {
   console.log('**statistic', statistic);
   let planTotal = 0;
   let totalWorkingTime = 0;
@@ -32,7 +32,9 @@ const ProjectStatistics = ({ statistic }) => {
             <Card>
               <Statistic
                 title="작업일(계획/실행)"
-                value={`${planTotal}일 / ${totalWorkingTime / 8}일`}
+                value={`${planTotal}일 / ${(totalWorkingTime / 8).toFixed(
+                  1,
+                )}일`}
                 precision={2}
                 valueStyle={{ color: '#3f8600' }}
                 // prefix={<ArrowUpOutlined />}
@@ -68,8 +70,8 @@ const ProjectStatistics = ({ statistic }) => {
             <Card>
               <Statistic
                 title="작업경과"
-                value="20"
-                precision={1}
+                value={duration}
+                // precision={1}
                 valueStyle={{ color: '#3f8600' }}
                 // prefix={<ArrowUpOutlined />}
                 suffix="일"

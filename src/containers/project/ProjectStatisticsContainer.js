@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import ProjectStatistics from '../../components/project/ProjectStatistics';
+import moment from 'moment';
 
 const ProjectStatisticsContainer = () => {
   // 코드북 loding 상태 체크
@@ -16,11 +17,14 @@ const ProjectStatisticsContainer = () => {
     workLists: project.data.works,
   }));
   const [statistic, setStatistic] = useState();
+  const [durationDay, setDurationDay] = useState(0);
 
   useEffect(() => {
     if (!code_tasks || !projectInfo || !taskLists) {
       return;
     }
+    const duration = moment().diff(moment(projectInfo.startDate), 'days');
+    console.log('duration', duration);
 
     console.log('projectInfo', projectInfo);
     // {  id:1,  code: 'w100',  name:'기획 구성', planDay: null, totalTime: null, progress:null }
@@ -40,6 +44,7 @@ const ProjectStatisticsContainer = () => {
     //   .sort((a, b) => a.sort - b.sort);
     const tasks = taskLists.map((v) => {
       return {
+        key: v.code_task.id,
         id: v.code_task.id,
         code: v.code_task.code,
         name: v.code_task.name,
@@ -64,6 +69,7 @@ const ProjectStatisticsContainer = () => {
         });
       });
     const tasksResult = tasks.sort((a, b) => a.sort - b.sort);
+    setDurationDay(duration);
     setStatistic(tasksResult);
     console.log('===tasksResult', tasksResult);
   }, [taskLists, workLists]);
@@ -71,7 +77,7 @@ const ProjectStatisticsContainer = () => {
   return (
     <>
       {mode === 'VIEW' && statistic ? (
-        <ProjectStatistics statistic={statistic} />
+        <ProjectStatistics statistic={statistic} duration={durationDay} />
       ) : (
         <h1>...</h1>
       )}

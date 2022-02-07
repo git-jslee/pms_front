@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, Table, Space } from 'antd';
+import moment from 'moment';
 
 const ProjectListTable = ({ lists, loading }) => {
   const navigate = useNavigate();
@@ -34,15 +35,25 @@ const ProjectListTable = ({ lists, loading }) => {
       title: '상태',
       key: 'status',
       dataIndex: 'status',
+      align: 'center',
     },
     {
       title: '시작일',
       key: 'startdate',
       dataIndex: 'startdate',
+      align: 'right',
+    },
+    {
+      title: 'Duration',
+      key: 'duration',
+      dataIndex: 'duration',
+      align: 'right',
+      sorter: (a, b) => a.duration - b.duration,
     },
     {
       title: 'Action',
       key: 'action',
+      align: 'center',
       render: (text, record) => (
         <Space size="middle">
           <Button
@@ -69,6 +80,7 @@ const ProjectListTable = ({ lists, loading }) => {
     return <Table columns={columns} />;
   }
   const tableList = lists.map((list, index) => {
+    const duration = moment().diff(moment(list.startDate), 'days');
     const array = {
       key: list.id,
       no: index + 1,
@@ -78,6 +90,7 @@ const ProjectListTable = ({ lists, loading }) => {
       service: list.code_service.name,
       status: list.code_status.name,
       startdate: list.startDate,
+      duration: duration,
       action: 'View',
     };
     tableData.push(array);
@@ -94,7 +107,7 @@ const ProjectListTable = ({ lists, loading }) => {
       <Table
         columns={columns}
         dataSource={tableData}
-        pagination={{ pageSize: 30 }}
+        pagination={{ pageSize: 20 }}
       />
     </>
   );

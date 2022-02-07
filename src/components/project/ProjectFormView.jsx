@@ -159,7 +159,7 @@ const ProjectFormView = ({
         <Form.Item label="계획일" name="planDate" rules={[{ required: true }]}>
           <RangePicker />
         </Form.Item>
-        <Form.Item label="시작일" name="startDate">
+        <Form.Item label="시작일" name="startDate" rules={[{ required: true }]}>
           <DatePicker />
         </Form.Item>
         <Form.Item label="종료일" name="endDate">

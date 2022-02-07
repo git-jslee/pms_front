@@ -31,7 +31,7 @@ const ProjectUpdateForm = ({ initialValues, code_statuses, onSubmit }) => {
       >
         <Row>
           <Col offset={2} span={6}>
-            <Form.Item label="상태" name="status">
+            <Form.Item label="상태" name="status" rules={[{ required: true }]}>
               <Select>
                 {code_statuses.map((status, index) => {
                   return (
@@ -44,19 +44,31 @@ const ProjectUpdateForm = ({ initialValues, code_statuses, onSubmit }) => {
             </Form.Item>
           </Col>
           <Col span={6}>
-            <Form.Item label="계획시작" name="planStartDate">
+            <Form.Item
+              label="계획시작"
+              name="planStartDate"
+              rules={[{ required: true }]}
+            >
               <DatePicker />
             </Form.Item>
           </Col>
           <Col span={6}>
-            <Form.Item label="계획종료" name="planEndDate">
+            <Form.Item
+              label="계획종료"
+              name="planEndDate"
+              rules={[{ required: true }]}
+            >
               <DatePicker />
             </Form.Item>
           </Col>
         </Row>
         <Row>
           <Col offset={2} span={6}>
-            <Form.Item label="시작일" name="startDate">
+            <Form.Item
+              label="시작일"
+              name="startDate"
+              rules={[{ required: true }]}
+            >
               <DatePicker />
             </Form.Item>
           </Col>
