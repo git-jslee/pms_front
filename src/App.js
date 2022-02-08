@@ -3,6 +3,8 @@ import './App.css';
 import React from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import PrivateRoute from './components/common/PrivateRoute';
+import PublicRoute from './components/common/PublicRoute';
 
 //page import
 import SiteHeader from './components/SiteHeader';
@@ -34,20 +36,24 @@ function App() {
     <>
       <Routes>
         {/* <Route path="/" element={<MainPage />} /> */}
-        <Route path="/" element={<ProjectPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
-        <Route path="/project" element={<ProjectPage />} />
-        <Route path="/project/:id" element={<ProjectViewPage />} />
-        <Route path="/addproject/" element={<AddPorjectPage />} />
-        <Route path="/customer" element={<CustomerPage />} />
-        <Route path="/addcustomer" element={<AddCustomerPage />} />
-        <Route path="/work" element={<WorkFormPage />} />
-        <Route path="/addwork" element={<AddWorkFormPage />} />
-        <Route path="/sales" element={<SalesPage />} />
-        <Route path="/sales/:id" element={<SalesViewPage />} />
-        <Route path="/addsales" element={<AddSalesPage />} />
-        <Route path="/*" element={<ErrorPage />} />
+        <Route element={<PublicRoute />}>
+          <Route path="/login" element={<LoginPage />} />
+        </Route>
+        <Route element={<PrivateRoute />}>
+          <Route path="/" element={<ProjectPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/project" element={<ProjectPage />} />
+          <Route path="/project/:id" element={<ProjectViewPage />} />
+          <Route path="/addproject/" element={<AddPorjectPage />} />
+          <Route path="/customer" element={<CustomerPage />} />
+          <Route path="/addcustomer" element={<AddCustomerPage />} />
+          <Route path="/work" element={<WorkFormPage />} />
+          <Route path="/addwork" element={<AddWorkFormPage />} />
+          <Route path="/sales" element={<SalesPage />} />
+          <Route path="/sales/:id" element={<SalesViewPage />} />
+          <Route path="/addsales" element={<AddSalesPage />} />
+          <Route path="/*" element={<ErrorPage />} />
+        </Route>
       </Routes>
     </>
   );
