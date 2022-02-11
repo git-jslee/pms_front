@@ -166,12 +166,15 @@ const SalesDetailContainer = () => {
       _margin = parseInt(profitMarginValue.margin);
       _profit = parseInt(calResult.profit);
     }
-
+    const _confirmed = checked.checked === true ? true : false;
+    const _probability = checked.checked === true ? 5 : values.probability;
     const datas = [
       {
+        confirmed: _confirmed,
+        scode_probability: _probability,
         sales_rec_date: moment(values.sales_rec_date.format('YYYY-MM-DD')),
         count: list.sales_profits.length + 1,
-        // description: values.description,
+        description: values.description,
       },
       {
         headers: {
@@ -182,8 +185,6 @@ const SalesDetailContainer = () => {
     const result = await tbl_update('sales-performances', id, datas);
     console.log('1. sales-performances_update', result.data);
     // probability 5 -> 100% 의미함
-    const _confirmed = checked.checked === true ? true : false;
-    const _probability = checked.checked === true ? 5 : values.probability;
     const paymentDate = values.payment_date || '';
     const result2 = await tbl_insert('sales-profits', [
       {
@@ -241,6 +242,7 @@ const SalesDetailContainer = () => {
       sales: sales_profit.sales,
       sales_profit: sales_profit.sales_profit,
       probability: sales_profit.scode_probability,
+      description: list.description,
       // sales_rec_date: sales_profit.sales_rec_date,
     };
     // setSalesValue(sales_profit.sales);
@@ -265,6 +267,8 @@ const SalesDetailContainer = () => {
       </>
     );
   };
+
+  console.log('list', list);
 
   return (
     <>

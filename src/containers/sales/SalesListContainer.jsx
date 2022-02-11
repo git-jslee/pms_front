@@ -11,9 +11,9 @@ const SalesListContainer = () => {
   // const [salesSummary, setSalesSummary] = useState({});
   const [tableData, setTableData] = useState();
   const { startMonth, endMonth, lists, loading } = useSelector(
-    ({ sales, loading }) => ({
-      startMonth: sales.month[0],
-      endMonth: sales.month[1],
+    ({ common, sales, loading }) => ({
+      startMonth: common.month[0],
+      endMonth: common.month[1],
       lists: sales.data,
       loading: loading['sales/GET_SALESLIST'],
     }),
@@ -24,12 +24,12 @@ const SalesListContainer = () => {
   useEffect(() => {
     // const startMonth = moment().add(0, 'months').format('YYYY-MM');
     // const endMonth = moment().add(0, 'months').format('YYYY-MM');
-    const startOfMonth = moment(startMonth)
-      .startOf('month')
-      .format('YYYY-MM-DD');
-    const endOfMonth = moment(endMonth).endOf('month').format('YYYY-MM-DD');
-    console.log('month', startOfMonth, endOfMonth);
-    dispatch(getSalesList(startOfMonth, endOfMonth));
+    // const startOfMonth = moment(startMonth)
+    //   .startOf('month')
+    //   .format('YYYY-MM-DD');
+    // const endOfMonth = moment(endMonth).endOf('month').format('YYYY-MM-DD');
+    // console.log('month', startOfMonth, endOfMonth);
+    dispatch(getSalesList(startMonth, endMonth));
   }, [dispatch, startMonth, endMonth]);
 
   // table data

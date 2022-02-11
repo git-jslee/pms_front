@@ -47,6 +47,7 @@ const SalesListTable = ({ tableData }) => {
       title: '사업부',
       key: 'team',
       dataIndex: 'team',
+      align: 'center',
     },
     {
       title: '매출',
@@ -106,7 +107,11 @@ const SalesListTable = ({ tableData }) => {
 
   return (
     <>
-      <Table columns={columns} dataSource={tableData} />
+      <Table
+        columns={columns}
+        dataSource={tableData}
+        pagination={{ pageSize: 20 }}
+      />
     </>
   );
 };

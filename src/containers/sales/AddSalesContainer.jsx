@@ -92,6 +92,8 @@ const AddSalesContainer = () => {
       _margin = parseInt(profitMarginValue.margin);
       _profit = parseInt(calResult.profit);
     }
+    const _confirmed = checked.checked === true ? true : false;
+    const _probability = checked.checked === true ? 5 : values.probability;
     const datas = [
       {
         customer: values.customer,
@@ -99,6 +101,8 @@ const AddSalesContainer = () => {
         scode_division: values.division,
         scode_item: values.item,
         scode_team: values.team,
+        confirmed: _confirmed,
+        scode_probability: _probability,
         sales_rec_date: moment(values.sales_rec_date.format('YYYY-MM-DD')),
         count: 1,
         description: values.description,
@@ -112,8 +116,7 @@ const AddSalesContainer = () => {
     const result = await tbl_insert('sales-performances', datas);
     console.log('1. sales-performances', result.data);
     // probability 5 -> 100% 의미함
-    const _confirmed = checked.checked === true ? true : false;
-    const _probability = checked.checked === true ? 5 : values.probability;
+
     const paymentDate = values.payment_date || '';
     const result2 = await tbl_insert('sales-profits', [
       {
