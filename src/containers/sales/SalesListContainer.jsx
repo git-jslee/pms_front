@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getSalesList } from '../../modules/sales';
+import { getSalesList, getSalesParams } from '../../modules/sales';
 import SalesListTable from '../../components/sales/SalesListTable';
 import moment from 'moment';
 // import { setSummary } from '../../modules/sales';
@@ -10,10 +10,11 @@ const SalesListContainer = () => {
   const dispatch = useDispatch();
   // const [salesSummary, setSalesSummary] = useState({});
   const [tableData, setTableData] = useState();
-  const { startMonth, endMonth, lists, loading } = useSelector(
+  const { startMonth, endMonth, lists, loading, params } = useSelector(
     ({ common, sales, loading }) => ({
       startMonth: common.month[0],
       endMonth: common.month[1],
+      params: common.params,
       lists: sales.data,
       loading: loading['sales/GET_SALESLIST'],
     }),
@@ -29,8 +30,20 @@ const SalesListContainer = () => {
     //   .format('YYYY-MM-DD');
     // const endOfMonth = moment(endMonth).endOf('month').format('YYYY-MM-DD');
     // console.log('month', startOfMonth, endOfMonth);
-    dispatch(getSalesList(startMonth, endMonth));
-  }, [dispatch, startMonth, endMonth]);
+    if (!params) {
+      dispatch(getSalesList(startMonth, endMonth));
+    } else {
+      console.log('파라미터', params);
+      //scode_probability.id
+      if (params.key === '99') {
+        const parameter = `confirmed=true`;
+        dispatch(getSalesParams(startMonth, endMonth, parameter));
+      } else {
+        const parameter = `confirmed=false&scode_probability.id=${params.key}`;
+        dispatch(getSalesParams(startMonth, endMonth, parameter));
+      }
+    }
+  }, [dispatch, startMonth, endMonth, params]);
 
   // table data
   console.log('lists', lists);

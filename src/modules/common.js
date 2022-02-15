@@ -9,6 +9,9 @@ const CHANGE_MODE = 'common/CHANGE_MODE';
 // 월별 조회 관련 날짜 지정 기능
 const SET_STARTENDOFMONTH = 'common/SET_STARTENDOFMONTH';
 
+// 매출현황 테이블 확률&월별 조회 기능
+const SET_PARAMS = 'common/SET_PARAMS';
+
 // VIEW - EDIT 모드 변경
 export const changeMode = createAction(CHANGE_MODE, (mode) => mode);
 
@@ -17,9 +20,12 @@ export const setStartEndOfMonth = createAction(
   (month) => month,
 );
 
+export const setParams = createAction(SET_PARAMS, (params) => params);
+
 const initialState = {
   mode: 'VIEW',
   month: [null, null],
+  params: null,
   error: null,
 };
 
@@ -34,6 +40,10 @@ const common = handleActions(
     [SET_STARTENDOFMONTH]: (state, { payload }) => ({
       ...state,
       month: payload,
+    }),
+    [SET_PARAMS]: (state, { payload }) => ({
+      ...state,
+      params: payload,
     }),
   },
   initialState,

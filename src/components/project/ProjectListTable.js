@@ -41,6 +41,16 @@ const ProjectListTable = ({ lists, loading }) => {
       dataIndex: 'startdate',
     },
     {
+      title: 'Update',
+      key: 'update',
+      dataIndex: 'update',
+    },
+    {
+      title: 'time/w',
+      key: 'count',
+      dataIndex: 'count',
+    },
+    {
       title: 'Action',
       key: 'action',
       render: (text, record) => (
@@ -51,13 +61,6 @@ const ProjectListTable = ({ lists, loading }) => {
             }}
           >
             View
-          </Button>
-          <Button
-            onClick={() => {
-              onClick(record.key);
-            }}
-          >
-            Edit
           </Button>
         </Space>
       ),

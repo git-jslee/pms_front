@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import SalesStatisticsTable from '../../components/sales/SalesStatisticsTable';
 import * as api from '../../lib/api/api';
 import sumSalesValueByMonth from '../../modules/sales/sumSalesValueByMonth';
 import moment from 'moment';
 import startEndDay from '../../modules/common/startEndDay';
+import { setStartEndOfMonth, setParams } from '../../modules/common';
 
 const SalesStatisticsContainer = () => {
+  const dispatch = useDispatch();
   // sales summary 정보 가져오기
   const { summary } = useSelector(({ sales }) => ({
     summary: sales.summary,
   }));
-  console.log('summary', summary);
+  // console.log('summary', summary);
   const [sumValue, setSumValue] = useState({});
   const [totalMonth, setTotalMonth] = useState([]);
 
@@ -33,7 +35,7 @@ const SalesStatisticsContainer = () => {
     } catch (error) {
       console.log('error', error);
     }
-    // console.log('obj', obj);
+    console.log('obj', obj);
     setSumValue(obj);
     setTotalMonth(total4Month);
   };
@@ -44,6 +46,9 @@ const SalesStatisticsContainer = () => {
 
   const onClick = (record) => {
     console.log('eeee', record);
+    if (!record.month) return;
+    dispatch(setStartEndOfMonth(record.month));
+    dispatch(setParams({ type: 'scode_probability', key: record.key }));
   };
 
   return (

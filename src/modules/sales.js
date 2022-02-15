@@ -8,6 +8,11 @@ const GET_SALESLIST = 'sales/GET_SALESLIST';
 const GET_SALESLIST_SUCCESS = 'sales/GET_SALESLIST_SUCCESS';
 const GET_SALESLIST_FAILURE = 'sales/GET_SALESLIST_FAILURE';
 
+// 매출현황 리스트 월&확률 조회
+const GET_SALESPARAMS = 'sales/GET_SALESPARAMS';
+const GET_SALESPARAMS_SUCCESS = 'sales/GET_SALESPARAMS_SUCCESS';
+const GET_SALESPARAMS_FAILURE = 'sales/GET_SALESPARAMS_FAILURE';
+
 // 매출현황-salesStatistics 계산용..
 const GET_SALESSTATISTICS = 'sales/GET_SALESSTATISTICS';
 const GET_SALESSTATISTICS_SUCCESS = 'sales/GET_SALESSTATISTICS_SUCCESS';
@@ -47,6 +52,32 @@ export const getSalesList = (startOfMonth, endOfMonth) => async (dispatch) => {
     throw error;
   }
 };
+
+export const getSalesParams =
+  (startOfMonth, endOfMonth, params) => async (dispatch) => {
+    dispatch({ type: GET_SALESPARAMS }); //요청 시작을 알림
+    dispatch(startLoading(GET_SALESPARAMS)); //loading true
+    try {
+      const response = await api.getSalesParameter(
+        startOfMonth,
+        endOfMonth,
+        params,
+      );
+      dispatch({
+        type: GET_SALESPARAMS_SUCCESS,
+        payload: response,
+      }); // 요청성공
+      dispatch(finishLoading(GET_SALESPARAMS)); // loading false
+    } catch (error) {
+      dispatch({
+        type: GET_SALESPARAMS_FAILURE,
+        payload: error,
+        error: true,
+      }); // 요청실패
+      dispatch(startLoading(GET_SALESPARAMS)); // loading true
+      throw error;
+    }
+  };
 
 export const getSalesStatistics = () => async (dispatch) => {
   dispatch({ type: GET_SALESSTATISTICS }); //요청 시작을 알림
@@ -121,6 +152,16 @@ const sales = handleActions(
     }),
     // 엽업현황 리스트 가져오기 실패
     [GET_SALESLIST_FAILURE]: (state, { payload }) => ({
+      ...state,
+      error: true,
+    }),
+    // 영업현황 리스트 가져오기 성공(월 & 확률)
+    [GET_SALESPARAMS_SUCCESS]: (state, { payload }) => ({
+      ...state,
+      data: payload.data,
+    }),
+    // 엽업현황 리스트 가져오기 실패(월 & 확률)
+    [GET_SALESPARAMS_FAILURE]: (state, { payload }) => ({
       ...state,
       error: true,
     }),

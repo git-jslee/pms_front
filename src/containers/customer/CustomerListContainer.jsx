@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCustomerlist } from '../../modules/customerList';
 import CustomerLIstTable from '../../components/customer/CustomerLIstTable';
+import AutoComplete from '../../components/common/AutoComplete';
 
 const CustomerListContainer = () => {
   const dispatch = useDispatch();
@@ -28,6 +29,7 @@ const CustomerListContainer = () => {
 
   return (
     <>
+      <AutoComplete lists={data} />
       {status ? (
         <CustomerLIstTable lists={data} />
       ) : (

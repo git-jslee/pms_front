@@ -5,7 +5,7 @@ import Button from '../common/Button';
 import { DatePicker, Space } from 'antd';
 import moment from 'moment';
 // import { setStartEndOfMonth } from '../../modules/sales';
-import { setStartEndOfMonth } from '../../modules/common';
+import { setStartEndOfMonth, setParams } from '../../modules/common';
 import startEndDay from '../../modules/common/startEndDay';
 
 const { RangePicker } = DatePicker;
@@ -36,19 +36,39 @@ const SalesSubMenu = () => {
   const startMonth = moment().format('YYYY-MM');
   const endMonth = moment().format('YYYY-MM');
   const dateFormat = 'YYYY-MM';
+  const month = moment().format('MM');
 
   useEffect(() => {
     const startEndOfDay = startEndDay(startMonth, endMonth);
     dispatch(setStartEndOfMonth(startEndOfDay));
   }, [dispatch]);
 
+  // 컴포넌트 언마운트시
+  useEffect(() => {
+    return () => {
+      dispatch(setParams(null));
+    };
+  }, []);
+
   const onChange = (value) => {
     console.log('onchange', value);
     if (value !== null) {
       const startEndOfDay = startEndDay(value[0], value[1]);
       dispatch(setStartEndOfMonth(startEndOfDay));
+      dispatch(setParams(null));
     }
   };
+
+  const buttonOnClick = () => {
+    console.log('조회 buttononclick');
+    const startEndOfDay = startEndDay(
+      moment().format('YYYY-MM'),
+      moment().format('YYYY-MM'),
+    );
+    dispatch(setStartEndOfMonth(startEndOfDay));
+    dispatch(setParams(null));
+  };
+
   return (
     <>
       <SubMenuBlock>
@@ -66,6 +86,7 @@ const SalesSubMenu = () => {
               onChange={onChange}
             />
           </Space>
+          <Button onClick={buttonOnClick}>{month}월 조회</Button>
         </div>
       </SubMenuBlock>
     </>
