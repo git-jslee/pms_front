@@ -1,56 +1,64 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import SalesStatisticsTable from '../../components/sales/SalesStatisticsTable';
 import * as api from '../../lib/api/api';
 import sumSalesValueByMonth from '../../modules/sales/sumSalesValueByMonth';
 import moment from 'moment';
+import startEndDay from '../../modules/common/startEndDay';
+import { setStartEndOfMonth, setParams } from '../../modules/common';
 
 const SalesStatisticsContainer = () => {
+  const dispatch = useDispatch();
   // sales summary 정보 가져오기
   const { summary } = useSelector(({ sales }) => ({
     summary: sales.summary,
   }));
-  console.log('summary', summary);
+  // console.log('summary', summary);
   const [sumValue, setSumValue] = useState({});
+  const [totalMonth, setTotalMonth] = useState([]);
 
   const get4MonthSalesList = async () => {
     const obj = {};
+    const total4Month = [];
     try {
       for (let i = -1; i < 3; i++) {
-        const thisMonth = moment().add(i, 'months').format('YYYY-MM');
-        const startOfMonth = moment(thisMonth)
-          .startOf('month')
-          .format('YYYY-MM-DD');
-        const endOfMonth = moment(thisMonth)
-          .endOf('month')
-          .format('YYYY-MM-DD');
-        console.log('month', startOfMonth, endOfMonth);
-        const response = await api.getSalesFiltered(startOfMonth, endOfMonth);
-        console.log(`response[${i}]`, response.data);
+        const month = moment().add(i, 'months').format('YYYY-MM');
+        // 해당 시작일 종료일 계산하기, 시작월/종료월 인자로 전달
+        const startEndofDay = startEndDay(month, month);
+        total4Month.push(startEndofDay);
+        const response = await api.getSalesStartEndDay(startEndofDay);
+        // console.log(`response[${i}]`, response.data);
         const sum = sumSalesValueByMonth(response.data);
         // console.log(`***sum..[${i}]****`, sum);
         obj[i] = sum;
       }
-
-      // console.log('response1', response1);
-      // const cal1 = sumSalesValueByMonth(response1.data);
-      // console.log('cal1', cal1);
-      // setSum1(cal1);
     } catch (error) {
       console.log('error', error);
     }
     console.log('obj', obj);
     setSumValue(obj);
+    setTotalMonth(total4Month);
   };
 
   useEffect(() => {
     get4MonthSalesList();
   }, []);
 
+  const onClick = (record) => {
+    console.log('eeee', record);
+    if (!record.month) return;
+    dispatch(setStartEndOfMonth(record.month));
+    dispatch(setParams({ type: 'scode_probability', key: record.key }));
+  };
+
   return (
     <>
       {sumValue[2] ? (
-        <SalesStatisticsTable sumValue={sumValue} />
+        <SalesStatisticsTable
+          sumValue={sumValue}
+          totalMonth={totalMonth}
+          onClick={onClick}
+        />
       ) : (
         // <h1>테스트</h1>
         <h1>로딩중</h1>

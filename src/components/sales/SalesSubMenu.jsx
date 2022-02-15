@@ -4,7 +4,9 @@ import styled from 'styled-components';
 import Button from '../common/Button';
 import { DatePicker, Space } from 'antd';
 import moment from 'moment';
-import { setStartEndOfMonth } from '../../modules/sales';
+// import { setStartEndOfMonth } from '../../modules/sales';
+import { setStartEndOfMonth, setParams } from '../../modules/common';
+import startEndDay from '../../modules/common/startEndDay';
 
 const { RangePicker } = DatePicker;
 
@@ -29,26 +31,44 @@ const SubMenuBlock = styled.div`
 
 const SalesSubMenu = () => {
   const dispatch = useDispatch();
-  const { startMonth, endMonth } = useSelector(({ sales }) => ({
-    startMonth: sales.month[0],
-    endMonth: sales.month[1],
-  }));
+  // 검색조건 당월
+  // const startMonth = moment().add(0, 'months').format('YYYY-MM');
+  const startMonth = moment().format('YYYY-MM');
+  const endMonth = moment().format('YYYY-MM');
   const dateFormat = 'YYYY-MM';
+  const month = moment().format('MM');
 
-  // useEffect(() => {
-  //   dispatch(setStartEndOfMonth(thisMonth));
-  // }, [dispatch]);
+  useEffect(() => {
+    const startEndOfDay = startEndDay(startMonth, endMonth);
+    dispatch(setStartEndOfMonth(startEndOfDay));
+  }, [dispatch]);
+
+  // 컴포넌트 언마운트시
+  useEffect(() => {
+    return () => {
+      dispatch(setParams(null));
+    };
+  }, []);
 
   const onChange = (value) => {
     console.log('onchange', value);
     if (value !== null) {
-      const month = [
-        moment(value[0]).format('YYYY-MM'),
-        moment(value[1]).format('YYYY-MM'),
-      ];
-      dispatch(setStartEndOfMonth(month));
+      const startEndOfDay = startEndDay(value[0], value[1]);
+      dispatch(setStartEndOfMonth(startEndOfDay));
+      dispatch(setParams(null));
     }
   };
+
+  const buttonOnClick = () => {
+    console.log('조회 buttononclick');
+    const startEndOfDay = startEndDay(
+      moment().format('YYYY-MM'),
+      moment().format('YYYY-MM'),
+    );
+    dispatch(setStartEndOfMonth(startEndOfDay));
+    dispatch(setParams(null));
+  };
+
   return (
     <>
       <SubMenuBlock>
@@ -66,6 +86,7 @@ const SalesSubMenu = () => {
               onChange={onChange}
             />
           </Space>
+          <Button onClick={buttonOnClick}>{month}월 조회</Button>
         </div>
       </SubMenuBlock>
     </>

@@ -38,7 +38,7 @@ const ProjectFormContainer = () => {
   }));
   const tasks = serviceId
     ? code_tasks
-        .filter((v) => v.code_service.id === serviceId)
+        .filter((v) => v.code_service.id === serviceId && v.used === true)
         .sort((a, b) => a.sort - b.sort)
     : null;
 
