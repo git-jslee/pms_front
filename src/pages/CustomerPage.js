@@ -13,9 +13,9 @@ const CustomerPage = () => {
       <SiteHeader />
       <FormTemplate>
         <h1>고객정보 페이지</h1>
-        <Link to="/addcustomer">
+        {/* <Link to="/addcustomer">
           <Button>고객 등록</Button>
-        </Link>
+        </Link> */}
         <CustomerListContainer />
       </FormTemplate>
     </>

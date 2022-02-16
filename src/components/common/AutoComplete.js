@@ -13,15 +13,46 @@ import {
   Switch,
 } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
+import { useSelector } from 'react-redux';
+import { addCustomer } from '../../modules/customerForm';
+import { useNavigate } from 'react-router-dom';
+import { getCustomerlist } from '../../modules/customerList';
+import { useDispatch } from 'react-redux';
 
 const { Option } = Select;
 
 const AutoCompleteBlock = styled.div`
+  .input-box {
+    display: flex;
+    width: 100%;
+    padding-bottom: 5px;
+  }
+  .input-title {
+    margin-right: 20px;
+    padding-top: 4px;
+  }
+
+  .input-box > div {
+    position: relative;
+    margin-right: 10px;
+  }
+  .input-box input {
+    /* width: 100%; */
+    width: 300px;
+  }
+  .suggestion-box {
+    position: absolute;
+    top: 28px;
+    left: 0;
+    z-index: 50;
+    width: 100%;
+  }
   .suggestion {
     cursor: pointer;
     border-right: 1px solid black;
     border-left: 1px solid black;
     border-bottom: 1px solid black;
+    background: #fff;
   }
   .suggestion:hover {
     background-color: gray;
@@ -29,9 +60,15 @@ const AutoCompleteBlock = styled.div`
 `;
 
 const AutoComplete = ({ lists }) => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [text, setText] = useState('');
   const [suggestions, setSuggestions] = useState([]);
   const [visible, setVisible] = useState(false);
+
+  const { auth } = useSelector(({ auth }) => ({
+    auth: auth.auth,
+  }));
 
   const onChangeHandler = (text) => {
     let matches = [];
@@ -59,40 +96,71 @@ const AutoComplete = ({ lists }) => {
   const onClose = () => {
     setVisible(false);
   };
-  const onSubmit = (e) => {
-    console.log('eee', e);
-    // setVisible(false);
+
+  const onSubmit = (values) => {
+    console.log('고객등록-onSubmit..');
+    const jwt = auth.jwt;
+    const datas = [
+      {
+        name_eng: values.customerId,
+        name: values.name,
+        businessNumber: values.businessNumber,
+        businessType: values.businessType,
+        remark: values.description,
+      },
+      {
+        headers: {
+          Authorization: 'Bearer ' + jwt,
+        },
+      },
+    ];
+    try {
+      addCustomer(datas);
+      // 고객등록 성공시 페이지 이동 기능 구현 필요
+      setVisible(false);
+      // navigate('/customer');
+      dispatch(getCustomerlist());
+    } catch (error) {
+      console.log('고객등록 에러', error);
+    }
   };
 
   return (
     <>
       {/* autocomplete 기능 적용 */}
       <AutoCompleteBlock>
-        <span>고객검색</span>
-        <input
-          type="text"
-          onChange={(e) => onChangeHandler(e.target.value)}
-          value={text}
-          //   다른영역클릭시 suggestion 값 삭제
-          onBlur={() => {
-            setTimeout(() => {
-              setSuggestions([]);
-            }, 100);
-          }}
-        />
-        <Button onClick={showDrawer} icon={<PlusOutlined />}>
-          고객등록
-        </Button>
-        {suggestions &&
-          suggestions.map((suggestion, i) => (
-            <div
-              key={suggestion.id}
-              className="suggestion"
-              onClick={() => onSuggestHandler(suggestion.name)}
-            >
-              {suggestion.name}
+        <div className="input-box">
+          <div className="input-title">고객검색</div>
+          <div>
+            <input
+              type="text"
+              onChange={(e) => onChangeHandler(e.target.value)}
+              value={text}
+              //   다른영역클릭시 suggestion 값 삭제
+
+              onBlur={() => {
+                setTimeout(() => {
+                  setSuggestions([]);
+                }, 100);
+              }}
+            />
+            <div className="suggestion-box">
+              {suggestions &&
+                suggestions.map((suggestion, i) => (
+                  <div
+                    key={suggestion.id}
+                    className="suggestion"
+                    onClick={() => onSuggestHandler(suggestion.name)}
+                  >
+                    {suggestion.name}
+                  </div>
+                ))}
             </div>
-          ))}
+          </div>
+          <Button onClick={showDrawer} icon={<PlusOutlined />}>
+            고객등록
+          </Button>
+        </div>
       </AutoCompleteBlock>
       <Drawer
         title="신규 고객 등록"
@@ -132,13 +200,13 @@ const AutoComplete = ({ lists }) => {
           </Row>
           <Row gutter={16}>
             <Col span={12}>
-              <Form.Item name="owner" label="사업자번호">
+              <Form.Item name="businessNumber" label="사업자번호">
                 <Input placeholder="사업자 번호 입력" />
               </Form.Item>
             </Col>
             <Col span={12}>
               <Form.Item
-                name="type"
+                name="businessType"
                 label="기업구분"
                 rules={[{ required: true, message: '기업구분을 입력하세요' }]}
               >
