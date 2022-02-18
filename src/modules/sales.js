@@ -13,6 +13,11 @@ const GET_SALESPARAMS = 'sales/GET_SALESPARAMS';
 const GET_SALESPARAMS_SUCCESS = 'sales/GET_SALESPARAMS_SUCCESS';
 const GET_SALESPARAMS_FAILURE = 'sales/GET_SALESPARAMS_FAILURE';
 
+// 매출현황 리스트 월&확률 조회
+const GET_SALESQUERY = 'sales/GET_SALESQUERY';
+const GET_SALESQUERY_SUCCESS = 'sales/GET_SALESQUERY_SUCCESS';
+const GET_SALESQUERY_FAILURE = 'sales/GET_SALESQUERY_FAILURE';
+
 // 매출현황-salesStatistics 계산용..
 const GET_SALESSTATISTICS = 'sales/GET_SALESSTATISTICS';
 const GET_SALESSTATISTICS_SUCCESS = 'sales/GET_SALESSTATISTICS_SUCCESS';
@@ -53,6 +58,7 @@ export const getSalesList = (startOfMonth, endOfMonth) => async (dispatch) => {
   }
 };
 
+// 세일즈 현황테이블에서...사용중..
 export const getSalesParams =
   (startOfMonth, endOfMonth, params) => async (dispatch) => {
     dispatch({ type: GET_SALESPARAMS }); //요청 시작을 알림
@@ -78,6 +84,28 @@ export const getSalesParams =
       throw error;
     }
   };
+
+// 전체 쿼리문을 인자로 받게 개선.중..
+export const getSalesQuery = (query) => async (dispatch) => {
+  dispatch({ type: GET_SALESQUERY }); //요청 시작을 알림
+  dispatch(startLoading(GET_SALESQUERY)); //loading true
+  try {
+    const response = await api.getSalesQueryString(query);
+    dispatch({
+      type: GET_SALESQUERY_SUCCESS,
+      payload: response,
+    }); // 요청성공
+    dispatch(finishLoading(GET_SALESQUERY)); // loading false
+  } catch (error) {
+    dispatch({
+      type: GET_SALESQUERY_FAILURE,
+      payload: error,
+      error: true,
+    }); // 요청실패
+    dispatch(startLoading(GET_SALESQUERY)); // loading true
+    throw error;
+  }
+};
 
 export const getSalesStatistics = () => async (dispatch) => {
   dispatch({ type: GET_SALESSTATISTICS }); //요청 시작을 알림
@@ -152,6 +180,16 @@ const sales = handleActions(
     }),
     // 엽업현황 리스트 가져오기 실패
     [GET_SALESLIST_FAILURE]: (state, { payload }) => ({
+      ...state,
+      error: true,
+    }),
+    // 영업현황 리스트 가져오기 성공
+    [GET_SALESQUERY_SUCCESS]: (state, { payload }) => ({
+      ...state,
+      data: payload.data,
+    }),
+    // 엽업현황 리스트 가져오기 실패
+    [GET_SALESQUERY_FAILURE]: (state, { payload }) => ({
       ...state,
       error: true,
     }),

@@ -36,10 +36,10 @@ const SalesListContainer = () => {
       console.log('파라미터', params);
       //scode_probability.id
       if (params.key === '99') {
-        const parameter = `confirmed=true`;
+        const parameter = `&confirmed=true`;
         dispatch(getSalesParams(startMonth, endMonth, parameter));
       } else {
-        const parameter = `confirmed=false&scode_probability.id=${params.key}`;
+        const parameter = `&confirmed=false&scode_probability.id=${params.key}`;
         dispatch(getSalesParams(startMonth, endMonth, parameter));
       }
     }

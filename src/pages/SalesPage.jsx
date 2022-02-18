@@ -4,15 +4,18 @@ import SiteHeader from '../components/SiteHeader';
 import SalesListContainer from '../containers/sales/SalesListContainer';
 import FormTemplate from '../components/common/FormTemplate';
 import SalesSubMenu from '../components/sales/SalesSubMenu';
+import SalesSubContainer from '../containers/sales/SalesSubContainer';
 import SalesStatisticsContainer from '../containers/sales/SalesStatisticsContainer';
+import SalesCodebookContainer from '../containers/common/SalesCodebookContainer';
 
 const SalesPage = () => {
   return (
     <>
       <HeaderContainer />
       <SiteHeader />
+      <SalesCodebookContainer />
       <FormTemplate>
-        <SalesSubMenu />
+        <SalesSubContainer />
         <hr />
         <SalesStatisticsContainer />
         <hr />

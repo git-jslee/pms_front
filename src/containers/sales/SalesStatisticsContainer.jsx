@@ -53,7 +53,7 @@ const SalesStatisticsContainer = () => {
 
   return (
     <>
-      {sumValue[2] ? (
+      {sumValue[2] && totalMonth.length !== 0 ? (
         <SalesStatisticsTable
           sumValue={sumValue}
           totalMonth={totalMonth}

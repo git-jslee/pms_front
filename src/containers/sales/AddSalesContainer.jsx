@@ -4,6 +4,7 @@ import AddSalesPerformanceForm from '../../components/sales/AddSalesPerformanceF
 import tbl_insert from '../../modules/tbl_insert';
 import moment from 'moment';
 import { useNavigate } from 'react-router-dom';
+import AutoComplete from '../../components/common/AutoComplete';
 
 const AddSalesContainer = () => {
   const navigate = useNavigate();
@@ -14,7 +15,7 @@ const AddSalesContainer = () => {
 
   const [divisionId, setDivisionId] = useState(null);
   const [radioValue, setRadioValue] = useState(true);
-  const [salesValue, setSalesValue] = useState();
+  const [salesValue, setSalesValue] = useState(null);
   const [checked, setChecked] = useState({
     checked: false,
     name: '매출예정',
@@ -61,11 +62,14 @@ const AddSalesContainer = () => {
 
   // 매출이익 마진 계산
   useEffect(() => {
+    console.log('--0--', salesValue);
     if (radioValue && salesValue && profitMarginValue) {
+      console.log('--1--');
       setCalResult({
         margin: (profitMarginValue.sales_profit / salesValue) * 100,
       });
     } else if (!radioValue && salesValue && profitMarginValue) {
+      console.log('--2--');
       setCalResult({
         profit: salesValue * (profitMarginValue.margin / 100),
       });
@@ -75,6 +79,16 @@ const AddSalesContainer = () => {
         '#2parfitmarginvalue##',
         parseInt(profitMarginValue.margin) / 100,
       );
+    } else if (radioValue && salesValue === 0) {
+      console.log('--3--', salesValue, profitMarginValue);
+      setCalResult({
+        margin: 0,
+      });
+    } else if (!radioValue && salesValue === 0) {
+      console.log('--4--', salesValue, profitMarginValue);
+      setCalResult({
+        profit: 0,
+      });
     }
   }, [radioValue, salesValue, profitMarginValue]);
 
@@ -161,23 +175,26 @@ const AddSalesContainer = () => {
   return (
     <>
       {probability && division && team && customer ? (
-        <AddSalesPerformanceForm
-          probability={probability}
-          division={division}
-          team={team}
-          customer={customer}
-          onChangeDivision={onChangeDivision}
-          onSubmit={onSubmit}
-          divisionId={divisionId}
-          calResult={calResult}
-          onChangeRadio={onChangeRadio}
-          salesValueOnchange={salesValueOnchange}
-          profitMarginOnchange={profitMarginOnchange}
-          radioValue={radioValue}
-          profitMarginValue={profitMarginValue}
-          checked={checked}
-          onChangeSwitch={onChangeSwitch}
-        />
+        <>
+          <AutoComplete lists={customer} />
+          <AddSalesPerformanceForm
+            probability={probability}
+            division={division}
+            team={team}
+            customer={customer}
+            onChangeDivision={onChangeDivision}
+            onSubmit={onSubmit}
+            divisionId={divisionId}
+            calResult={calResult}
+            onChangeRadio={onChangeRadio}
+            salesValueOnchange={salesValueOnchange}
+            profitMarginOnchange={profitMarginOnchange}
+            radioValue={radioValue}
+            profitMarginValue={profitMarginValue}
+            checked={checked}
+            onChangeSwitch={onChangeSwitch}
+          />
+        </>
       ) : (
         <h1>로딩중</h1>
       )}

@@ -127,6 +127,16 @@ const SalesDetailContainer = () => {
         '#2parfitmarginvalue##',
         parseInt(profitMarginValue.margin) / 100,
       );
+    } else if (radioValue && salesValue === 0) {
+      console.log('--3--', salesValue, profitMarginValue);
+      setCalResult({
+        margin: 0,
+      });
+    } else if (!radioValue && salesValue === 0) {
+      console.log('--4--', salesValue, profitMarginValue);
+      setCalResult({
+        profit: 0,
+      });
     }
   }, [radioValue, salesValue, profitMarginValue]);
 
@@ -152,6 +162,11 @@ const SalesDetailContainer = () => {
         }),
       );
     }
+  };
+
+  const onClickBack = () => {
+    console.log('뒤로가기 버튼 클릭');
+    navigate('/sales');
   };
 
   const onSubmit = async (values) => {
@@ -279,6 +294,7 @@ const SalesDetailContainer = () => {
             tableData={tableData}
             buttonOnClick={buttonOnClick}
             mode={mode}
+            onClickBack={onClickBack}
           />
         ) : (
           <SalesViewDetailTable
@@ -287,6 +303,7 @@ const SalesDetailContainer = () => {
             buttonOnClick={buttonOnClick}
             mode={mode}
             updateForm={updateForm()}
+            onClickBack={onClickBack}
           />
         )
       ) : (

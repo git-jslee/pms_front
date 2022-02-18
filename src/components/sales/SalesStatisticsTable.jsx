@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Table, Space, Row, Col } from 'antd';
+import moment from 'moment';
+
 const { Column, ColumnGroup } = Table;
 
 const SalesStatisticsTable = ({ sumValue, totalMonth, onClick }) => {
@@ -185,7 +187,9 @@ const SalesStatisticsTable = ({ sumValue, totalMonth, onClick }) => {
               align="right"
             />
 
-            <ColumnGroup title="전월">
+            <ColumnGroup
+              title={`전월-${moment(totalMonth[0][0]).format('MM')}월`}
+            >
               <Column
                 title="실제매출액"
                 width={100}
@@ -217,7 +221,9 @@ const SalesStatisticsTable = ({ sumValue, totalMonth, onClick }) => {
               };
             }}
           >
-            <ColumnGroup title="당월">
+            <ColumnGroup
+              title={`당월-${moment(totalMonth[1][0]).format('MM')}월`}
+            >
               <Column
                 title="예상매출액"
                 width={100}
@@ -263,7 +269,9 @@ const SalesStatisticsTable = ({ sumValue, totalMonth, onClick }) => {
               };
             }}
           >
-            <ColumnGroup title="익월">
+            <ColumnGroup
+              title={`익월-${moment(totalMonth[2][0]).format('MM')}월`}
+            >
               <Column
                 title="예상매출액"
                 width={100}
@@ -295,7 +303,9 @@ const SalesStatisticsTable = ({ sumValue, totalMonth, onClick }) => {
               };
             }}
           >
-            <ColumnGroup title="익익월">
+            <ColumnGroup
+              title={`익익월-${moment(totalMonth[3][0]).format('MM')}월`}
+            >
               <Column
                 title="예상매출액"
                 width={100}

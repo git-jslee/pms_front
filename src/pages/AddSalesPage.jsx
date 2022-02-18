@@ -12,7 +12,7 @@ const AddSalesPage = () => {
       <SiteHeader />
       <FormTemplate>
         <h1>매출현황 등록</h1>
-        <SalesCodebookContainer />
+        {/* <SalesCodebookContainer /> */}
         <AddSalesContainer />
       </FormTemplate>
     </>

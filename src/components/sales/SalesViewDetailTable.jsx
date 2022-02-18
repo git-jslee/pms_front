@@ -1,5 +1,14 @@
 import React from 'react';
-import { Table, Descriptions, Badge, Space, Divider, Button } from 'antd';
+import {
+  Table,
+  Descriptions,
+  Badge,
+  Space,
+  Divider,
+  Button,
+  Col,
+  Row,
+} from 'antd';
 // import Button from '../common/Button';
 
 const SalesViewDetailTable = ({
@@ -8,6 +17,7 @@ const SalesViewDetailTable = ({
   buttonOnClick,
   updateForm,
   mode,
+  onClickBack,
 }) => {
   const sales_profits = list.sales_profits;
   const sales_profit = sales_profits[sales_profits.length - 1];
@@ -41,7 +51,7 @@ const SalesViewDetailTable = ({
       dataIndex: 'profit',
     },
     {
-      title: '마진',
+      title: '마진(%)',
       key: 'margin',
       dataIndex: 'margin',
     },
@@ -65,12 +75,28 @@ const SalesViewDetailTable = ({
 
   return (
     <>
-      <Button onClick={buttonOnClick}>{modename}</Button>
+      <Row>
+        <Col>
+          <Button onClick={buttonOnClick}>{modename}</Button>
+        </Col>
+        {mode === 'EDIT' ? (
+          <Col offset={1}>
+            <Button>DELETE</Button>
+          </Col>
+        ) : (
+          ''
+        )}
+        <Col offset={1}>
+          <Button onClick={onClickBack}>BACK</Button>
+        </Col>
+      </Row>
       <Descriptions title="Sales View" bordered>
         <Descriptions.Item label="매출확률">
           {sales_profit.scode_probability}
         </Descriptions.Item>
-        <Descriptions.Item label="매출처">{list.name}</Descriptions.Item>
+        <Descriptions.Item label="매출처">
+          {list.customer.name}
+        </Descriptions.Item>
         <Descriptions.Item label="매출확정여부">
           {sales_profit.confirmed ? 'Yes' : 'No'}
         </Descriptions.Item>
@@ -95,7 +121,7 @@ const SalesViewDetailTable = ({
         <Descriptions.Item label="매출이익">
           {sales_profit.sales_profit.toLocaleString('ko-KR')}
         </Descriptions.Item>
-        <Descriptions.Item label="마 진">
+        <Descriptions.Item label="마진(%)">
           {sales_profit.profit_margin}
         </Descriptions.Item>
         {/* edit 모드일때 discription 안보이게 */}
