@@ -18,6 +18,7 @@ import { addCustomer } from '../../modules/customerForm';
 import { useNavigate } from 'react-router-dom';
 import { getCustomerlist } from '../../modules/customerList';
 import { useDispatch } from 'react-redux';
+import { setCustomerId } from '../../modules/common';
 
 const { Option } = Select;
 
@@ -83,9 +84,11 @@ const AutoComplete = ({ lists }) => {
     setText(text);
   };
 
-  const onSuggestHandler = (text) => {
-    setText(text);
+  const onSuggestHandler = (company) => {
+    console.log('온클릭', company);
+    setText(company.name);
     setSuggestions([]);
+    dispatch(setCustomerId({ id: company.id, name: company.name }));
   };
   console.log('suggestion', suggestions);
 
@@ -138,11 +141,12 @@ const AutoComplete = ({ lists }) => {
               value={text}
               //   다른영역클릭시 suggestion 값 삭제
 
-              onBlur={() => {
-                setTimeout(() => {
-                  setSuggestions([]);
-                }, 100);
-              }}
+              // onBlur={() => {
+              //   setTimeout(() => {
+              //     console.log('onBlur..');
+              //     setSuggestions([]);
+              //   }, 100);
+              // }}
             />
             <div className="suggestion-box">
               {suggestions &&
@@ -150,7 +154,7 @@ const AutoComplete = ({ lists }) => {
                   <div
                     key={suggestion.id}
                     className="suggestion"
-                    onClick={() => onSuggestHandler(suggestion.name)}
+                    onClick={() => onSuggestHandler(suggestion)}
                   >
                     {suggestion.name}
                   </div>

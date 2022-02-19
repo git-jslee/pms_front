@@ -15,8 +15,13 @@ const SET_PARAMS = 'common/SET_PARAMS';
 // 상세 검색 테이블
 const SET_SEARCHTABLE = 'common/SET_SEARCHTABLE';
 
+const SET_CUSTOMERID = 'common/SET_CUSTOMERID';
+
 // VIEW - EDIT 모드 변경
 export const changeMode = createAction(CHANGE_MODE, (mode) => mode);
+
+// Autocomplete 기능 이용하여 고객 검색시 고객Id 등록
+export const setCustomerId = createAction(SET_CUSTOMERID, (id) => id);
 
 export const setStartEndOfMonth = createAction(
   SET_STARTENDOFMONTH,
@@ -31,6 +36,7 @@ export const setSearchTable = createAction(SET_SEARCHTABLE, (mode) => mode);
 const initialState = {
   mode: 'VIEW',
   search: false,
+  customerid: { id: null, name: null },
   month: [null, null],
   params: null,
   error: null,
@@ -47,6 +53,10 @@ const common = handleActions(
     [SET_SEARCHTABLE]: (state, { payload }) => ({
       ...state,
       search: !state.search,
+    }),
+    [SET_CUSTOMERID]: (state, { payload }) => ({
+      ...state,
+      customerid: payload,
     }),
     //start month & end month
     [SET_STARTENDOFMONTH]: (state, { payload }) => ({

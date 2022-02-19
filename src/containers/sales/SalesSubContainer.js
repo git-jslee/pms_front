@@ -2,19 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import SalesSubMenu from '../../components/sales/SalesSubMenu';
 import moment from 'moment';
-import {
-  setStartEndOfMonth,
-  setParams,
-  setSearchTable,
-} from '../../modules/common';
+import { setStartEndOfMonth, setParams } from '../../modules/common';
 import startEndDay from '../../modules/common/startEndDay';
-import SalesSearchForm from '../../components/sales/SalesSearchForm';
-import { getCustomerlist } from '../../modules/customerList';
-import * as api from '../../lib/api/api';
 import { getSalesQuery } from '../../modules/sales';
 import SalesStatisticsContainer from './SalesStatisticsContainer';
-import SalesAdvancedSearchContainer from './SalesAdvancedSearchContainer';
 import SalesAdvancedSearchForm from '../../components/sales/SalesAdvancedSearchForm';
+import AddSalesDrawerContainer from './AddSalesDrawerContainer';
 
 const SalesSubContainer = () => {
   const dispatch = useDispatch();
@@ -83,7 +76,7 @@ const SalesSubContainer = () => {
     setAddSalesVisible(true);
   };
   const addSalesOnClose = () => {
-    setAddSalesVisible();
+    setAddSalesVisible(false);
   };
 
   const searchOnClick = () => {
@@ -167,6 +160,7 @@ const SalesSubContainer = () => {
         searchOnClick={searchOnClick}
         advancedSearch={advancedSearch}
         buttonName={buttonName}
+        addSalesOnClick={addSalesOnClick}
       />
       <hr />
       {search ? (
@@ -180,15 +174,11 @@ const SalesSubContainer = () => {
       ) : (
         <SalesStatisticsContainer />
       )}
-      {searchVisible && division && customers ? (
-        <SalesSearchForm
-          searchVisible={searchVisible}
-          searchOnClose={searchOnClose}
-          searchOnSubmit={searchOnSubmit}
+      {addSalesVisible ? (
+        <AddSalesDrawerContainer
           customers={customers}
-          division={division}
-          team={team}
-          customerOnSelect={customerOnSelect}
+          addSalesVisible={addSalesVisible}
+          addSalesOnClose={addSalesOnClose}
         />
       ) : (
         ''
