@@ -3,13 +3,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getSalesList, getSalesParams } from '../../modules/sales';
 import SalesListTable from '../../components/sales/SalesListTable';
 import moment from 'moment';
-// import { setSummary } from '../../modules/sales';
-// import sumSalesValueByMonth from '../../modules/sales/sumSalesValueByMonth';
+import AddSalesDrawerContainer from './AddSalesDrawerContainer';
+import * as api from '../../lib/api/api';
+import { message, Button, Space } from 'antd';
 
 const SalesListContainer = () => {
   const dispatch = useDispatch();
-  // const [salesSummary, setSalesSummary] = useState({});
   const [tableData, setTableData] = useState();
+  const [addSalesVisible, setAddSalesVisible] = useState(false);
+  const [initialValues, setInitialValues] = useState();
+  const [salesConfirmed, setSalesConfirmed] = useState(false);
   const { startMonth, endMonth, lists, loading, params } = useSelector(
     ({ common, sales, loading }) => ({
       startMonth: common.month[0],
@@ -23,13 +26,6 @@ const SalesListContainer = () => {
   console.log('saleslist', lists);
 
   useEffect(() => {
-    // const startMonth = moment().add(0, 'months').format('YYYY-MM');
-    // const endMonth = moment().add(0, 'months').format('YYYY-MM');
-    // const startOfMonth = moment(startMonth)
-    //   .startOf('month')
-    //   .format('YYYY-MM-DD');
-    // const endOfMonth = moment(endMonth).endOf('month').format('YYYY-MM-DD');
-    // console.log('month', startOfMonth, endOfMonth);
     if (!params) {
       dispatch(getSalesList(startMonth, endMonth));
     } else {
@@ -82,26 +78,62 @@ const SalesListContainer = () => {
       return array;
     });
 
-    // 예상매출, 예상매출이익, 실제매출액, 실제매출이익 합계산
-    // SalesStatisticsConatainer 로 이동..
-    // const summaryData = sumSalesValueByMonth(salesProfitData);
-    // console.log('sumSalesByMonth', summaryData);
-    // setSalesSummary(summaryData);
     setTableData(data);
   }, [lists]);
 
-  // 예상매출, 예상매출이익, 실제매출액, 실제매출이익 합계산
-  // SalesStatisticsConatainer 로 이동..
-  // useEffect(() => {
-  //   dispatch(setSummary(salesSummary));
-  // }, [salesSummary]);
+  // 매출리스트 복사 기능
+  const addSalesOnClick = async (id) => {
+    console.log('항목복사', id);
+    try {
+      const response = await api.getSalesId(id);
+      console.log('--response--', response.data);
+      const initValues = {
+        customer: response.data.customer.id,
+        sales_name: response.data.name,
+        probability: response.data.scode_probability.id,
+        division: response.data.scode_division.id,
+        // item: response.data.scode_item.id,
+        team: response.data.scode_team.id,
+        // sales:
+        // sales_profit:
+      };
+      if (response.data.confirmed) {
+        console.log('********');
+        setSalesConfirmed(true);
+      }
+      setInitialValues(initValues);
+      setAddSalesVisible(true);
+    } catch (error) {
+      console.error('에러', error);
+      message.error('매출항목 가져오기 오류 발생');
+    }
+  };
+
+  const addSalesOnClose = () => {
+    setSalesConfirmed(false);
+    setAddSalesVisible(false);
+  };
+  console.log('--1.salesConfirmed--', salesConfirmed);
 
   return (
     <>
       {loading === false ? (
-        <SalesListTable tableData={tableData} />
+        <SalesListTable
+          tableData={tableData}
+          addSalesOnClick={addSalesOnClick}
+        />
       ) : (
         <div>로딩중</div>
+      )}
+      {addSalesVisible ? (
+        <AddSalesDrawerContainer
+          addSalesVisible={addSalesVisible}
+          addSalesOnClose={addSalesOnClose}
+          initialValues={initialValues}
+          salesConfirmed={salesConfirmed}
+        />
+      ) : (
+        ''
       )}
     </>
   );

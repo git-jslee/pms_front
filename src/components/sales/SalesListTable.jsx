@@ -1,9 +1,15 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Table, Tag, Space, Button } from 'antd';
+import { Table, Tag, Space, Button, Popconfirm } from 'antd';
+import {
+  PlusOutlined,
+  PlusCircleOutlined,
+  InfoCircleOutlined,
+} from '@ant-design/icons';
 
-const SalesListTable = ({ tableData }) => {
+const SalesListTable = ({ tableData, addSalesOnClick }) => {
   const navigate = useNavigate();
+
   const columns = [
     {
       title: 'No',
@@ -77,13 +83,23 @@ const SalesListTable = ({ tableData }) => {
       key: 'action',
       render: (text, record) => (
         <Space size="small">
-          <Button
+          <InfoCircleOutlined
             onClick={() => {
               actionOnClick(record.key);
             }}
+            style={{ fontSize: '20px' }}
+          />
+          <Popconfirm
+            title="매출항목 복사"
+            onConfirm={() => {
+              addSalesOnClick(text.key);
+            }}
+            // onCancel={cancel}
+            okText="Yes"
+            cancelText="No"
           >
-            View
-          </Button>
+            <PlusCircleOutlined style={{ fontSize: '20px' }} />
+          </Popconfirm>
         </Space>
       ),
     },

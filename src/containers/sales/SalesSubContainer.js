@@ -176,7 +176,6 @@ const SalesSubContainer = () => {
       )}
       {addSalesVisible ? (
         <AddSalesDrawerContainer
-          customers={customers}
           addSalesVisible={addSalesVisible}
           addSalesOnClose={addSalesOnClose}
         />

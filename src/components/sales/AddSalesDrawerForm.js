@@ -35,7 +35,11 @@ const AddSalesDrawerForm = ({
   profitMarginValue,
   calResult,
   onSubmit,
+  initialValues,
+  salesConfirmed,
 }) => {
+  console.log('--initValues', initialValues);
+  console.log('--salesConfirmed', salesConfirmed);
   return (
     <>
       <Drawer
@@ -55,7 +59,12 @@ const AddSalesDrawerForm = ({
       >
         <AutoComplete lists={customer} />
         <Divider />
-        <Form layout="vertical" hideRequiredMark onFinish={onSubmit}>
+        <Form
+          layout="vertical"
+          hideRequiredMark
+          onFinish={onSubmit}
+          initialValues={initialValues}
+        >
           <Row gutter={16}>
             <Col span={12}>
               <Form.Item
@@ -87,7 +96,10 @@ const AddSalesDrawerForm = ({
           <Row gutter={16}>
             <Col span={12}>
               <Form.Item name="confirmed" label={probabilityChecked.name}>
-                <Switch defaultChecked={false} onChange={onChangeSwitch} />
+                <Switch
+                  defaultChecked={salesConfirmed}
+                  onChange={onChangeSwitch}
+                />
               </Form.Item>
             </Col>
             <Col span={12}>

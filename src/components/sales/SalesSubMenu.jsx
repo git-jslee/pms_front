@@ -10,6 +10,7 @@ import { setStartEndOfMonth, setParams } from '../../modules/common';
 import startEndDay from '../../modules/common/startEndDay';
 import AutoComplete from '../common/AutoComplete';
 import { getSalesQuery } from '../../modules/sales';
+import { RedoOutlined } from '@ant-design/icons';
 
 const { RangePicker } = DatePicker;
 
@@ -103,7 +104,11 @@ const SalesSubMenu = ({
               onChange={onChange}
             />
           </Space>
-          <Button onClick={buttonOnClick}>{month}월 조회</Button>
+          {/* <Button onClick={buttonOnClick}>{month}월 조회</Button> */}
+          <RedoOutlined
+            onClick={buttonOnClick}
+            style={{ fontSize: '24px', color: '#08c', marginLeft: '10px' }}
+          />
         </div>
       </SubMenuBlock>
     </>

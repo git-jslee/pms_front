@@ -5,7 +5,13 @@ import tbl_insert from '../../modules/tbl_insert';
 import moment from 'moment';
 import { useNavigate } from 'react-router-dom';
 
-const AddSalesDrawerContainer = ({ addSalesVisible, addSalesOnClose }) => {
+const AddSalesDrawerContainer = ({
+  addSalesVisible,
+  addSalesOnClose,
+  initialValues,
+  salesConfirmed,
+}) => {
+  console.log('--2.salesConfirmed--', salesConfirmed);
   const navigate = useNavigate();
   //웹토큰 가져오기..값 변경시에만 실행되게 설정 변경..
   const { auth } = useSelector(({ auth }) => ({
@@ -188,7 +194,7 @@ const AddSalesDrawerContainer = ({ addSalesVisible, addSalesOnClose }) => {
             customerid={customerid}
             addSalesVisible={addSalesVisible}
             addSalesOnClose={addSalesOnClose}
-            initialValues={{ customer: customerid.id }}
+            initialValues={initialValues}
             probabilityChecked={probabilityChecked}
             onChangeSwitch={onChangeSwitch}
             //
@@ -201,6 +207,7 @@ const AddSalesDrawerContainer = ({ addSalesVisible, addSalesOnClose }) => {
             profitMarginOnchange={profitMarginOnchange}
             radioValue={radioValue}
             profitMarginValue={profitMarginValue}
+            salesConfirmed={salesConfirmed}
           />
         </>
       ) : (
