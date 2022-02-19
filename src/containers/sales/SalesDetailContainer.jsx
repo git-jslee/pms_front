@@ -253,12 +253,17 @@ const SalesDetailContainer = () => {
   const updateForm = () => {
     const sales_profits = list.sales_profits;
     const sales_profit = sales_profits[sales_profits.length - 1];
+    const _payment_date = sales_profit.payment_date
+      ? moment(sales_profit.payment_date)
+      : '';
     const initialValues = {
+      confirmed: sales_profit.confirmed,
       sales: sales_profit.sales,
       sales_profit: sales_profit.sales_profit,
       probability: sales_profit.scode_probability,
       description: list.description,
-      // sales_rec_date: sales_profit.sales_rec_date,
+      sales_rec_date: moment(sales_profit.sales_rec_date),
+      payment_date: _payment_date,
     };
     // setSalesValue(sales_profit.sales);
 

@@ -2,12 +2,19 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import SalesSubMenu from '../../components/sales/SalesSubMenu';
 import moment from 'moment';
-import { setStartEndOfMonth, setParams } from '../../modules/common';
+import {
+  setStartEndOfMonth,
+  setParams,
+  setSearchTable,
+} from '../../modules/common';
 import startEndDay from '../../modules/common/startEndDay';
 import SalesSearchForm from '../../components/sales/SalesSearchForm';
 import { getCustomerlist } from '../../modules/customerList';
 import * as api from '../../lib/api/api';
 import { getSalesQuery } from '../../modules/sales';
+import SalesStatisticsContainer from './SalesStatisticsContainer';
+import SalesAdvancedSearchContainer from './SalesAdvancedSearchContainer';
+import SalesAdvancedSearchForm from '../../components/sales/SalesAdvancedSearchForm';
 
 const SalesSubContainer = () => {
   const dispatch = useDispatch();
@@ -27,12 +34,14 @@ const SalesSubContainer = () => {
   const [addSalesVisible, setAddSalesVisible] = useState(false);
   const [searchVisible, setSearchVisible] = useState(false);
   const [selectedCustomer, setSelectedCustomer] = useState(null);
+  const [search, setSearch] = useState(false);
   // 검색조건 당월
   // const startMonth = moment().add(0, 'months').format('YYYY-MM');
   const startMonth = moment().format('YYYY-MM');
   const endMonth = moment().format('YYYY-MM');
   const dateFormat = 'YYYY-MM';
   const month = moment().format('MM');
+  const buttonName = search ? '현황' : '상세검색';
 
   useEffect(() => {
     const startEndOfDay = startEndDay(startMonth, endMonth);
@@ -74,11 +83,16 @@ const SalesSubContainer = () => {
     setAddSalesVisible(true);
   };
   const addSalesOnClose = () => {
-    setAddSalesVisible(false);
+    setAddSalesVisible();
   };
 
   const searchOnClick = () => {
     setSearchVisible(true);
+  };
+  const advancedSearch = () => {
+    //기능구현..
+    setSearch(!search);
+    setSelectedCustomer(null);
   };
   const searchOnClose = () => {
     setSearchVisible(false);
@@ -90,7 +104,7 @@ const SalesSubContainer = () => {
     const start = moment(value.date[0]).format('YYYY-MM');
     const end = moment(value.date[1]).format('YYYY-MM');
     const startEndOfDay = startEndDay(start, end);
-    const queryDate = `sales_rec_date_gte=${startEndOfDay[0]}&sales_rec_date_lte=${startEndOfDay[1]}`;
+    const queryDate = `sales_rec_date_gte=${startEndOfDay[0]}&sales_rec_date_lte=${startEndOfDay[1]}&deleted=false`;
     let queryString = queryDate;
     if (selectedCustomer) {
       queryString = queryString + `&customer.id=${selectedCustomer}`;
@@ -113,6 +127,32 @@ const SalesSubContainer = () => {
     setSearchVisible(false);
   };
 
+  const advancedSearchOnsubmit = async (value) => {
+    console.log('검색 - onSubmit', value);
+    console.log('검색 - selectedCustomer', selectedCustomer);
+    const start = moment(value.date[0]).format('YYYY-MM');
+    const end = moment(value.date[1]).format('YYYY-MM');
+    const startEndOfDay = startEndDay(start, end);
+    const queryDate = `sales_rec_date_gte=${startEndOfDay[0]}&sales_rec_date_lte=${startEndOfDay[1]}&deleted=false`;
+    let queryString = queryDate;
+    if (selectedCustomer) {
+      queryString = queryString + `&customer.id=${selectedCustomer}`;
+    }
+    if (value.item) {
+      queryString = queryString + `&scode_item.id=${value.item}`;
+    } else if (value.division) {
+      queryString = queryString + `&scode_division.id=${value.division}`;
+    }
+    if (value.team) {
+      queryString = queryString + `&scode_team.id=${value.team}`;
+    }
+    console.log('querystring', queryString);
+
+    // const response = await api.getSalesQueryString(queryString);
+    // console.log('response', response.data);
+    dispatch(getSalesQuery(queryString));
+  };
+
   const customerOnSelect = (data, option) => {
     // console.log('onSelect', data);
     console.log('onSelect-option', option);
@@ -125,7 +165,21 @@ const SalesSubContainer = () => {
         startMonth={startMonth}
         endMonth={endMonth}
         searchOnClick={searchOnClick}
+        advancedSearch={advancedSearch}
+        buttonName={buttonName}
       />
+      <hr />
+      {search ? (
+        <SalesAdvancedSearchForm
+          searchOnSubmit={advancedSearchOnsubmit}
+          customers={customers}
+          division={division}
+          team={team}
+          customerOnSelect={customerOnSelect}
+        />
+      ) : (
+        <SalesStatisticsContainer />
+      )}
       {searchVisible && division && customers ? (
         <SalesSearchForm
           searchVisible={searchVisible}

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import HeaderContainer from '../containers/common/HeaderContainer';
 import SiteHeader from '../components/SiteHeader';
 import SalesListContainer from '../containers/sales/SalesListContainer';
@@ -7,8 +8,13 @@ import SalesSubMenu from '../components/sales/SalesSubMenu';
 import SalesSubContainer from '../containers/sales/SalesSubContainer';
 import SalesStatisticsContainer from '../containers/sales/SalesStatisticsContainer';
 import SalesCodebookContainer from '../containers/common/SalesCodebookContainer';
+import SalesAdvancedSearchContainer from '../containers/sales/SalesAdvancedSearchContainer';
 
 const SalesPage = () => {
+  const { search } = useSelector(({ common }) => ({
+    search: common.search,
+  }));
+
   return (
     <>
       <HeaderContainer />
@@ -16,8 +22,6 @@ const SalesPage = () => {
       <SalesCodebookContainer />
       <FormTemplate>
         <SalesSubContainer />
-        <hr />
-        <SalesStatisticsContainer />
         <hr />
         <SalesListContainer />
       </FormTemplate>

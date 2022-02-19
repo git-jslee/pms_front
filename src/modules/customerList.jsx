@@ -9,9 +9,15 @@ export const getCustomerlist = () => async (dispatch) => {
   dispatch({ type: GET_CUSTOMERLIST });
   try {
     const response = await apiCustomerList();
+    console.log('---response---', response);
+    // 오름차순 정렬
+    const sortResponse = response.data.sort((a, b) => {
+      return a.name < b.name ? -1 : a.name > b.name ? 1 : 0;
+    });
+    console.log('---sort---', sortResponse);
     dispatch({
       type: GET_CUSTOMERLIST_SUCCESS,
-      payload: response,
+      payload: sortResponse,
       status: true,
     });
   } catch (error) {
@@ -34,7 +40,7 @@ const customerList = handleActions(
     // 고객리스트 가져오기 성공
     [GET_CUSTOMERLIST_SUCCESS]: (state, { payload, status }) => ({
       ...state,
-      data: payload.data,
+      data: payload,
       status: status,
     }),
     // 고객리스트 가져오기 실패

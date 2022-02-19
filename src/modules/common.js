@@ -12,6 +12,9 @@ const SET_STARTENDOFMONTH = 'common/SET_STARTENDOFMONTH';
 // 매출현황 테이블 확률&월별 조회 기능
 const SET_PARAMS = 'common/SET_PARAMS';
 
+// 상세 검색 테이블
+const SET_SEARCHTABLE = 'common/SET_SEARCHTABLE';
+
 // VIEW - EDIT 모드 변경
 export const changeMode = createAction(CHANGE_MODE, (mode) => mode);
 
@@ -22,8 +25,12 @@ export const setStartEndOfMonth = createAction(
 
 export const setParams = createAction(SET_PARAMS, (params) => params);
 
+// 서브메뉴 상세검색 클릭시
+export const setSearchTable = createAction(SET_SEARCHTABLE, (mode) => mode);
+
 const initialState = {
   mode: 'VIEW',
+  search: false,
   month: [null, null],
   params: null,
   error: null,
@@ -35,6 +42,11 @@ const common = handleActions(
     [CHANGE_MODE]: (state, { payload }) => ({
       ...state,
       mode: payload.mode,
+    }),
+    // 상세 조회 테이블
+    [SET_SEARCHTABLE]: (state, { payload }) => ({
+      ...state,
+      search: !state.search,
     }),
     //start month & end month
     [SET_STARTENDOFMONTH]: (state, { payload }) => ({

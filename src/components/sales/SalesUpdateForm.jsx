@@ -58,7 +58,10 @@ const SalesUpdateForm = ({
         <Row>
           <Col offset={2} span={6}>
             <Form.Item label={checked.name} name="confirmed">
-              <Switch onChange={onChangeSwitch} />
+              <Switch
+                onChange={onChangeSwitch}
+                defaultChecked={initialValues.confirmed}
+              />
             </Form.Item>
           </Col>
           <Col span={6}>

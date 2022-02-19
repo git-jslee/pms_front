@@ -43,7 +43,13 @@ const SubMenuBlock = styled.div`
   }
 `;
 
-const SalesSubMenu = ({ startMonth, endMonth, searchOnClick }) => {
+const SalesSubMenu = ({
+  startMonth,
+  endMonth,
+  searchOnClick,
+  advancedSearch,
+  buttonName,
+}) => {
   const dispatch = useDispatch();
   const [addSalesVisible, setAddSalesVisible] = useState(false);
   const [searchVisible, setSearchVisible] = useState(false);
@@ -101,7 +107,8 @@ const SalesSubMenu = ({ startMonth, endMonth, searchOnClick }) => {
           <Button>등록</Button>
         </Link>
         <Button onClick={addSalesOnClick}>_____</Button>
-        <Button onClick={searchOnClick}>상세검색</Button>
+        {/* <Button onClick={searchOnClick}>상세검색1</Button> */}
+        <Button onClick={advancedSearch}>{buttonName}</Button>
         <div className="search">
           <span>기준일자</span>
           <Space direction="vertical" size={12}>

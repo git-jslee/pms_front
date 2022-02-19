@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-// import Button from '../common/Button';
 import {
   Drawer,
   Form,
@@ -16,13 +15,12 @@ import {
   Checkbox,
   AutoComplete,
 } from 'antd';
-// import AutoComplete from '../common/AutoComplete';
 
 const { RangePicker } = DatePicker;
 
 const SearchFormBlock = styled.div`
   /* position: relative; */
-  display: inline;
+  /* display: inline; */
   /* box-shadow: 0 0 8px rgba(0, 0, 0, 0.025);
   margin-top: 10px;
   padding: 2rem;
@@ -39,21 +37,15 @@ const SearchFormBlock = styled.div`
   }
 `;
 
-const SalesSearchForm = ({
-  searchOnClose,
-  searchVisible,
-  searchOnSubmit,
-  customerOnSelect,
+const SalesAdvancedSearchForm = ({
   customers,
   division,
   team,
+  searchOnSubmit,
+  customerOnSelect,
 }) => {
   const [form] = Form.useForm();
-  // autocomplete
-  // const [value, setValue] = useState('');
-  // const [text, setText] = useState('');
   const [suggestions, setSuggestions] = useState([]);
-  const [options, setOptions] = useState([]);
   const [divisionId, setDivisionId] = useState(null);
 
   useEffect(() => {
@@ -62,15 +54,8 @@ const SalesSearchForm = ({
     };
   }, []);
 
-  // console.log('customers', customers);
-
   const onSearch = (searchText) => {
     console.log('searchtext', searchText);
-    // setOptions(
-    //   !searchText
-    //     ? []
-    //     : [mockVal(searchText), mockVal(searchText, 2), mockVal(searchText, 3)],
-    // );
     let matches = [];
     if (customers && searchText.length > 0) {
       matches = customers.filter((customer) => {
@@ -89,20 +74,9 @@ const SalesSearchForm = ({
     // setText(text);
   };
 
-  console.log('options', suggestions);
-
   const onChangeDivision = (e) => {
     console.log('onchangedivision', e);
     setDivisionId(e);
-  };
-
-  //
-  const layout = {
-    labelCol: { span: 5 },
-    wrapperCol: { span: 19 },
-  };
-  const tailLayout = {
-    wrapperCol: { offset: 8, span: 16 },
   };
 
   const onReset = () => {
@@ -111,31 +85,25 @@ const SalesSearchForm = ({
 
   return (
     <>
-      <SearchFormBlock></SearchFormBlock>
-      <Drawer
-        title="매출 상세 조회"
-        width={640}
-        onClose={searchOnClose}
-        visible={searchVisible}
-        bodyStyle={{ paddingBottom: 80 }}
-        extra={
-          <Space>
-            <Button onClose={searchOnClose}>Cancel</Button>
-            {/* <Button type="primary" htmlType="submit">
-              Submit
-            </Button> */}
-          </Space>
-        }
-      >
+      <SearchFormBlock>
         <Form
-          {...layout}
+          // {...layout}
+          labelCol={{
+            span: 5,
+          }}
+          wrapperCol={{
+            span: 19,
+          }}
+          //   wrapperCol={{ flex: 1 }}
+          labelAlign="left"
+          labelWrap
           form={form}
-          // hideRequiredMark
+          // layout="vertical"
+          hideRequiredMark
           onFinish={searchOnSubmit}
         >
-          <Row>
-            {/* <Col span={1} offset={1}></Col> */}
-            <Col span={24}>
+          <Row gutter={16}>
+            <Col span={10}>
               <Form.Item
                 name="date"
                 label="기준일자"
@@ -144,42 +112,7 @@ const SalesSearchForm = ({
                 <RangePicker picker="month" />
               </Form.Item>
             </Col>
-          </Row>
-          <Divider />
-          <Row gutter={16}>
-            {/* <Col span={1} offset={1}>
-              <Switch />
-            </Col> */}
-            <Col span={24}>
-              <Form.Item name="customer" label="매출처">
-                <AutoComplete
-                  options={suggestions}
-                  style={{
-                    width: 200,
-                  }}
-                  onSelect={customerOnSelect}
-                  onSearch={onSearch}
-                  placeholder="매출처 입력 후 선택"
-                />
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={16}>
-            {/* <Col span={1} offset={1}>
-              <Switch />
-            </Col> */}
-            <Col span={24}>
-              <Form.Item name="salesname" label="건명">
-                {/* <Input /> */}
-              </Form.Item>
-            </Col>
-          </Row>
-          <Divider />
-          <Row>
-            {/* <Col span={1} offset={1}>
-              <Switch />
-            </Col> */}
-            <Col span={24}>
+            <Col span={7} offset={0}>
               <Form.Item name="division" label="매출구분">
                 <Select onChange={onChangeDivision}>
                   {division.map((list, index) => {
@@ -192,10 +125,27 @@ const SalesSearchForm = ({
                 </Select>
               </Form.Item>
             </Col>
+            <Col span={6} offset={1}>
+              <Form.Item name="probability" label="매출확률">
+                <Input />
+              </Form.Item>
+            </Col>
           </Row>
-          <Row>
-            {/* <Col span={1} offset={1}></Col> */}
-            <Col span={24}>
+          <Row gutter={16}>
+            <Col span={10}>
+              <Form.Item name="customer" label="매출처">
+                <AutoComplete
+                  options={suggestions}
+                  style={{
+                    width: 200,
+                  }}
+                  onSelect={customerOnSelect}
+                  onSearch={onSearch}
+                  placeholder="매출처 입력 후 선택"
+                />
+              </Form.Item>
+            </Col>
+            <Col span={7}>
               <Form.Item name="item" label="매출품목">
                 <Select>
                   {divisionId
@@ -216,10 +166,12 @@ const SalesSearchForm = ({
             </Col>
           </Row>
           <Row gutter={16}>
-            {/* <Col span={1} offset={1}>
-              <Switch />
-            </Col> */}
-            <Col span={24}>
+            <Col span={10}>
+              <Form.Item name="salesname" label="건명">
+                {/* <Input /> */}
+              </Form.Item>
+            </Col>
+            <Col span={7}>
               <Form.Item name="team" label="사업부">
                 <Select>
                   {team.map((list, index) => {
@@ -233,9 +185,9 @@ const SalesSearchForm = ({
               </Form.Item>
             </Col>
           </Row>
-          <Divider />
+
           <Row gutter={16}>
-            <Col offset={4}>
+            <Col offset={2}>
               <Button type="primary" htmlType="submit">
                 조회
               </Button>
@@ -247,9 +199,9 @@ const SalesSearchForm = ({
             </Col>
           </Row>
         </Form>
-      </Drawer>
+      </SearchFormBlock>
     </>
   );
 };
 
-export default SalesSearchForm;
+export default SalesAdvancedSearchForm;
