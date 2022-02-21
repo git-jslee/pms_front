@@ -43,6 +43,7 @@ const SalesAdvancedSearchForm = ({
   team,
   searchOnSubmit,
   customerOnSelect,
+  resetSelectedCustomer,
 }) => {
   const [form] = Form.useForm();
   const [suggestions, setSuggestions] = useState([]);
@@ -81,6 +82,7 @@ const SalesAdvancedSearchForm = ({
 
   const onReset = () => {
     form.resetFields();
+    resetSelectedCustomer();
   };
 
   return (
@@ -127,7 +129,7 @@ const SalesAdvancedSearchForm = ({
             </Col>
             <Col span={6} offset={1}>
               <Form.Item name="probability" label="매출확률">
-                <Input />
+                {/* <Input /> */}
               </Form.Item>
             </Col>
           </Row>

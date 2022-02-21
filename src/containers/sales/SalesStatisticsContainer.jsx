@@ -6,6 +6,7 @@ import sumSalesValueByMonth from '../../modules/sales/sumSalesValueByMonth';
 import moment from 'moment';
 import startEndDay from '../../modules/common/startEndDay';
 import { setStartEndOfMonth, setParams } from '../../modules/common';
+import { getSalesQuery } from '../../modules/sales';
 
 const SalesStatisticsContainer = () => {
   const dispatch = useDispatch();
@@ -24,9 +25,12 @@ const SalesStatisticsContainer = () => {
       for (let i = -1; i < 3; i++) {
         const month = moment().add(i, 'months').format('YYYY-MM');
         // 해당 시작일 종료일 계산하기, 시작월/종료월 인자로 전달
-        const startEndofDay = startEndDay(month, month);
-        total4Month.push(startEndofDay);
-        const response = await api.getSalesStartEndDay(startEndofDay);
+        const startEndOfDay = startEndDay(month, month);
+        total4Month.push(startEndOfDay);
+        // const response = await api.getSalesStartEndDay(startEndOfDay);
+        const queryString = `sales_rec_date_gte=${startEndOfDay[0]}&sales_rec_date_lte=${startEndOfDay[1]}&deleted=false`;
+        console.log('--queryString--', queryString);
+        const response = await api.getSalesQueryString(queryString);
         // console.log(`response[${i}]`, response.data);
         const sum = sumSalesValueByMonth(response.data);
         // console.log(`***sum..[${i}]****`, sum);
@@ -47,8 +51,17 @@ const SalesStatisticsContainer = () => {
   const onClick = (record) => {
     console.log('eeee', record);
     if (!record.month) return;
-    dispatch(setStartEndOfMonth(record.month));
-    dispatch(setParams({ type: 'scode_probability', key: record.key }));
+    let queryString = '';
+    const queryDate = `sales_rec_date_gte=${record.month[0]}&sales_rec_date_lte=${record.month[1]}&deleted=false`;
+    if (record.key === '99') {
+      queryString = queryDate + `&confirmed=true`;
+    } else {
+      queryString =
+        queryDate + `&confirmed=false&scode_probability.id=${record.key}`;
+    }
+    dispatch(getSalesQuery(queryString));
+    // dispatch(setStartEndOfMonth(record.month));
+    // dispatch(setParams({ type: 'scode_probability', key: record.key }));
   };
 
   return (

@@ -2,6 +2,7 @@ import { createAction, handleActions } from 'redux-actions';
 import * as api from '../lib/api/api';
 import { startLoading, finishLoading } from './loading';
 import moment from 'moment';
+import calStartEndDayFromMonth from './common/calStartEndDayFromMonth';
 
 // 매출현황 리스트
 const GET_SALESLIST = 'sales/GET_SALESLIST';
@@ -37,11 +38,23 @@ const CHANGE_MODE = 'sales/CHANGE_MODE';
 // sales 날짜 검색 기능
 const SET_STARTENDOFMONTH = 'sales/SET_STARTENDOFMONTH';
 
-export const getSalesList = (startOfMonth, endOfMonth) => async (dispatch) => {
+export const getSalesList = (start, end, arg) => async (dispatch) => {
   dispatch({ type: GET_SALESLIST }); //요청 시작을 알림
   dispatch(startLoading(GET_SALESLIST)); //loading true
+  // 월 시작날짜, 마지막 날짜 구하기
+  let queryString;
+  const _start = moment(start).format('YYYY-MM');
+  const _end = moment(end).format('YYYY-MM');
+  const startEnd = calStartEndDayFromMonth(_start, _end);
+  const queayDefault = `sales_rec_date_gte=${startEnd[0]}&sales_rec_date_lte=${startEnd[1]}&deleted=false`;
+  if (!arg) {
+    queryString = queayDefault;
+  } else {
+    queryString = queayDefault + arg;
+  }
+  console.log('**getSalesList- queryString**', queryString);
   try {
-    const response = await api.getSalesFiltered(startOfMonth, endOfMonth);
+    const response = await api.getSalesQueryString(queryString);
     dispatch({
       type: GET_SALESLIST_SUCCESS,
       payload: response,

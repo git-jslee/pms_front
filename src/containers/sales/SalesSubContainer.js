@@ -4,7 +4,7 @@ import SalesSubMenu from '../../components/sales/SalesSubMenu';
 import moment from 'moment';
 import { setStartEndOfMonth, setParams } from '../../modules/common';
 import startEndDay from '../../modules/common/startEndDay';
-import { getSalesQuery } from '../../modules/sales';
+import { getSalesQuery, getSalesList } from '../../modules/sales';
 import SalesStatisticsContainer from './SalesStatisticsContainer';
 import SalesAdvancedSearchForm from '../../components/sales/SalesAdvancedSearchForm';
 import AddSalesDrawerContainer from './AddSalesDrawerContainer';
@@ -37,40 +37,43 @@ const SalesSubContainer = () => {
   const buttonName = search ? '현황' : '상세검색';
 
   useEffect(() => {
-    const startEndOfDay = startEndDay(startMonth, endMonth);
-    dispatch(setStartEndOfMonth(startEndOfDay));
+    dispatch(getSalesList(startMonth, endMonth));
+    // const startEndOfDay = startEndDay(startMonth, endMonth);
+    // const queryString = `sales_rec_date_gte=${startEndOfDay[0]}&sales_rec_date_lte=${startEndOfDay[1]}&deleted=false`;
+    // dispatch(getSalesQuery(queryString));
+    // dispatch(setStartEndOfMonth(startEndOfDay));
   }, [dispatch]);
 
   // 컴포넌트 언마운트시
-  useEffect(() => {
-    return () => {
-      dispatch(setParams(null));
-    };
-  }, []);
+  // useEffect(() => {
+  //   return () => {
+  //     dispatch(setParams(null));
+  //   };
+  // }, []);
 
-  const onChange = (value) => {
-    console.log('onchange', value);
-    if (value !== null) {
-      const startEndOfDay = startEndDay(value[0], value[1]);
-      dispatch(setStartEndOfMonth(startEndOfDay));
-      dispatch(setParams(null));
-    }
-  };
+  // const onChange = (value) => {
+  //   console.log('onchange', value);
+  //   if (value !== null) {
+  //     const startEndOfDay = startEndDay(value[0], value[1]);
+  //     dispatch(setStartEndOfMonth(startEndOfDay));
+  //     dispatch(setParams(null));
+  //   }
+  // };
 
   // const onChangeDivision = (e) => {
   //   console.log('onchangedivision', e);
   //   setDivisionId(e);
   // };
 
-  const thisMonthOnClick = () => {
-    console.log('조회 buttononclick');
-    const startEndOfDay = startEndDay(
-      moment().format('YYYY-MM'),
-      moment().format('YYYY-MM'),
-    );
-    dispatch(setStartEndOfMonth(startEndOfDay));
-    dispatch(setParams(null));
-  };
+  // const thisMonthOnClick = () => {
+  //   console.log('조회 buttononclick');
+  //   const startEndOfDay = startEndDay(
+  //     moment().format('YYYY-MM'),
+  //     moment().format('YYYY-MM'),
+  //   );
+  //   dispatch(setStartEndOfMonth(startEndOfDay));
+  //   dispatch(setParams(null));
+  // };
 
   const addSalesOnClick = () => {
     setAddSalesVisible(true);
@@ -90,15 +93,21 @@ const SalesSubContainer = () => {
   const searchOnClose = () => {
     setSearchVisible(false);
   };
+  // advanced search 에서 초기화 클릭시..매출처 항목 초기화 함수
+  const resetSelectedCustomer = () => {
+    console.log('함수실행 - resetSelectedCustomer');
+    setSelectedCustomer(null);
+  };
+
   // AutoComplete
   const searchOnSubmit = async (value) => {
     console.log('검색 - onSubmit', value);
     console.log('검색 - selectedCustomer', selectedCustomer);
     const start = moment(value.date[0]).format('YYYY-MM');
     const end = moment(value.date[1]).format('YYYY-MM');
-    const startEndOfDay = startEndDay(start, end);
-    const queryDate = `sales_rec_date_gte=${startEndOfDay[0]}&sales_rec_date_lte=${startEndOfDay[1]}&deleted=false`;
-    let queryString = queryDate;
+    // const startEndOfDay = startEndDay(start, end);
+    // const queryDate = `sales_rec_date_gte=${startEndOfDay[0]}&sales_rec_date_lte=${startEndOfDay[1]}&deleted=false`;
+    let queryString = '';
     if (selectedCustomer) {
       queryString = queryString + `&customer.id=${selectedCustomer}`;
     }
@@ -110,11 +119,13 @@ const SalesSubContainer = () => {
     if (value.team) {
       queryString = queryString + `&scode_team.id=${value.team}`;
     }
-    console.log('querystring', queryString);
+
+    dispatch(getSalesList(start, end, queryString));
+    // console.log('querystring', queryString);
 
     // const response = await api.getSalesQueryString(queryString);
     // console.log('response', response.data);
-    dispatch(getSalesQuery(queryString));
+    // dispatch(getSalesQuery(queryString));
     setSelectedCustomer(null);
     // 완료시 SalesSearchForm 닫기
     setSearchVisible(false);
@@ -125,11 +136,12 @@ const SalesSubContainer = () => {
     console.log('검색 - selectedCustomer', selectedCustomer);
     const start = moment(value.date[0]).format('YYYY-MM');
     const end = moment(value.date[1]).format('YYYY-MM');
-    const startEndOfDay = startEndDay(start, end);
-    const queryDate = `sales_rec_date_gte=${startEndOfDay[0]}&sales_rec_date_lte=${startEndOfDay[1]}&deleted=false`;
-    let queryString = queryDate;
+    // const startEndOfDay = startEndDay(start, end);
+    // const queryDate = `sales_rec_date_gte=${startEndOfDay[0]}&sales_rec_date_lte=${startEndOfDay[1]}&deleted=false`;
+    // let queryString = queryDate;
+    let queryString = '';
     if (selectedCustomer) {
-      queryString = queryString + `&customer.id=${selectedCustomer}`;
+      queryString = `&customer.id=${selectedCustomer}`;
     }
     if (value.item) {
       queryString = queryString + `&scode_item.id=${value.item}`;
@@ -139,11 +151,13 @@ const SalesSubContainer = () => {
     if (value.team) {
       queryString = queryString + `&scode_team.id=${value.team}`;
     }
-    console.log('querystring', queryString);
+
+    dispatch(getSalesList(start, end, queryString));
+    // console.log('querystring', queryString);
 
     // const response = await api.getSalesQueryString(queryString);
     // console.log('response', response.data);
-    dispatch(getSalesQuery(queryString));
+    // dispatch(getSalesQuery(queryString));
   };
 
   const customerOnSelect = (data, option) => {
@@ -170,6 +184,7 @@ const SalesSubContainer = () => {
           division={division}
           team={team}
           customerOnSelect={customerOnSelect}
+          resetSelectedCustomer={resetSelectedCustomer}
         />
       ) : (
         <SalesStatisticsContainer />

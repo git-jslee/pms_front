@@ -9,7 +9,7 @@ import moment from 'moment';
 import { setStartEndOfMonth, setParams } from '../../modules/common';
 import startEndDay from '../../modules/common/startEndDay';
 import AutoComplete from '../common/AutoComplete';
-import { getSalesQuery } from '../../modules/sales';
+import { getSalesQuery, getSalesList } from '../../modules/sales';
 import { RedoOutlined } from '@ant-design/icons';
 
 const { RangePicker } = DatePicker;
@@ -47,53 +47,54 @@ const SalesSubMenu = ({
   // const startMonth = moment().format('YYYY-MM');
   // const endMonth = moment().format('YYYY-MM');
   const dateFormat = 'YYYY-MM';
-  const month = moment().format('MM');
+  // const month = moment().format('MM');
 
-  useEffect(() => {
-    const startEndOfDay = startEndDay(startMonth, endMonth);
-    dispatch(setStartEndOfMonth(startEndOfDay));
-  }, [dispatch]);
+  // useEffect(() => {
+  //   const startEndOfDay = startEndDay(startMonth, endMonth);
+  //   dispatch(setStartEndOfMonth(startEndOfDay));
+  // }, [dispatch]);
 
   // 컴포넌트 언마운트시
-  useEffect(() => {
-    return () => {
-      dispatch(setParams(null));
-    };
-  }, []);
+  // useEffect(() => {
+  //   return () => {
+  //     dispatch(setParams(null));
+  //   };
+  // }, []);
 
   const onChange = (value) => {
     console.log('onchange', value);
     if (value !== null) {
-      const startEndOfDay = startEndDay(value[0], value[1]);
-      dispatch(setStartEndOfMonth(startEndOfDay));
-      dispatch(setParams(null));
+      dispatch(getSalesList(value[0], value[1]));
     }
   };
 
   const buttonOnClick = () => {
-    console.log('조회 buttononclick');
-    const startEndOfDay = startEndDay(
-      moment().format('YYYY-MM'),
-      moment().format('YYYY-MM'),
-    );
-    const queryString = `sales_rec_date_gte=${startEndOfDay[0]}&sales_rec_date_lte=${startEndOfDay[1]}&deleted=false`;
+    // console.log('조회 buttononclick');
+    // const startEndOfDay = startEndDay(
+    //   moment().format('YYYY-MM'),
+    //   moment().format('YYYY-MM'),
+    // );
+    // const queryString = `sales_rec_date_gte=${startEndOfDay[0]}&sales_rec_date_lte=${startEndOfDay[1]}&deleted=false`;
     // dispatch(setStartEndOfMonth(startEndOfDay));
-    dispatch(setParams(null));
-    dispatch(getSalesQuery(queryString));
+    // dispatch(setParams(null));
+    // dispatch(getSalesQuery(queryString));
+    dispatch(
+      getSalesList(moment().format('YYYY-MM'), moment().format('YYYY-MM')),
+    );
   };
 
   return (
     <>
       <SubMenuBlock>
         <h1>매출현황</h1>
-        {/* <Link to="/addsales">
+        <Link to="/addsales">
           <Button>등록</Button>
-        </Link> */}
-        <Button onClick={addSalesOnClick}>매출등록</Button>
+        </Link>
+        {/* <Button onClick={addSalesOnClick}>매출등록</Button> */}
         {/* <Button onClick={searchOnClick}>상세검색1</Button> */}
         <Button onClick={advancedSearch}>{buttonName}</Button>
         <div className="search">
-          <span>기준일자</span>
+          {/* <span>기준일자</span>
           <Space direction="vertical" size={12}>
             <RangePicker
               picker="month"
@@ -103,7 +104,7 @@ const SalesSubMenu = ({
               ]}
               onChange={onChange}
             />
-          </Space>
+          </Space> */}
           {/* <Button onClick={buttonOnClick}>{month}월 조회</Button> */}
           <RedoOutlined
             onClick={buttonOnClick}

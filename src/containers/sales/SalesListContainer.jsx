@@ -25,21 +25,22 @@ const SalesListContainer = () => {
 
   console.log('saleslist', lists);
 
-  useEffect(() => {
-    if (!params) {
-      dispatch(getSalesList(startMonth, endMonth));
-    } else {
-      console.log('파라미터', params);
-      //scode_probability.id
-      if (params.key === '99') {
-        const parameter = `&confirmed=true`;
-        dispatch(getSalesParams(startMonth, endMonth, parameter));
-      } else {
-        const parameter = `&confirmed=false&scode_probability.id=${params.key}`;
-        dispatch(getSalesParams(startMonth, endMonth, parameter));
-      }
-    }
-  }, [dispatch, startMonth, endMonth, params]);
+  // 삭제 예정 쿼리 방식 변경..
+  // useEffect(() => {
+  //   if (!params) {
+  //     // dispatch(getSalesList(startMonth, endMonth));
+  //   } else {
+  //     console.log('파라미터', params);
+  //     //scode_probability.id
+  //     if (params.key === '99') {
+  //       const parameter = `&confirmed=true`;
+  //       dispatch(getSalesParams(startMonth, endMonth, parameter));
+  //     } else {
+  //       const parameter = `&confirmed=false&scode_probability.id=${params.key}`;
+  //       dispatch(getSalesParams(startMonth, endMonth, parameter));
+  //     }
+  //   }
+  // }, [dispatch, startMonth, endMonth, params]);
 
   // table data
   console.log('lists', lists);
@@ -128,6 +129,7 @@ const SalesListContainer = () => {
       {addSalesVisible ? (
         <AddSalesDrawerContainer
           addSalesVisible={addSalesVisible}
+          setAddSalesVisible={setAddSalesVisible}
           addSalesOnClose={addSalesOnClose}
           initialValues={initialValues}
           salesConfirmed={salesConfirmed}

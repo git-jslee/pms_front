@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 
 const AddSalesDrawerContainer = ({
   addSalesVisible,
+  setAddSalesVisible,
   addSalesOnClose,
   initialValues,
   salesConfirmed,
@@ -161,6 +162,7 @@ const AddSalesDrawerContainer = ({
       },
     ]);
     console.log('2. sales-profits', result2.data);
+    setAddSalesVisible(false);
     navigate('/sales');
   };
 
