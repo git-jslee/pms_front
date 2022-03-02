@@ -8,7 +8,9 @@ import {
   Button,
   Col,
   Row,
+  Popconfirm,
 } from 'antd';
+import { DeleteOutlined } from '@ant-design/icons';
 // import Button from '../common/Button';
 
 const SalesViewDetailTable = ({
@@ -18,12 +20,14 @@ const SalesViewDetailTable = ({
   updateForm,
   mode,
   onClickBack,
+  showDeleteConfirm,
 }) => {
   const sales_profits = list.sales_profits;
   const sales_profit = sales_profits[sales_profits.length - 1];
   const modename = mode === 'VIEW' ? 'EDIT' : 'VIEW';
   console.log('sales_pofir_length', sales_profit);
   console.log('tabledata', tableData);
+
   const columns = [
     {
       title: 'No',
@@ -79,13 +83,20 @@ const SalesViewDetailTable = ({
         <Col>
           <Button onClick={buttonOnClick}>{modename}</Button>
         </Col>
-        {mode === 'EDIT' ? (
-          <Col offset={1}>
-            <Button>DELETE</Button>
-          </Col>
-        ) : (
-          ''
-        )}
+        <Col offset={1}>
+          {/* <Popconfirm
+            title="매출항목을 삭제하시겠습니까?"
+            onConfirm={onClickItemDelete}
+            // onCancel={cancel}
+            okText="Yes"
+            cancelText="No"
+          >
+            <DeleteOutlined style={{ fontSize: '30px' }} />
+          </Popconfirm> */}
+          <Button onClick={showDeleteConfirm} type="dashed">
+            Delete
+          </Button>
+        </Col>
         <Col offset={1}>
           <Button onClick={onClickBack}>BACK</Button>
         </Col>
@@ -109,7 +120,7 @@ const SalesViewDetailTable = ({
         <Descriptions.Item label="매출구분">
           {list.scode_division.name}
         </Descriptions.Item>
-        <Descriptions.Item label="매풀품목">
+        <Descriptions.Item label="매출품목">
           {list.scode_item.name}
         </Descriptions.Item>
         <Descriptions.Item label="사업부">

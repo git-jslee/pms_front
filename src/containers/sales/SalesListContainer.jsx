@@ -4,6 +4,8 @@ import { getSalesList, getSalesParams } from '../../modules/sales';
 import SalesListTable from '../../components/sales/SalesListTable';
 import moment from 'moment';
 import AddSalesDrawerContainer from './AddSalesDrawerContainer';
+import InfoSalesDrawerForm from '../../components/sales/InfoSalesDrawerForm';
+import InfoSalesDrawerContainer from './InfoSalesDrawerContainer';
 import * as api from '../../lib/api/api';
 import { message, Button, Space } from 'antd';
 
@@ -11,6 +13,8 @@ const SalesListContainer = () => {
   const dispatch = useDispatch();
   const [tableData, setTableData] = useState();
   const [addSalesVisible, setAddSalesVisible] = useState(false);
+  const [infoSalesVisible, setInfoSalesVisible] = useState(false);
+  const [salesId, setSalesId] = useState(null);
   const [initialValues, setInitialValues] = useState();
   const [salesConfirmed, setSalesConfirmed] = useState(false);
   const { startMonth, endMonth, lists, loading, params } = useSelector(
@@ -116,12 +120,24 @@ const SalesListContainer = () => {
   };
   console.log('--1.salesConfirmed--', salesConfirmed);
 
+  const infoSalesOnClick = (id) => {
+    console.log('info on click');
+    setInfoSalesVisible(true);
+    setSalesId(id);
+  };
+
+  const infoSalesOnClose = () => {
+    setInfoSalesVisible(false);
+  };
+  console.log('1.infoSalesVisible', infoSalesVisible);
+
   return (
     <>
       {loading === false ? (
         <SalesListTable
           tableData={tableData}
           addSalesOnClick={addSalesOnClick}
+          infoSalesOnClick={infoSalesOnClick}
         />
       ) : (
         <div>로딩중</div>
@@ -133,6 +149,15 @@ const SalesListContainer = () => {
           addSalesOnClose={addSalesOnClose}
           initialValues={initialValues}
           salesConfirmed={salesConfirmed}
+        />
+      ) : (
+        ''
+      )}
+      {infoSalesVisible ? (
+        <InfoSalesDrawerContainer
+          infoSalesVisible={infoSalesVisible}
+          infoSalesOnClose={infoSalesOnClose}
+          salesId={salesId}
         />
       ) : (
         ''

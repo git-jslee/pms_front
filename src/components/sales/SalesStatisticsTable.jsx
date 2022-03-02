@@ -12,6 +12,9 @@ const SalesStatisticsTable = ({ sumValue, totalMonth, onClick }) => {
   // 전월(previous month)
   const _pm_999 = sumValue[-1][99] || '';
   const _pm_100 = sumValue[-1][5] || '';
+  const _pm_90 = sumValue[-1][4] || '';
+  const _pm_70 = sumValue[-1][3] || '';
+  const _pm_50 = sumValue[-1][2] || '';
   // 당월(current month)
   const _cm_50 = sumValue[0][2] || '';
   const _cm_70 = sumValue[0][3] || '';
@@ -48,15 +51,24 @@ const SalesStatisticsTable = ({ sumValue, totalMonth, onClick }) => {
     },
     {
       key: '4',
+      month: totalMonth[0],
       probibility: '90%',
+      pm_sales: _pm_90[0].toLocaleString('ko-KR'),
+      pm_profit: _pm_90[1].toLocaleString('ko-KR'),
     },
     {
       key: '3',
+      month: totalMonth[0],
       probibility: '70%',
+      pm_sales: _pm_70[0].toLocaleString('ko-KR'),
+      pm_profit: _pm_70[1].toLocaleString('ko-KR'),
     },
     {
       key: '2',
+      month: totalMonth[0],
       probibility: '50%',
+      pm_sales: _pm_50[0].toLocaleString('ko-KR'),
+      pm_profit: _pm_50[1].toLocaleString('ko-KR'),
     },
   ];
 

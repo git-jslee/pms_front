@@ -6,6 +6,9 @@ import moment from 'moment';
 // edit 버튼틀릭시 모드 변경 VIEW -> EDIT
 const CHANGE_MODE = 'common/CHANGE_MODE';
 
+// edit 버튼틀릭시 모드 변경 editmode false-> true
+const CHANGE_EDITMODE = 'common/CHANGE_EDITMODE';
+
 // 월별 조회 관련 날짜 지정 기능
 const SET_STARTENDOFMONTH = 'common/SET_STARTENDOFMONTH';
 
@@ -19,6 +22,12 @@ const SET_CUSTOMERID = 'common/SET_CUSTOMERID';
 
 // VIEW - EDIT 모드 변경
 export const changeMode = createAction(CHANGE_MODE, (mode) => mode);
+
+// VIEW - EDIT 모드 변경
+export const changeEditMode = createAction(
+  CHANGE_EDITMODE,
+  (editmode) => editmode,
+);
 
 // Autocomplete 기능 이용하여 고객 검색시 고객Id 등록
 export const setCustomerId = createAction(SET_CUSTOMERID, (id) => id);
@@ -34,12 +43,13 @@ export const setParams = createAction(SET_PARAMS, (params) => params);
 export const setSearchTable = createAction(SET_SEARCHTABLE, (mode) => mode);
 
 const initialState = {
-  mode: 'VIEW',
+  editmode: false,
   search: false,
   customerid: { id: null, name: null },
   month: [null, null],
   params: null,
   error: null,
+  mode: 'VIEW',
 };
 
 const common = handleActions(
@@ -48,6 +58,11 @@ const common = handleActions(
     [CHANGE_MODE]: (state, { payload }) => ({
       ...state,
       mode: payload.mode,
+    }),
+    // 모드변경(VIEW - EDIT)
+    [CHANGE_EDITMODE]: (state, { payload }) => ({
+      ...state,
+      editmode: payload.editmode,
     }),
     // 상세 조회 테이블
     [SET_SEARCHTABLE]: (state, { payload }) => ({

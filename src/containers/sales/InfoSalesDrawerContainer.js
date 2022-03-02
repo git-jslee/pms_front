@@ -3,30 +3,44 @@ import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSalesId } from '../../modules/sales';
 import SalesViewDetailTable from '../../components/sales/SalesViewDetailTable';
-import SalesUpdateForm from '../../components/sales/SalesUpdateForm';
+import SalesValueUpdateForm from '../../components/sales/SalesValueUpdateForm';
+import SalesBasicUpdateForm from '../../components/sales/SalesBasicUpdateForm';
+import { changeEditMode } from '../../modules/common';
 import { changeMode } from '../../modules/sales';
 import tbl_insert from '../../modules/tbl_insert';
 import tbl_update from '../../modules/tbl_update';
 import moment from 'moment';
 import { useNavigate } from 'react-router-dom';
 import { Modal } from 'antd';
+import InfoSalesDrawerForm from '../../components/sales/InfoSalesDrawerForm';
 
 const { confirm } = Modal;
 
-const SalesDetailContainer = () => {
+const InfoSalesDrawerContainer = ({
+  infoSalesVisible,
+  infoSalesOnClose,
+  salesId,
+}) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   //웹토큰 가져오기..값 변경시에만 실행되게 설정 변경..
   const { auth } = useSelector(({ auth }) => ({
     auth: auth.auth,
   }));
-  const { id } = useParams();
+  // const { id } = useParams();
   const [tableData, setTableData] = useState();
-  const { list, loading, mode } = useSelector(({ sales, loading }) => ({
-    list: sales.detail,
-    loading: loading['sales/GET_SALESID'],
-    mode: sales.mode,
+  const { customer, codebook } = useSelector(({ codebook, customerList }) => ({
+    codebook: codebook.sales,
+    customer: customerList.data,
   }));
+  const { list, loading, mode, editmode } = useSelector(
+    ({ sales, loading, common }) => ({
+      list: sales.detail,
+      loading: loading['sales/GET_SALESID'],
+      mode: sales.mode,
+      editmode: common.editmode,
+    }),
+  );
   const [radioValue, setRadioValue] = useState(true);
   const [salesValue, setSalesValue] = useState();
   const [profitMarginValue, setProfitMarginValue] = useState({
@@ -38,6 +52,7 @@ const SalesDetailContainer = () => {
     checked: false,
     name: '매출예정',
   });
+  const [editRadioValue, setEditRadioValue] = useState(1);
 
   const { probability } = useSelector(({ codebook }) => ({
     probability: codebook.sales.probability,
@@ -46,10 +61,10 @@ const SalesDetailContainer = () => {
   console.log('salesid', list);
 
   useEffect(() => {
-    dispatch(getSalesId(id));
+    dispatch(getSalesId(salesId));
     dispatch(
-      changeMode({
-        mode: 'VIEW',
+      changeEditMode({
+        editmode: false,
       }),
     );
   }, [dispatch]);
@@ -143,14 +158,14 @@ const SalesDetailContainer = () => {
     }
   }, [radioValue, salesValue, profitMarginValue]);
 
-  const buttonOnClick = () => {
+  const editButtonOnClick = () => {
     console.log('edit 버튼 클릭');
-    if (mode === 'VIEW') {
+    if (editmode === false) {
       const sales_profits = list.sales_profits;
       const sales_profit = sales_profits[sales_profits.length - 1];
       dispatch(
-        changeMode({
-          mode: 'EDIT',
+        changeEditMode({
+          editmode: true,
         }),
       );
       setSalesValue(sales_profit.sales);
@@ -158,13 +173,19 @@ const SalesDetailContainer = () => {
         margin: null,
         sales_profit: sales_profit.sales_profit,
       });
-    } else if (mode === 'EDIT') {
+    } else if (editmode === true) {
       dispatch(
-        changeMode({
-          mode: 'VIEW',
+        changeEditMode({
+          editmode: false,
         }),
       );
     }
+  };
+
+  // Edit 버튼 -> 매출 수정, 기본정보 수정 선택
+  const editRadioOnChange = (e) => {
+    console.log('Radio버튼 선택', e.target.value);
+    setEditRadioValue(e.target.value);
   };
 
   const onClickBack = () => {
@@ -172,6 +193,7 @@ const SalesDetailContainer = () => {
     navigate('/sales');
   };
 
+  // 매출항목 매출수정 update 시
   const onSubmit = async (values) => {
     console.log('onSubmit', values);
     const jwt = auth.jwt;
@@ -192,7 +214,7 @@ const SalesDetailContainer = () => {
         scode_probability: _probability,
         sales_rec_date: moment(values.sales_rec_date.format('YYYY-MM-DD')),
         count: list.sales_profits.length + 1,
-        description: values.description,
+        // description: values.description,
       },
       {
         headers: {
@@ -200,13 +222,13 @@ const SalesDetailContainer = () => {
         },
       },
     ];
-    const result = await tbl_update('sales-performances', id, datas);
+    const result = await tbl_update('sales-performances', list.id, datas);
     console.log('1. sales-performances_update', result.data);
     // probability 5 -> 100% 의미함
     const paymentDate = values.payment_date || '';
     const result2 = await tbl_insert('sales-profits', [
       {
-        sales_performance: id,
+        sales_performance: list.id,
         confirmed: _confirmed,
         scode_probability: _probability,
         sales: values.sales,
@@ -223,10 +245,41 @@ const SalesDetailContainer = () => {
       },
     ]);
     console.log('2. sales-profits', result2.data);
-    dispatch(getSalesId(id));
+    dispatch(getSalesId(list.id));
     dispatch(
-      changeMode({
-        mode: 'VIEW',
+      changeEditMode({
+        editmode: false,
+      }),
+    );
+    // navigate(`/sales/${id}`);
+  };
+
+  // 매출항목 기본정보 update 시
+  const onSubmitBasic = async (values) => {
+    console.log('onSubmitBasic', values);
+    const jwt = auth.jwt;
+    const datas = [
+      {
+        name: values.sales_name,
+        customer: values.customer,
+        scode_division: values.division,
+        scode_item: values.item,
+        scode_team: values.team,
+        description: values.description,
+      },
+      {
+        headers: {
+          Authorization: 'Bearer ' + jwt,
+        },
+      },
+    ];
+    const result = await tbl_update('sales-performances', list.id, datas);
+    console.log('1. sales-performances_update', result.data);
+
+    dispatch(getSalesId(list.id));
+    dispatch(
+      changeEditMode({
+        editmode: false,
       }),
     );
     // navigate(`/sales/${id}`);
@@ -260,11 +313,18 @@ const SalesDetailContainer = () => {
       ? moment(sales_profit.payment_date)
       : '';
     const initialValues = {
+      // SalesBasicUpdateForm
+      sales_name: list.name,
+      customer: list.customer.id,
+      division: list.scode_division.id,
+      item: list.scode_item.id,
+      team: list.scode_team.id,
+      description: list.description,
+      //SalesValueUpateForm
       confirmed: sales_profit.confirmed,
       sales: sales_profit.sales,
       sales_profit: sales_profit.sales_profit,
       probability: sales_profit.scode_probability,
-      description: list.description,
       sales_rec_date: moment(sales_profit.sales_rec_date),
       payment_date: _payment_date,
     };
@@ -272,21 +332,32 @@ const SalesDetailContainer = () => {
 
     return (
       <>
-        <SalesUpdateForm
-          initialValues={initialValues}
-          list={list}
-          tableData={tableData}
-          probability={probability}
-          profitMarginValue={profitMarginValue}
-          radioValue={radioValue}
-          calResult={calResult}
-          onSubmit={onSubmit}
-          onChangeRadio={onChangeRadio}
-          salesValueOnchange={salesValueOnchange}
-          profitMarginOnchange={profitMarginOnchange}
-          checked={checked}
-          onChangeSwitch={onChangeSwitch}
-        />
+        {editRadioValue === 1 ? (
+          <>
+            <SalesValueUpdateForm
+              initialValues={initialValues}
+              list={list}
+              tableData={tableData}
+              probability={probability}
+              profitMarginValue={profitMarginValue}
+              radioValue={radioValue}
+              calResult={calResult}
+              onSubmit={onSubmit}
+              onChangeRadio={onChangeRadio}
+              salesValueOnchange={salesValueOnchange}
+              profitMarginOnchange={profitMarginOnchange}
+              checked={checked}
+              onChangeSwitch={onChangeSwitch}
+            />
+          </>
+        ) : (
+          <SalesBasicUpdateForm
+            initialValues={initialValues}
+            customer={customer}
+            codebook={codebook}
+            onSubmitBasic={onSubmitBasic}
+          />
+        )}
       </>
     );
   };
@@ -301,7 +372,7 @@ const SalesDetailContainer = () => {
       okType: 'danger',
       cancelText: 'No',
       async onOk() {
-        console.log('매출항목 삭제', id);
+        console.log('매출항목 삭제', list.id);
         const jwt = auth.jwt;
         const datas = [
           {
@@ -313,7 +384,7 @@ const SalesDetailContainer = () => {
             },
           },
         ];
-        const result = await tbl_update('sales-performances', id, datas);
+        const result = await tbl_update('sales-performances', list.id, datas);
         console.log('항목삭제 성공', result);
         navigate('/sales');
       },
@@ -323,7 +394,7 @@ const SalesDetailContainer = () => {
     });
   };
   const onClickItemDelete = async () => {
-    console.log('매출항목 삭제', id);
+    console.log('매출항목 삭제', list.id);
     const jwt = auth.jwt;
 
     const datas = [
@@ -336,33 +407,43 @@ const SalesDetailContainer = () => {
         },
       },
     ];
-    const result = await tbl_update('sales-performances', id, datas);
+    const result = await tbl_update('sales-performances', list.id, datas);
     console.log('항목삭제 성공', result);
     navigate('/sales');
   };
 
   console.log('list', list);
+  console.log('2.infoSalesVisible', infoSalesVisible);
 
   return (
     <>
       {list && probability ? (
-        mode === 'VIEW' ? (
-          <SalesViewDetailTable
+        !editmode ? (
+          <InfoSalesDrawerForm
             list={list}
             tableData={tableData}
-            buttonOnClick={buttonOnClick}
-            mode={mode}
+            editButtonOnClick={editButtonOnClick}
+            editRadioOnChange={editRadioOnChange}
+            editRadioValue={editRadioValue}
+            editmode={editmode}
+            // updateForm={updateForm()}
             onClickBack={onClickBack}
             showDeleteConfirm={showDeleteConfirm}
+            infoSalesVisible={infoSalesVisible}
+            infoSalesOnClose={infoSalesOnClose}
           />
         ) : (
-          <SalesViewDetailTable
+          <InfoSalesDrawerForm
             list={list}
             tableData={tableData}
-            buttonOnClick={buttonOnClick}
-            mode={mode}
+            editButtonOnClick={editButtonOnClick}
+            editRadioOnChange={editRadioOnChange}
+            editRadioValue={editRadioValue}
+            editmode={editmode}
             updateForm={updateForm()}
             onClickBack={onClickBack}
+            infoSalesVisible={infoSalesVisible}
+            infoSalesOnClose={infoSalesOnClose}
           />
         )
       ) : (
@@ -372,4 +453,4 @@ const SalesDetailContainer = () => {
   );
 };
 
-export default SalesDetailContainer;
+export default InfoSalesDrawerContainer;

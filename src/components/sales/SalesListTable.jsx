@@ -2,12 +2,12 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Table, Tag, Space, Button, Popconfirm } from 'antd';
 import {
-  PlusOutlined,
-  PlusCircleOutlined,
   InfoCircleOutlined,
+  CopyOutlined,
+  MenuFoldOutlined,
 } from '@ant-design/icons';
 
-const SalesListTable = ({ tableData, addSalesOnClick }) => {
+const SalesListTable = ({ tableData, addSalesOnClick, infoSalesOnClick }) => {
   const navigate = useNavigate();
 
   const columns = [
@@ -83,9 +83,15 @@ const SalesListTable = ({ tableData, addSalesOnClick }) => {
       key: 'action',
       render: (text, record) => (
         <Space size="small">
-          <InfoCircleOutlined
+          {/* <InfoCircleOutlined
             onClick={() => {
               actionOnClick(record.key);
+            }}
+            style={{ fontSize: '20px' }}
+          /> */}
+          <MenuFoldOutlined
+            onClick={() => {
+              infoSalesOnClick(record.key);
             }}
             style={{ fontSize: '20px' }}
           />
@@ -98,7 +104,7 @@ const SalesListTable = ({ tableData, addSalesOnClick }) => {
             okText="Yes"
             cancelText="No"
           >
-            <PlusCircleOutlined style={{ fontSize: '20px' }} />
+            <CopyOutlined style={{ fontSize: '20px' }} />
           </Popconfirm>
         </Space>
       ),
