@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import SalesSubMenu from '../../components/sales/SalesSubMenu';
 import moment from 'moment';
-import { setStartEndOfMonth, setParams } from '../../modules/common';
+import { setStartEndOfMonth, setParams, setTitle } from '../../modules/common';
 import startEndDay from '../../modules/common/startEndDay';
 import { getSalesQuery, getSalesList } from '../../modules/sales';
 import SalesStatisticsContainer from './SalesStatisticsContainer';
@@ -38,10 +38,10 @@ const SalesSubContainer = () => {
 
   useEffect(() => {
     dispatch(getSalesList(startMonth, endMonth));
-    // const startEndOfDay = startEndDay(startMonth, endMonth);
-    // const queryString = `sales_rec_date_gte=${startEndOfDay[0]}&sales_rec_date_lte=${startEndOfDay[1]}&deleted=false`;
-    // dispatch(getSalesQuery(queryString));
-    // dispatch(setStartEndOfMonth(startEndOfDay));
+    dispatch(setTitle('매출현황 관리'));
+    return () => {
+      dispatch(setTitle(null));
+    };
   }, [dispatch]);
 
   // 컴포넌트 언마운트시

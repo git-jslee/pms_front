@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 // import { getProjectCount } from '../../modules/projectCount';
 import { apiProjectCount } from '../../lib/api/api';
-import ProjectCount from '../../components/project/ProjectCount';
+// import ProjectCount from '../../components/project/ProjectCount';
 
 const ProjectCountContainer = () => {
   const [count, setCount] = useState('');
@@ -17,7 +17,7 @@ const ProjectCountContainer = () => {
       });
   }, []);
   console.log('>>count>>', count);
-  return <>{count ? <ProjectCount count={count} /> : <h1>카운트 로딩중</h1>}</>;
+  return <>{count ? <h1>...</h1> : <h1>카운트 로딩중</h1>}</>;
 };
 
 export default ProjectCountContainer;

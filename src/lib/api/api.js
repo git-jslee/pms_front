@@ -41,6 +41,10 @@ export const salesCodebook = () =>
 // 코드 진행상태 - code-progresses
 export const apiCodeProgress = () => axios.get(`${API_URL}/code-progresses`);
 
+// 가져오기 기능 통합
+// projectlist,
+export const getListfromPrams = (params) => axios.get(`${API_URL}/${params}`);
+
 // == getList(날짜별 조회 기능 추가 필요)
 export const getList = (path) => axios.get(`${API_URL}/${path}`);
 
@@ -143,6 +147,16 @@ export const apiAddProject = (datas, values, tasks) =>
 
 // 프로젝트 카운트
 export const apiProjectCount = () =>
+  axios.all([
+    axios.get(`${API_URL}/projects/count?code_status.id=1`),
+    axios.get(`${API_URL}/projects/count?code_status.id=2`),
+    axios.get(`${API_URL}/projects/count?code_status.id=3`),
+    axios.get(`${API_URL}/projects/count?code_status.id=4`),
+  ]);
+
+// 프로젝트 카운트 v2
+// 완료건 - 기간설정 필요 ex..6개월 or 1년 등..
+export const projectCount = () =>
   axios.all([
     axios.get(`${API_URL}/projects/count?code_status.id=1`),
     axios.get(`${API_URL}/projects/count?code_status.id=2`),

@@ -1,9 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, Table, Space } from 'antd';
-import moment from 'moment';
+import { Button, Table, Space, Spin } from 'antd';
 
-const ProjectListTable = ({ lists, loading }) => {
+const ProjectListTable = ({ tableData, loading }) => {
   const navigate = useNavigate();
   const columns = [
     {
@@ -11,11 +10,11 @@ const ProjectListTable = ({ lists, loading }) => {
       dataIndex: 'no',
       key: 'no',
     },
-    {
-      title: '구분',
-      dataIndex: 'type',
-      key: 'type',
-    },
+    // {
+    //   title: '구분',
+    //   dataIndex: 'type',
+    //   key: 'type',
+    // },
     {
       title: '고객사',
       dataIndex: 'customer',
@@ -78,27 +77,6 @@ const ProjectListTable = ({ lists, loading }) => {
     },
   ];
 
-  const tableData = [];
-  if (!lists) {
-    return <Table columns={columns} />;
-  }
-  const tableList = lists.map((list, index) => {
-    const duration = moment().diff(moment(list.startDate), 'days');
-    const array = {
-      key: list.id,
-      no: index + 1,
-      type: list.code_type.name,
-      customer: list.customer.name,
-      name: list.name,
-      service: list.code_service.name,
-      status: list.code_status.name,
-      startdate: list.startDate,
-      duration: duration,
-      action: 'View',
-    };
-    tableData.push(array);
-  });
-
   const onClick = (id) => {
     console.log('키..', id);
     // project..view..코드 작성
@@ -112,6 +90,7 @@ const ProjectListTable = ({ lists, loading }) => {
         dataSource={tableData}
         pagination={{ pageSize: 20 }}
       />
+      {loading ? <Spin tip="Loading..." /> : ''}
     </>
   );
 };

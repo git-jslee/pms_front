@@ -43,13 +43,13 @@ const UserInfo = styled.div`
   margin-right: 1rem;
 `;
 
-const Header = ({ user, onLogout }) => {
+const Header = ({ user, title, onLogout }) => {
   return (
     <>
       <HeaderBlock>
         <Wrapper>
           <Link to="/" className="logo">
-            CWCC PMS
+            CWCC PMS {title}
           </Link>
           {user ? (
             <div className="right">

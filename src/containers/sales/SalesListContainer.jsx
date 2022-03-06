@@ -92,15 +92,18 @@ const SalesListContainer = () => {
     try {
       const response = await api.getSalesId(id);
       console.log('--response--', response.data);
+      const sales_profits = response.data.sales_profits;
+      const sales_profit = sales_profits[sales_profits.length - 1];
       const initValues = {
         customer: response.data.customer.id,
         sales_name: response.data.name,
         probability: response.data.scode_probability.id,
         division: response.data.scode_division.id,
-        // item: response.data.scode_item.id,
+        item: response.data.scode_item.id,
         team: response.data.scode_team.id,
-        // sales:
         // sales_profit:
+        sales: sales_profit.sales,
+        sales_profit: sales_profit.sales_profit,
       };
       if (response.data.confirmed) {
         console.log('********');

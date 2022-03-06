@@ -5,6 +5,7 @@ import ProjectListContainer from '../containers/project/ProjectListContainer';
 import ProjectCountContainer from '../containers/project/ProjectCountContainer';
 import FormTemplate from '../components/common/FormTemplate';
 import ProjectSearchContainer from '../containers/project/ProjectSearchContainer';
+import ProjectSubContainer from '../containers/project/ProjectSubContainer';
 
 const ProjectPage = () => {
   return (
@@ -12,9 +13,7 @@ const ProjectPage = () => {
       <HeaderContainer />
       <SiteHeader />
       <FormTemplate>
-        <ProjectSearchContainer />
-        <hr />
-        <ProjectCountContainer />
+        <ProjectSubContainer />
         <hr />
         <ProjectListContainer />
       </FormTemplate>

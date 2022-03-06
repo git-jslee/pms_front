@@ -86,7 +86,6 @@ const SalesSubMenu = ({
   return (
     <>
       <SubMenuBlock>
-        <h1>매출현황</h1>
         <Link to="/addsales">
           <Button>등록</Button>
         </Link>

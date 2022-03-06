@@ -15,6 +15,9 @@ const SET_STARTENDOFMONTH = 'common/SET_STARTENDOFMONTH';
 // 매출현황 테이블 확률&월별 조회 기능
 const SET_PARAMS = 'common/SET_PARAMS';
 
+// title 정보 저장
+const SET_TITLE = 'common/SET_TITLE';
+
 // 상세 검색 테이블
 const SET_SEARCHTABLE = 'common/SET_SEARCHTABLE';
 
@@ -28,6 +31,8 @@ export const changeEditMode = createAction(
   CHANGE_EDITMODE,
   (editmode) => editmode,
 );
+
+export const setTitle = createAction(SET_TITLE, (title) => title);
 
 // Autocomplete 기능 이용하여 고객 검색시 고객Id 등록
 export const setCustomerId = createAction(SET_CUSTOMERID, (id) => id);
@@ -44,6 +49,7 @@ export const setSearchTable = createAction(SET_SEARCHTABLE, (mode) => mode);
 
 const initialState = {
   editmode: false,
+  title: '',
   search: false,
   customerid: { id: null, name: null },
   month: [null, null],
@@ -63,6 +69,11 @@ const common = handleActions(
     [CHANGE_EDITMODE]: (state, { payload }) => ({
       ...state,
       editmode: payload.editmode,
+    }),
+    // Title 저장
+    [SET_TITLE]: (state, { payload }) => ({
+      ...state,
+      title: payload,
     }),
     // 상세 조회 테이블
     [SET_SEARCHTABLE]: (state, { payload }) => ({

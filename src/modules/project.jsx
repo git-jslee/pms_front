@@ -5,6 +5,15 @@ import { startLoading, finishLoading } from './loading';
 import createRequestThunk from '../lib/api/createRequestThunk';
 
 // 프로젝트 리스트
+const GET_PROJECT = 'project/GET_PROJECT';
+const GET_PROJECT_SUCCESS = 'project/GET_PROJECT_SUCCESS';
+const GET_PROJECT_FAILURE = 'project/GET_PROJECT_FAILURE';
+
+const GET_PWORKLIST = 'project/GET_PWORKLIST';
+const GET_PWORKLIST_SUCCESS = 'project/GET_PWORKLIST_SUCCESS';
+const GET_PWORKLIST_FAILURE = 'project/GET_PWORKLIST_FAILURE';
+
+// 프로젝트 리스트
 const GET_PROJECTLIST = 'project/GET_PROJECTLIST';
 const GET_PROJECTLIST_SUCCESS = 'project/GET_PROJECTLIST_SUCCESS';
 const GET_PROJECTLIST_FAILURE = 'project/GET_PROJECTLIST_FAILURE';
@@ -19,6 +28,55 @@ const GET_PROJECTWORK = 'project/GET_PROJECTWORK';
 const GET_PROJECTWORK_SUCCESS = 'project/GET_PROJECTWORK_SUCCESS';
 const GET_PROJECTWORK_FAILURE = 'project/GET_PROJECTWORK_FAILURE';
 
+// 프로젝트 정보 가져오기 통합
+export const getProject = (params) => async (dispatch) => {
+  dispatch({ type: GET_PROJECT }); //요청 시작을 알림
+  dispatch(startLoading(GET_PROJECT)); //loading true
+  try {
+    const response = await api.getList(params);
+    // console.log('response', response.data);
+    dispatch({
+      type: GET_PROJECT_SUCCESS,
+      payload: response.data,
+    }); // 요청 성공
+    dispatch(finishLoading(GET_PROJECT)); //loading false
+  } catch (error) {
+    console.log('error-getproject', error);
+    dispatch({
+      typd: GET_PROJECT_FAILURE,
+      payload: error,
+      error: true,
+    }); //요청 실패
+    dispatch(startLoading(GET_PROJECT)); // loading true
+    throw error;
+  }
+};
+
+// 기간별 작업 정보 가져오기
+// http://192.168.20.99:1337/works?workingDay_gte=2022-02-25&workingDay_lte=${end}`)
+export const getProjectWorkList = (params) => async (dispatch) => {
+  dispatch({ type: GET_PWORKLIST });
+  dispatch(startLoading(GET_PWORKLIST));
+  try {
+    const response = await api.getList(params);
+    console.log('getProjectWorkList', response.data);
+    dispatch({
+      type: GET_PWORKLIST_SUCCESS,
+      payload: response.data,
+    });
+    dispatch(finishLoading(GET_PWORKLIST));
+  } catch (error) {
+    dispatch({
+      typd: GET_PWORKLIST_FAILURE,
+      payload: error,
+      error: true,
+    });
+    dispatch(startLoading(GET_PWORKLIST));
+    throw error;
+  }
+};
+
+// 삭제예정 -> getProject 로 변경
 export const getProjectList = () => async (dispatch) => {
   dispatch({ type: GET_PROJECTLIST }); // 요청 시작을 알림
   dispatch(startLoading(GET_PROJECTLIST)); // ladding true
@@ -90,11 +148,34 @@ export const getProjectWork = (id) => async (dispatch) => {
 
 const initialState = {
   data: '',
+  list: null,
+  wlist: null,
   error: null,
+  werror: null,
 };
 
 const project = handleActions(
   {
+    // 프로젝트 리스트 가져오기 성공
+    [GET_PROJECT_SUCCESS]: (state, { payload }) => ({
+      ...state,
+      list: payload,
+    }),
+    // 프로젝트 리스트 가져오기 실패
+    [GET_PROJECT_FAILURE]: (state, { payload }) => ({
+      ...state,
+      error: true,
+    }),
+    // 작업 리스트 가져오기 성공
+    [GET_PWORKLIST_SUCCESS]: (state, { payload }) => ({
+      ...state,
+      wlist: payload,
+    }),
+    // 작업 리스트 가져오기 실패
+    [GET_PWORKLIST_FAILURE]: (state, { payload }) => ({
+      ...state,
+      werror: true,
+    }),
     // 프로젝트 리스트 가져오기 성공
     [GET_PROJECTLIST_SUCCESS]: (state, { payload }) => ({
       ...state,

@@ -18,31 +18,32 @@ const AddSalesDrawerContainer = ({
   const { auth } = useSelector(({ auth }) => ({
     auth: auth.auth,
   }));
+  const { customer, codebook } = useSelector(({ codebook, customerList }) => ({
+    codebook: codebook.sales,
+    customer: customerList.data,
+  }));
+
+  const { customerid } = useSelector(({ common }) => ({
+    customerid: common.customerid,
+  }));
 
   const [divisionId, setDivisionId] = useState(null);
   const [radioValue, setRadioValue] = useState(true);
-  const [salesValue, setSalesValue] = useState(null);
+  const [salesValue, setSalesValue] = useState(initialValues.sales);
   const [probabilityChecked, setProbabilityChecked] = useState({
     checked: false,
     name: '매출예정',
   });
   const [profitMarginValue, setProfitMarginValue] = useState({
     margin: null,
-    sales_profit: null,
+    sales_profit: initialValues.sales_profit,
   });
   const [calResult, setCalResult] = useState({});
+
   const { probability, division, team } = useSelector(({ codebook }) => ({
     probability: codebook.sales.probability,
     division: codebook.sales.division,
     team: codebook.sales.team,
-  }));
-
-  const { customer } = useSelector(({ customerList }) => ({
-    customer: customerList.data,
-  }));
-
-  const { customerid } = useSelector(({ common }) => ({
-    customerid: common.customerid,
   }));
 
   const onChangeDivision = (e) => {
@@ -189,20 +190,22 @@ const AddSalesDrawerContainer = ({
       {probability && division && team && customer ? (
         <>
           <AddSalesDrawerForm
-            probability={probability}
-            division={division}
-            team={team}
+            codebook={codebook}
             customer={customer}
             customerid={customerid}
+            initialValues={initialValues}
+            // probability={probability}
+            // division={division}
+            // team={team}
+
             addSalesVisible={addSalesVisible}
             addSalesOnClose={addSalesOnClose}
-            initialValues={initialValues}
             probabilityChecked={probabilityChecked}
             onChangeSwitch={onChangeSwitch}
             //
             onChangeDivision={onChangeDivision}
             onSubmit={onSubmit}
-            divisionId={divisionId}
+            // divisionId={divisionId}
             calResult={calResult}
             onChangeRadio={onChangeRadio}
             salesValueOnchange={salesValueOnchange}

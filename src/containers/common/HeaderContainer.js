@@ -5,7 +5,10 @@ import Header from '../../components/common/Header';
 import { logout } from '../../modules/auth';
 
 const HeaderContainer = () => {
-  const { user } = useSelector(({ auth }) => ({ user: auth.auth }));
+  const { user, title } = useSelector(({ auth, common }) => ({
+    user: auth.auth,
+    title: common.title,
+  }));
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const onLogout = () => {
@@ -17,7 +20,7 @@ const HeaderContainer = () => {
       console.log(e);
     }
   };
-  return <Header user={user} onLogout={onLogout} />;
+  return <Header user={user} title={title} onLogout={onLogout} />;
 };
 
 export default HeaderContainer;

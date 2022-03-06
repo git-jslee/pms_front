@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Drawer,
   Form,
@@ -18,16 +18,17 @@ import AutoComplete from '../common/AutoComplete';
 
 const AddSalesDrawerForm = ({
   customer,
+  codebook,
   customerid,
-  probability,
-  division,
-  divisionId,
-  team,
+  // probability,
+  // division,
+  // divisionId,
+  // team,
   addSalesVisible,
   addSalesOnClose,
   probabilityChecked,
   onChangeSwitch,
-  onChangeDivision,
+  // onChangeDivision,
   salesValueOnchange,
   profitMarginOnchange,
   radioValue,
@@ -40,6 +41,17 @@ const AddSalesDrawerForm = ({
 }) => {
   console.log('--initValues', initialValues);
   console.log('--salesConfirmed', salesConfirmed);
+  const [divisionId, setDivisionId] = useState(initialValues.division);
+  const division = codebook.division;
+  const team = codebook.team;
+  const probability = codebook.probability;
+  console.log('codebook', codebook);
+
+  const onChangeDivision = (e) => {
+    console.log('division change', e);
+    setDivisionId(e);
+  };
+
   return (
     <>
       <Drawer
