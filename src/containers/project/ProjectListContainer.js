@@ -10,7 +10,7 @@ import { startLoading, finishLoading } from '../../modules/loading';
 
 const ProjectListContainer = () => {
   const dispatch = useDispatch();
-  const [projectList, setProjectList] = useState();
+  // const [projectList, setProjectList] = useState();
   const { lists, error, loading } = useSelector(({ project, loading }) => ({
     lists: project.list,
     error: project.error,
@@ -19,10 +19,10 @@ const ProjectListContainer = () => {
   console.log('loading', loading);
   console.log('list', lists);
 
-  const { startMonth, endMonth } = useSelector(({ common }) => ({
-    startMonth: common.month[0],
-    endMonth: common.month[1],
-  }));
+  // const { startMonth, endMonth } = useSelector(({ common }) => ({
+  //   startMonth: common.month[0],
+  //   endMonth: common.month[1],
+  // }));
 
   // const [tableData, setTableData] = useState(null);
 
@@ -74,6 +74,7 @@ const ProjectListContainer = () => {
 
   let tableData = [];
   if (lists) {
+    console.log('**list**', lists);
     const tableList = lists.map((list, index) => {
       const duration = moment().diff(moment(list.startDate), 'days');
       const array = {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as api from '../../lib/api/api';
 import moment from 'moment';
@@ -46,12 +46,27 @@ const ProjectSubContainer = () => {
   }, []);
 
   // 작업통계 정보 가져오기
+  // const start = useRef(moment().subtract(7, 'days').format('YYYY-MM-DD'));
+  const [start, setStart] = useState(
+    moment().subtract(7, 'days').format('YYYY-MM-DD'),
+  );
+  const [end, setEnd] = useState(moment().format('YYYY-MM-DD'));
   useEffect(() => {
-    const start = moment().subtract(7, 'days').format('YYYY-MM-DD');
-    const end = moment().format('YYYY-MM-DD');
     const params = `works?workingDay_gte=${start}&workingDay_lte=${end}`;
     dispatch(getProjectWorkList(params));
-  }, []);
+  }, [start, end]);
+
+  const subWorkStatisticsOnSubmit = (e) => {
+    console.log('subWorkStatisticsOnSubmit', e);
+    const start = moment(e.date[0]).format('YYYY-MM-DD');
+    const end = moment(e.date[1]).format('YYYY-MM-DD');
+    // const params = `works?workingDay_gte=${start}&workingDay_lte=${end}`;
+    // dispatch(getProjectWorkList(params));
+    setStart(start);
+    setEnd(end);
+  };
+
+  console.log('start', start);
 
   // 프로젝트ID 별 카운트
   // [{id:100, name:스케치미디어 홈페이지, worktime:10},{id:101, name:화영 홈페이지, worktime:10}]
@@ -67,7 +82,14 @@ const ProjectSubContainer = () => {
     if (subMenu === 'menu1') {
       return <ProjectCountForm count={count} />;
     } else if (subMenu === 'menu2') {
-      return <SubWorkStatistics worktime={worktime} />;
+      return (
+        <SubWorkStatistics
+          worktime={worktime}
+          subWorkStatisticsOnSubmit={subWorkStatisticsOnSubmit}
+          start={start}
+          end={end}
+        />
+      );
     } else if (subMenu === 'menu3') {
       return <ProjectAdvancedSearchForm />;
     } else {
@@ -79,6 +101,11 @@ const ProjectSubContainer = () => {
     console.log('reload 버튼 클릭');
     const params = 'projects?code_status.id=2';
     dispatch(getProject(params));
+    //작업통계 초기화
+    const start = moment().subtract(7, 'days').format('YYYY-MM-DD');
+    const end = moment().format('YYYY-MM-DD');
+    setStart(start);
+    setEnd(end);
   };
 
   return (

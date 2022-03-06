@@ -43,19 +43,19 @@ const ProjectListTable = ({ tableData, loading }) => {
       align: 'right',
     },
     {
-      title: 'Duration',
+      title: '경과일',
       key: 'duration',
       dataIndex: 'duration',
       align: 'right',
       sorter: (a, b) => a.duration - b.duration,
     },
     {
-      title: 'Update',
+      title: 'date',
       key: 'update',
       dataIndex: 'update',
     },
     {
-      title: 'time/w',
+      title: '작업시간/주간',
       key: 'count',
       dataIndex: 'count',
     },

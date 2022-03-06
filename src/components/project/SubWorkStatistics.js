@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { Layout, Form, Button, Col, Row, DatePicker } from 'antd';
+import { Layout, Form, Button, Col, Row, DatePicker, Space } from 'antd';
 import moment from 'moment';
 
 const { RangePicker } = DatePicker;
@@ -25,11 +25,16 @@ const FormBlock = styled.div`
   }
 `;
 
-const SubWorkStatistics = ({ worktime }) => {
+const SubWorkStatistics = ({
+  worktime,
+  subWorkStatisticsOnSubmit,
+  start,
+  end,
+}) => {
   const [form] = Form.useForm();
   // 임시추가
-  const start = moment().subtract(7, 'days').format('YYYY-MM-DD');
-  const end = moment().format('YYYY-MM-DD');
+  // const start = moment().subtract(7, 'days').format('YYYY-MM-DD');
+  // const end = moment().format('YYYY-MM-DD');
 
   const onReset = () => {
     form.resetFields();
@@ -51,16 +56,16 @@ const SubWorkStatistics = ({ worktime }) => {
             form={form}
             // layout="vertical"
             hideRequiredMark
-            //   onFinish={searchOnSubmit}
+            onFinish={subWorkStatisticsOnSubmit}
           >
-            <Row gutter={16}>
+            <Row>
               <Col span={24}>
                 <Form.Item
                   name="date"
                   label="기준일자"
                   rules={[{ required: true }]}
                 >
-                  <RangePicker picker="month" />
+                  <RangePicker />
                 </Form.Item>
               </Col>
             </Row>
