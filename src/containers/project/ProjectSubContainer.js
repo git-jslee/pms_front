@@ -74,7 +74,7 @@ const ProjectSubContainer = () => {
   useEffect(() => {
     if (!wlist) return;
     const result = calWorkTime(wlist);
-    console.log('--calworktime--', result);
+    // console.log('--calworktime--', result);
     setWorktime(result);
   }, [wlist]);
 

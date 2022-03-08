@@ -7,6 +7,7 @@ import ProjectListTable from '../../components/project/ProjectListTable';
 import { apiCustomerList } from '../../lib/api/api';
 import * as api from '../../lib/api/api';
 import { startLoading, finishLoading } from '../../modules/loading';
+import calWorkTime from '../../modules/project/calWorkTime';
 
 const ProjectListContainer = () => {
   const dispatch = useDispatch();
@@ -18,6 +19,9 @@ const ProjectListContainer = () => {
   }));
   console.log('loading', loading);
   console.log('list', lists);
+  const { wlist } = useSelector(({ project }) => ({
+    wlist: project.wlist,
+  }));
 
   // const { startMonth, endMonth } = useSelector(({ common }) => ({
   //   startMonth: common.month[0],
@@ -32,6 +36,15 @@ const ProjectListContainer = () => {
     const params = 'projects?code_status.id=2';
     dispatch(getProject(params));
   }, []);
+
+  // 작업통계 기능 projectSubContainer 통합필요..
+  const [worktime, setWorktime] = useState([]);
+  useEffect(() => {
+    if (!wlist) return;
+    const result = calWorkTime(wlist);
+    console.log('--calworktime--', result);
+    setWorktime(result);
+  }, [wlist]);
 
   // useEffect(() => {
   //   if (error) {
@@ -72,27 +85,35 @@ const ProjectListContainer = () => {
   //   }
   // }, [lists]);
 
-  let tableData = [];
-  if (lists) {
-    console.log('**list**', lists);
-    const tableList = lists.map((list, index) => {
-      const duration = moment().diff(moment(list.startDate), 'days');
-      const array = {
-        key: list.id,
-        no: index + 1,
-        type: list.code_type.name,
-        customer: list.customer.name,
-        name: list.name,
-        service: list.code_service.name,
-        status: list.code_status.name,
-        startdate: list.startDate,
-        duration: duration,
-        action: 'View',
-      };
-      return array;
-    });
-    tableData = tableList;
-  }
+  // let tableData = [];
+  const [tableData, setTableData] = useState([]);
+  useEffect(() => {
+    if (lists) {
+      console.log('**list**', lists);
+      const tableList = lists.map((list, index) => {
+        const duration = moment().diff(moment(list.startDate), 'days');
+        const _worktime = worktime.filter((v) => v.id === list.id)[0];
+        console.log('**worktime**', index, _worktime);
+        const array = {
+          key: list.id,
+          no: index + 1,
+          type: list.code_type.name,
+          customer: list.customer.name,
+          name: list.name,
+          service: list.code_service.name,
+          status: list.code_status.name,
+          startdate: list.startDate,
+          lastUpdate: list.lastUpdate,
+          duration: duration,
+          worktime: _worktime !== undefined ? _worktime.worktime : '',
+          action: 'View',
+        };
+        return array;
+      });
+      // tableData = tableList;
+      setTableData(tableList);
+    }
+  }, [lists, worktime]);
 
   console.log('tableList', tableData);
 

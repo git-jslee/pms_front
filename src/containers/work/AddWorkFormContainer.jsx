@@ -9,6 +9,7 @@ import {
   apiCodeProgress,
   apiAddWork,
 } from '../../lib/api/api';
+import tbl_update from '../../modules/tbl_update';
 import projectlist from '../../modules/projectList';
 import { setCustomer, setProject, setTask, set_init } from '../../modules/work';
 import { useNavigate } from 'react-router-dom';
@@ -97,7 +98,7 @@ const AddWorkFormContainer = () => {
   };
 
   // onSubmit
-  const onSubmit = (values) => {
+  const onSubmit = async (values) => {
     // console.log('submit', values);
     const jwt = auth.jwt;
     const datas = [
@@ -118,6 +119,18 @@ const AddWorkFormContainer = () => {
         },
       },
     ];
+    const pjtUpdate = await tbl_update('projects', values.project, [
+      {
+        lastUpdate: moment(values.workingDay.format('YYYY-MM-DD')),
+      },
+      {
+        headers: {
+          Authorization: 'Bearer ' + jwt,
+        },
+      },
+    ]);
+    console.log('1.project update 결과', pjtUpdate);
+    // 작업등록
     apiAddWork(datas)
       .then((result) => {
         console.log('작업 등록 성공', result);

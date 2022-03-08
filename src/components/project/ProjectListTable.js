@@ -50,14 +50,16 @@ const ProjectListTable = ({ tableData, loading }) => {
       sorter: (a, b) => a.duration - b.duration,
     },
     {
-      title: 'date',
-      key: 'update',
-      dataIndex: 'update',
+      title: '최근작업일',
+      key: 'lastUpdate',
+      dataIndex: 'lastUpdate',
+      align: 'center',
     },
     {
-      title: '작업시간/주간',
-      key: 'count',
-      dataIndex: 'count',
+      title: '시간(기간)',
+      key: 'worktime',
+      dataIndex: 'worktime',
+      align: 'center',
     },
     {
       title: 'Action',
