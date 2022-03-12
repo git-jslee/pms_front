@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import AddSalesDrawerForm from '../../components/sales/AddSalesDrawerForm';
-import tbl_insert from '../../modules/tbl_insert';
+// import tbl_insert from '../../modules/tbl_insert';
+import { tbl_insert } from '../../modules/common/tbl_crud';
 import moment from 'moment';
 import { useNavigate } from 'react-router-dom';
 
@@ -15,9 +16,9 @@ const AddSalesDrawerContainer = ({
   console.log('--2.salesConfirmed--', salesConfirmed);
   const navigate = useNavigate();
   //웹토큰 가져오기..값 변경시에만 실행되게 설정 변경..
-  const { auth } = useSelector(({ auth }) => ({
-    auth: auth.auth,
-  }));
+  // const { auth } = useSelector(({ auth }) => ({
+  //   auth: auth.auth,
+  // }));
   const { customer, codebook } = useSelector(({ codebook, customerList }) => ({
     codebook: codebook.sales,
     customer: customerList.data,
@@ -107,7 +108,7 @@ const AddSalesDrawerContainer = ({
   //sales-performances, /sales-profits
   const onSubmit = async (values) => {
     console.log('onSubmit', values);
-    const jwt = auth.jwt;
+    // const jwt = auth.jwt;
     let _profit;
     let _margin;
     if (radioValue) {
@@ -120,50 +121,38 @@ const AddSalesDrawerContainer = ({
     const _confirmed = probabilityChecked.checked === true ? true : false;
     const _probability =
       probabilityChecked.checked === true ? 5 : values.probability;
-    const datas = [
-      {
-        customer: values.customer,
-        name: values.sales_name,
-        scode_division: values.division,
-        scode_item: values.item,
-        scode_team: values.team,
-        confirmed: _confirmed,
-        scode_probability: _probability,
-        sales_rec_date: moment(values.sales_rec_date.format('YYYY-MM-DD')),
-        count: 1,
-        description: values.description,
-      },
-      {
-        headers: {
-          Authorization: 'Bearer ' + jwt,
-        },
-      },
-    ];
-    const result = await tbl_insert('sales-performances', datas);
-    console.log('1. sales-performances', result.data);
+
+    const data = {
+      customer: values.customer,
+      name: values.sales_name,
+      scode_division: values.division,
+      scode_item: values.item,
+      scode_team: values.team,
+      confirmed: _confirmed,
+      scode_probability: _probability,
+      sales_rec_date: moment(values.sales_rec_date.format('YYYY-MM-DD')),
+      count: 1,
+      description: values.description,
+    };
+    const result = await tbl_insert('sales-performances', data);
+
+    console.log('1. sales-performances', result);
     // probability 5 -> 100% 의미함
 
     const paymentDate = values.payment_date || '';
-    const result2 = await tbl_insert('sales-profits', [
-      {
-        sales_performance: result.data.id,
-        confirmed: _confirmed,
-        scode_probability: _probability,
-        sales: values.sales,
-        sales_profit: _profit,
-        profit_margin: _margin,
-        sales_rec_date: moment(values.sales_rec_date.format('YYYY-MM-DD')),
-        payment_date: moment(paymentDate),
-        description: values.memo,
-      },
-      {
-        headers: {
-          Authorization: 'Bearer ' + jwt,
-        },
-      },
-    ]);
+    const profit_data = {
+      sales_performance: result.data.id,
+      confirmed: _confirmed,
+      scode_probability: _probability,
+      sales: values.sales,
+      sales_profit: _profit,
+      profit_margin: _margin,
+      sales_rec_date: moment(values.sales_rec_date.format('YYYY-MM-DD')),
+      payment_date: moment(paymentDate),
+      description: values.memo,
+    };
+    const result2 = await tbl_insert('sales-profits', profit_data);
     console.log('2. sales-profits', result2.data);
-    setAddSalesVisible(false);
     navigate('/sales');
   };
 

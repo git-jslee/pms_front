@@ -10,7 +10,8 @@ import {
   apiCustomerList,
 } from '../../lib/api/api';
 import { useNavigate } from 'react-router-dom';
-import tbl_insert from '../../modules/tbl_insert';
+// import tbl_insert from '../../modules/tbl_insert';
+import { tbl_insert } from '../../modules/common/tbl_crud';
 
 const ProjectFormContainer = () => {
   const navigate = useNavigate();
@@ -41,25 +42,6 @@ const ProjectFormContainer = () => {
         .filter((v) => v.code_service.id === serviceId && v.used === true)
         .sort((a, b) => a.sort - b.sort)
     : null;
-
-  //웹토큰 가져오기..값 변경시에만 실행되게 설정 변경..
-  const { auth } = useSelector(({ auth }) => ({
-    auth: auth.auth,
-  }));
-  // console.log('>>auth>>', auth);
-
-  // code_task 정보 가져오기 & 선택된 서비스ID 에 해당되는 task 만들기
-  //   if (serviceId) {
-  //     const tasks = code_tasks.filter((v) => v.code_service.id === serviceId);
-  //     console.log('>>tasks>>', tasks);
-  //     // return <ProjectTaskForm tasks={tasks} />;
-  //   }
-
-  // 컴포넌트가 처음 렌더링 될 때 codebook 디스패치
-  // codebook container 로 기능 이관 22/01/06
-  // useEffect(() => {
-  //   dispatch(getCodebook());
-  // }, [dispatch]);
 
   // 컴포넌트 렌더링시 고객 정보 가져오기..redux 사용안함
   useEffect(() => {
@@ -101,72 +83,50 @@ const ProjectFormContainer = () => {
 
   // 프로젝트 등록 기능 구현//redux 사용 안함
   const onSubmit = async (values) => {
-    const jwt = auth.jwt;
-    console.log('jwt', jwt);
+    // const jwt = auth.jwt;
+    // console.log('jwt', jwt);
     const startDate = values.startDate || '';
     const endDate = values.endDate || '';
-    const datas = [
-      {
-        customer: values.customer,
-        code_type: values.type,
-        name: values.project,
-        code_service: values.service,
-        code_status: values.status,
-        planStartDate: moment(values.planDate[0].format('YYYY-MM-DD')),
-        planEndDate: moment(values.planDate[1].format('YYYY-MM-DD')),
-        startDate: moment(startDate),
-        endDate: moment(endDate),
-        price: parseInt(values.price),
-      },
-      {
-        headers: {
-          Authorization: 'Bearer ' + jwt,
-        },
-      },
-    ];
-    // axios
-    //   .post('http://192.168.20.99:1337/projects', datas, {
-    //     headers: {
-    //       Authorization: 'Bearer ' + auth,
-    //     },
-    //   })
-    //   .then((result) => {
-    //     console.log('등록 성공');
-    //   })
-    //   .catch((error) => {
-    //     console.log(`에러가 발생했습니다.  ${error.message}`);
-    //   });
+    const project_data = {
+      customer: values.customer,
+      code_type: values.type,
+      name: values.project,
+      code_service: values.service,
+      code_status: values.status,
+      planStartDate: moment(values.planDate[0].format('YYYY-MM-DD')),
+      planEndDate: moment(values.planDate[1].format('YYYY-MM-DD')),
+      startDate: moment(startDate),
+      endDate: moment(endDate),
+      price: parseInt(values.price),
+    };
 
     // apiAddProject(datas, values, tasks); -> 22/1/8일 수정
     console.log('onClick', values);
-    const result = await tbl_insert('projects', datas);
+    const result = await tbl_insert('projects', project_data);
+
+    // project-task data insert
     console.log('1. project', result.data);
-    tasks.map((task) => {
-      tbl_insert('project-tasks', [
-        {
-          project: result.data.id,
-          code_task: task.id,
-          planTime: values[task.code],
-        },
-        {
-          headers: {
-            Authorization: 'Bearer ' + jwt,
-          },
-        },
-      ]);
+    tasks.map(async (task, index) => {
+      const task_data = {
+        project: result.data.id,
+        code_task: task.id,
+        planTime: values[task.code],
+      };
+      const result2 = await tbl_insert('project-tasks', task_data);
       console.log('>>task>>', task);
       console.log('>>planTime>>', values);
+      console.log(`2. task-${index} : `, result2.data);
     });
 
     // console.log('2. tasks', test2);
 
     navigate('/project');
   };
-  console.log({ auth: auth, customers: customers });
+  console.log({ customers: customers });
 
   return (
     <>
-      {auth && customers && code_types ? (
+      {customers && code_types ? (
         <ProjectFormView
           code_types={code_types}
           code_services={code_services}

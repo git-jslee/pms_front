@@ -11,7 +11,7 @@ const CustomerFormContainer = () => {
   }));
   // 고객등록 폼 작성 후 submit 클릭시
   const onSubmit = (values) => {
-    console.log('고객등록-onSubmit..');
+    console.log('고객등록-onSubmit..', values);
     const jwt = auth.jwt;
     const datas = [
       {

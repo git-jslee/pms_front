@@ -19,6 +19,7 @@ import { useNavigate } from 'react-router-dom';
 import { getCustomerlist } from '../../modules/customerList';
 import { useDispatch } from 'react-redux';
 import { setCustomerId } from '../../modules/common';
+import { tbl_insert } from '../../modules/common/tbl_crud';
 
 const { Option } = Select;
 
@@ -67,9 +68,9 @@ const AutoComplete = ({ lists }) => {
   const [suggestions, setSuggestions] = useState([]);
   const [visible, setVisible] = useState(false);
 
-  const { auth } = useSelector(({ auth }) => ({
-    auth: auth.auth,
-  }));
+  // const { auth } = useSelector(({ auth }) => ({
+  //   auth: auth.auth,
+  // }));
 
   const onChangeHandler = (text) => {
     let matches = [];
@@ -100,25 +101,20 @@ const AutoComplete = ({ lists }) => {
     setVisible(false);
   };
 
-  const onSubmit = (values) => {
-    console.log('고객등록-onSubmit..');
-    const jwt = auth.jwt;
-    const datas = [
-      {
-        name_eng: values.customerId,
-        name: values.name,
-        businessNumber: values.businessNumber,
-        businessType: values.businessType,
-        remark: values.description,
-      },
-      {
-        headers: {
-          Authorization: 'Bearer ' + jwt,
-        },
-      },
-    ];
+  const onSubmit = async (values) => {
+    console.log('고객등록-onSubmit..', values);
+    // const jwt = auth.jwt;
+    const customer_data = {
+      name_eng: values.customerId,
+      name: values.name,
+      businessNumber: values.businessNumber,
+      businessType: values.businessType,
+      remark: values.description,
+    };
     try {
-      addCustomer(datas);
+      const result = await tbl_insert('customers', customer_data);
+      console.log('result', result);
+      // addCustomer(datas);
       // 고객등록 성공시 페이지 이동 기능 구현 필요
       setVisible(false);
       // navigate('/customer');

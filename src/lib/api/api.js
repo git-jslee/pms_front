@@ -75,6 +75,10 @@ export const getProjectWork = (path, id) =>
 export const insertData = (path, auth_data) =>
   axios.post(`${API_URL}/${path}`, ...auth_data);
 
+// create
+export const createData = (path, auth_data) =>
+  axios.post(`${API_URL}/${path}`, ...auth_data);
+
 // update //put/sales-performances/:id
 export const updateData = (path, id, auth_data) =>
   axios.put(`${API_URL}/${path}/${id}`, ...auth_data);

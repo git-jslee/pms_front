@@ -47,7 +47,6 @@ const SalesListContainer = () => {
   // }, [dispatch, startMonth, endMonth, params]);
 
   // table data
-  console.log('lists', lists);
 
   useEffect(() => {
     console.log('---useEffect 실행---');
@@ -55,6 +54,7 @@ const SalesListContainer = () => {
       console.log('리턴실행..');
       return;
     }
+    console.log('**useeffect lists**', lists);
     const salesProfitData = [];
     // const summaryData = {};
     const data = lists.map((list, index) => {

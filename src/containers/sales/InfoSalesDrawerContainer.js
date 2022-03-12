@@ -1,18 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSalesId } from '../../modules/sales';
-import SalesViewDetailTable from '../../components/sales/SalesViewDetailTable';
 import SalesValueUpdateForm from '../../components/sales/SalesValueUpdateForm';
 import SalesBasicUpdateForm from '../../components/sales/SalesBasicUpdateForm';
 import { changeEditMode } from '../../modules/common';
-import { changeMode } from '../../modules/sales';
-import tbl_insert from '../../modules/tbl_insert';
-import tbl_update from '../../modules/tbl_update';
 import moment from 'moment';
 import { useNavigate } from 'react-router-dom';
 import { Modal } from 'antd';
 import InfoSalesDrawerForm from '../../components/sales/InfoSalesDrawerForm';
+import { tbl_insert, tbl_update } from '../../modules/common/tbl_crud';
 
 const { confirm } = Modal;
 
@@ -23,11 +19,7 @@ const InfoSalesDrawerContainer = ({
 }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  //웹토큰 가져오기..값 변경시에만 실행되게 설정 변경..
-  const { auth } = useSelector(({ auth }) => ({
-    auth: auth.auth,
-  }));
-  // const { id } = useParams();
+
   const [tableData, setTableData] = useState();
   const { customer, codebook } = useSelector(({ codebook, customerList }) => ({
     codebook: codebook.sales,
@@ -68,17 +60,6 @@ const InfoSalesDrawerContainer = ({
       }),
     );
   }, [dispatch]);
-
-  // update form 관련 값 설정
-  // useEffect(() => {
-  //   const sales_profits = list.sales_profits;
-  //   const sales_profit = sales_profits[sales_profits.length - 1];
-  //   setSalesValue(sales_profit.sales);
-  //   setProfitMarginValue({
-  //     margin: null,
-  //     sales_profit: sales_profit.sales_profit,
-  //   });
-  // }, []);
 
   useEffect(() => {
     console.log('---useEffect 실행---');
@@ -196,7 +177,7 @@ const InfoSalesDrawerContainer = ({
   // 매출항목 매출수정 update 시
   const onSubmit = async (values) => {
     console.log('onSubmit', values);
-    const jwt = auth.jwt;
+    // const jwt = auth.jwt;
     let _profit;
     let _margin;
     if (radioValue) {
@@ -208,42 +189,29 @@ const InfoSalesDrawerContainer = ({
     }
     const _confirmed = checked.checked === true ? true : false;
     const _probability = checked.checked === true ? 5 : values.probability;
-    const datas = [
-      {
-        confirmed: _confirmed,
-        scode_probability: _probability,
-        sales_rec_date: moment(values.sales_rec_date.format('YYYY-MM-DD')),
-        count: list.sales_profits.length + 1,
-        // description: values.description,
-      },
-      {
-        headers: {
-          Authorization: 'Bearer ' + jwt,
-        },
-      },
-    ];
-    const result = await tbl_update('sales-performances', list.id, datas);
+    const update_data = {
+      confirmed: _confirmed,
+      scode_probability: _probability,
+      sales_rec_date: moment(values.sales_rec_date.format('YYYY-MM-DD')),
+      count: list.sales_profits.length + 1,
+      // description: values.description,
+    };
+    const result = await tbl_update('sales-performances', list.id, update_data);
     console.log('1. sales-performances_update', result.data);
     // probability 5 -> 100% 의미함
     const paymentDate = values.payment_date || '';
-    const result2 = await tbl_insert('sales-profits', [
-      {
-        sales_performance: list.id,
-        confirmed: _confirmed,
-        scode_probability: _probability,
-        sales: values.sales,
-        sales_profit: _profit,
-        profit_margin: _margin,
-        sales_rec_date: moment(values.sales_rec_date.format('YYYY-MM-DD')),
-        payment_date: moment(paymentDate),
-        description: values.memo,
-      },
-      {
-        headers: {
-          Authorization: 'Bearer ' + jwt,
-        },
-      },
-    ]);
+    const payment_data = {
+      sales_performance: list.id,
+      confirmed: _confirmed,
+      scode_probability: _probability,
+      sales: values.sales,
+      sales_profit: _profit,
+      profit_margin: _margin,
+      sales_rec_date: moment(values.sales_rec_date.format('YYYY-MM-DD')),
+      payment_date: moment(paymentDate),
+      description: values.memo,
+    };
+    const result2 = await tbl_insert('sales-profits', payment_data);
     console.log('2. sales-profits', result2.data);
     dispatch(getSalesId(list.id));
     dispatch(
@@ -257,23 +225,16 @@ const InfoSalesDrawerContainer = ({
   // 매출항목 기본정보 update 시
   const onSubmitBasic = async (values) => {
     console.log('onSubmitBasic', values);
-    const jwt = auth.jwt;
-    const datas = [
-      {
-        name: values.sales_name,
-        customer: values.customer,
-        scode_division: values.division,
-        scode_item: values.item,
-        scode_team: values.team,
-        description: values.description,
-      },
-      {
-        headers: {
-          Authorization: 'Bearer ' + jwt,
-        },
-      },
-    ];
-    const result = await tbl_update('sales-performances', list.id, datas);
+    // const jwt = auth.jwt;
+    const basic_data = {
+      name: values.sales_name,
+      customer: values.customer,
+      scode_division: values.division,
+      scode_item: values.item,
+      scode_team: values.team,
+      description: values.description,
+    };
+    const result = await tbl_update('sales-performances', list.id, basic_data);
     console.log('1. sales-performances_update', result.data);
 
     dispatch(getSalesId(list.id));
@@ -373,18 +334,15 @@ const InfoSalesDrawerContainer = ({
       cancelText: 'No',
       async onOk() {
         console.log('매출항목 삭제', list.id);
-        const jwt = auth.jwt;
-        const datas = [
-          {
-            deleted: true,
-          },
-          {
-            headers: {
-              Authorization: 'Bearer ' + jwt,
-            },
-          },
-        ];
-        const result = await tbl_update('sales-performances', list.id, datas);
+        // const jwt = auth.jwt;
+        const delete_data = {
+          deleted: true,
+        };
+        const result = await tbl_update(
+          'sales-performances',
+          list.id,
+          delete_data,
+        );
         console.log('항목삭제 성공', result);
         navigate('/sales');
       },
@@ -395,19 +353,12 @@ const InfoSalesDrawerContainer = ({
   };
   const onClickItemDelete = async () => {
     console.log('매출항목 삭제', list.id);
-    const jwt = auth.jwt;
+    // const jwt = auth.jwt;
 
-    const datas = [
-      {
-        deleted: true,
-      },
-      {
-        headers: {
-          Authorization: 'Bearer ' + jwt,
-        },
-      },
-    ];
-    const result = await tbl_update('sales-performances', list.id, datas);
+    const delete_data = {
+      deleted: true,
+    };
+    const result = await tbl_update('sales-performances', list.id, delete_data);
     console.log('항목삭제 성공', result);
     navigate('/sales');
   };
