@@ -15,16 +15,18 @@ import { Spin } from 'antd';
 import ProjectInfoTable from '../../components/project/ProjectInfoTable';
 import ProjectUpdateForm from '../../components/project/ProjectUpdateForm';
 import moment from 'moment';
-import tbl_update from '../../modules/tbl_update';
+// import tbl_update from '../../modules/tbl_update';
 import { changeMode } from '../../modules/common';
 import ProjectWorkList from '../../components/project/ProjectWorkList';
 import { ListConsumer } from 'antd/lib/list';
+import { tbl_update } from '../../modules/common/tbl_crud';
+import { weekOfMonth } from '../../modules/common/weekOfMonth';
 
 const ProjectViewContainer = () => {
   const { id } = useParams();
-  const { auth } = useSelector(({ auth }) => ({
-    auth: auth.auth,
-  }));
+  // const { auth } = useSelector(({ auth }) => ({
+  //   auth: auth.auth,
+  // }));
 
   const dispatch = useDispatch();
   // 코드북 가져오기
@@ -115,31 +117,35 @@ const ProjectViewContainer = () => {
     setWorkList(result);
   }, [works]);
 
+  // 주별 작업 그래프
+  useEffect(() => {
+    if (!workList) return;
+    //
+    const testdata = workList.map((v) => {
+      // [{22-02-1:{progress:90, task:6, time:5},{22-02-2},{22-02-3}]
+      const week = weekOfMonth(v.workingDay);
+      console.log('+++workOfMonth+++', week);
+    });
+  }, [workList]);
+
   //onSubmit -> Update
   const onSubmit = async (values) => {
     console.log('1.onsubmit', values);
-    const jwt = auth.jwt;
+    // const jwt = auth.jwt;
     const _startDate = values.startDate ? moment(values.startDate) : null;
     const _endDate = values.endDate ? moment(values.endDate) : null;
 
-    const datas = [
-      {
-        code_status: values.status,
-        planStartDate: moment(values.planStartDate.format('YYYY-MM-DD')),
-        planEndDate: moment(values.planEndDate.format('YYYY-MM-DD')),
-        startDate: _startDate,
-        endDate: _endDate,
-        price: values.price,
-        remark: values.description,
-        // description: values.description,
-      },
-      {
-        headers: {
-          Authorization: 'Bearer ' + jwt,
-        },
-      },
-    ];
-    const result = await tbl_update('projects', id, datas);
+    const update_data = {
+      code_status: values.status,
+      planStartDate: moment(values.planStartDate.format('YYYY-MM-DD')),
+      planEndDate: moment(values.planEndDate.format('YYYY-MM-DD')),
+      startDate: _startDate,
+      endDate: _endDate,
+      price: values.price,
+      remark: values.description,
+      // description: values.description,
+    };
+    const result = await tbl_update('projects', id, update_data);
     console.log('2.update 결과', result);
 
     dispatch(getProjectId(id));

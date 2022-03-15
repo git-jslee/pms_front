@@ -7,6 +7,7 @@ import Button from '../components/common/Button';
 import WorkListContainer from '../containers/work/WorkListContainer';
 import WorkFilterContainer from '../containers/work/WorkFilterContainer';
 import CodeBookContainer from '../containers/common/CodebookContainer';
+import AddWorkDrawerContainer from '../containers/work/AddWorkDrawerContainer';
 
 const WorkFormPage = () => {
   return (
@@ -16,9 +17,10 @@ const WorkFormPage = () => {
       <CodeBookContainer />
       <FormTemplate>
         <h1>작업 페이지</h1>
-        <Link to="/addwork">
+        <AddWorkDrawerContainer />
+        {/* <Link to="/addwork">
           <Button>작업 등록</Button>
-        </Link>
+        </Link> */}
         <hr />
         <WorkFilterContainer />
         <hr />

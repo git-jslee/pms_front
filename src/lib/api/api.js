@@ -48,6 +48,9 @@ export const getListfromPrams = (params) => axios.get(`${API_URL}/${params}`);
 // == getList(날짜별 조회 기능 추가 필요)
 export const getList = (path) => axios.get(`${API_URL}/${path}`);
 
+export const getListQuery = (path, query) =>
+  axios.get(`${API_URL}/${path}?${query}`);
+
 // == getSalesList(날짜별 조회 기능 추가 필요)
 // projects?planStartDate_gte=2021-11-01&planStartDate_lte=2021-12-01
 export const getSalesListByMonth = (start, end) =>
@@ -200,7 +203,7 @@ export const apiWorkList = (id) =>
 // works?user_info.users_permissions_user=3
 
 // 사용자 리스트
-export const apiUserList = () => axios.get(`${API_URL}/users`);
+export const apiUserList = () => axios.get(`${API_URL}/users?worker=true`);
 
 // Project 별 work..
 export const apiWorkId = (id) => axios.get(`${API_URL}/works?project.id=${id}`);
