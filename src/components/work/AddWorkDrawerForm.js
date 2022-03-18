@@ -165,7 +165,7 @@ const AddWorkDrawerForm = ({
                 <Form.Item
                   name="code_progress"
                   label="진행상태"
-                  ules={[{ required: true }]}
+                  rules={[{ required: true }]}
                 >
                   <Select>
                     {progress
