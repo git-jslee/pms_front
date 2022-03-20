@@ -6,7 +6,7 @@ const jwt_data = (data) => {
   //   console.log('*** jwt ***', user, jwt);
   const result = [
     {
-      ...data,
+      data,
     },
     {
       headers: {

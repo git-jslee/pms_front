@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
+import 'moment-timezone';
 import { getCodebook } from '../../modules/codebook';
 import ProjectFormView from '../../components/project/ProjectFormView';
 import { selectedService } from '../../modules/addPorject';
@@ -10,7 +11,6 @@ import {
   apiCustomerList,
 } from '../../lib/api/api';
 import { useNavigate } from 'react-router-dom';
-// import tbl_insert from '../../modules/tbl_insert';
 import { tbl_insert } from '../../modules/common/tbl_crud';
 
 const ProjectFormContainer = () => {
@@ -38,8 +38,12 @@ const ProjectFormContainer = () => {
     serviceId: addProject.serviceId,
   }));
   const tasks = serviceId
-    ? code_tasks
-        .filter((v) => v.code_service.id === serviceId && v.used === true)
+    ? code_tasks.data
+        .filter(
+          (v) =>
+            v.attributes.code_service.data.id === serviceId &&
+            v.attributes.used === true,
+        )
         .sort((a, b) => a.sort - b.sort)
     : null;
 
@@ -84,7 +88,7 @@ const ProjectFormContainer = () => {
   // 프로젝트 등록 기능 구현//redux 사용 안함
   const onSubmit = async (values) => {
     // const jwt = auth.jwt;
-    // console.log('jwt', jwt);
+    // console.log('onSubmit-values', values);
     const startDate = values.startDate || '';
     const endDate = values.endDate || '';
     const project_data = {
@@ -93,28 +97,32 @@ const ProjectFormContainer = () => {
       name: values.project,
       code_service: values.service,
       code_status: values.status,
-      planStartDate: moment(values.planDate[0].format('YYYY-MM-DD')),
-      planEndDate: moment(values.planDate[1].format('YYYY-MM-DD')),
-      startDate: moment(startDate),
-      endDate: moment(endDate),
+      plan_startdate: moment(values.planDate[0]).tz('Asia/Seoul'),
+      plan_enddate: moment(values.planDate[1]).tz('Asia/Seoul'),
+      startdate: moment(startDate).tz('Asia/Seoul'),
+      enddate: moment(endDate).tz('Asia/Seoul'),
       price: parseInt(values.price),
+      description: values.description,
     };
 
     // apiAddProject(datas, values, tasks); -> 22/1/8일 수정
-    console.log('onClick', values);
-    const result = await tbl_insert('projects', project_data);
+    console.log('onSubmit-values', values);
+    console.log('******onSubmit-project_data', project_data);
+    const result = await tbl_insert('api/projects', project_data);
 
     // project-task data insert
     console.log('1. project', result.data);
     tasks.map(async (task, index) => {
       const task_data = {
-        project: result.data.id,
+        project: result.data.data.id,
         code_task: task.id,
-        planTime: values[task.code],
+        plan_day: values[task.attributes.code],
       };
-      const result2 = await tbl_insert('project-tasks', task_data);
-      console.log('>>task>>', task);
-      console.log('>>planTime>>', values);
+
+      const result2 = await tbl_insert('api/project-tasks', task_data);
+      // console.log('>>task_data>>', task_data);
+      // console.log('>>task>>', task);
+      // console.log('>>planTime>>', values);
       console.log(`2. task-${index} : `, result2.data);
     });
 
@@ -122,17 +130,22 @@ const ProjectFormContainer = () => {
 
     navigate('/project');
   };
-  console.log({ customers: customers });
+  console.log({
+    customers: customers,
+    code_types: code_types,
+    code_tasks: code_tasks,
+    tasks: tasks,
+  });
 
   return (
     <>
       {customers && code_types ? (
         <ProjectFormView
-          code_types={code_types}
-          code_services={code_services}
-          code_statuses={code_statuses}
-          code_tasks={code_tasks}
-          customers={customers}
+          code_types={code_types.data}
+          code_services={code_services.data}
+          code_statuses={code_statuses.data}
+          code_tasks={code_tasks.data}
+          customers={customers.data}
           tasks={tasks}
           onChange={onChange}
           onSubmit={onSubmit}

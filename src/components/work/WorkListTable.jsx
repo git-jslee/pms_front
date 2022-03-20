@@ -70,24 +70,25 @@ const WorkListTable = ({ lists, code_tasks }) => {
   console.log('1.code_tasks', code_tasks);
   console.log('1.lists', lists);
   const tableList = lists.map((list, index) => {
-    console.log('2-1.list_name', list.project_task.code_task);
+    const wlist = list.attributes;
+    // console.log('2-1.list_name', list.project_task.code_task);
     // task ID 에서 code_tasks 활용하여 task name 추출
-    const taskName = code_tasks.filter(
-      (code) => code.id === list.project_task.code_task,
-    );
-    console.log('taskName', taskName);
+    // const taskName = code_tasks.filter(
+    //   (code) => code.id === wlist.project_task.code_task,
+    // );
+    // console.log('taskName', taskName);
 
     const array = {
       key: list.id,
       id: list.id,
-      customer: list.customer.name,
-      projectName: list.project.name,
-      service: taskName[0].code_service.code,
-      task: taskName[0].name,
-      progress: list.code_progress.code,
-      user: list.users_permissions_user.username,
-      workingDay: list.workingDay,
-      workingTime: list.workingTime,
+      customer: wlist.customer.data.attributes.name,
+      projectName: wlist.project.data.attributes.name,
+      // service: taskName[0].code_service.code,
+      // task: taskName[0].name,
+      progress: wlist.code_progress.data.code,
+      user: wlist.users_permissions_user.data.attributes.username,
+      workingDay: wlist.working_day,
+      workingTime: wlist.working_time,
       action: 'View',
     };
     tableData.push(array);

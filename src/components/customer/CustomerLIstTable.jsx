@@ -55,8 +55,8 @@ const CustomerLIstTable = ({ lists }) => {
     const array = {
       key: list.id,
       id: list.id,
-      name_eng: list.name_eng,
-      name: list.name,
+      name_eng: list.attributes.name_eng,
+      name: list.attributes.name,
       action: 'View',
     };
     tableData.push(array);

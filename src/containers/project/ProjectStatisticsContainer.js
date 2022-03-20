@@ -27,6 +27,7 @@ const ProjectStatisticsContainer = () => {
     console.log('duration', duration);
 
     console.log('projectInfo', projectInfo);
+    console.log('taskLists', taskLists);
     // {  id:1,  code: 'w100',  name:'기획 구성', planDay: null, totalTime: null, progress:null }
     // const tasks1 = code_tasks
     //   .filter((v1) => v1.code_service.id === projectInfo.code_service.id)
@@ -43,13 +44,14 @@ const ProjectStatisticsContainer = () => {
     //   })
     //   .sort((a, b) => a.sort - b.sort);
     const tasks = taskLists.map((v) => {
+      const value = v.attributes;
       return {
-        key: v.code_task.id,
-        id: v.code_task.id,
-        code: v.code_task.code,
-        name: v.code_task.name,
-        sort: v.code_task.sort,
-        planDay: v.planTime,
+        key: v.id,
+        id: v.id,
+        code: value.code_task.data.attributes.code,
+        name: value.code_task.data.attributes.name,
+        sort: value.code_task.data.attributes.sort,
+        planDay: value.plan_day,
         totalTime: 0,
         progress: 0,
       };
@@ -59,12 +61,18 @@ const ProjectStatisticsContainer = () => {
 
     // total time & progress 계산
     workLists
-      .sort((a, b) => new Date(a.workingDay) - new Date(b.workingDay))
+      .sort(
+        (a, b) =>
+          new Date(a.attributes.working_day) -
+          new Date(b.attributes.working_day),
+      )
       .map((v2) => {
         tasks.map((v3, index) => {
-          if (v2.project_task.code_task === v3.id) {
-            tasks[index].totalTime = tasks[index].totalTime + v2.workingTime;
-            tasks[index].progress = v2.code_progress.code;
+          if (v2.attributes.project_task.data.id === v3.id) {
+            tasks[index].totalTime =
+              tasks[index].totalTime + v2.attributes.working_time;
+            tasks[index].progress =
+              v2.attributes.code_progress.data.attributes.code;
           }
         });
       });

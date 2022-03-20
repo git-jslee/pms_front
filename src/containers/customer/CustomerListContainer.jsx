@@ -25,7 +25,7 @@ const CustomerListContainer = () => {
       console.log('고객리스트 가져오기 실패');
       console.log(error);
     }
-  });
+  }, [status]);
 
   return (
     <>

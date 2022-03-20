@@ -10,10 +10,15 @@ export const getCustomerlist = () => async (dispatch) => {
   dispatch({ type: GET_CUSTOMER });
   try {
     const response = await apiCustomerList();
-    console.log('---response---', response);
+    const clist = response.data.data;
+    console.log('---response---', clist);
     // 오름차순 정렬
-    const sortResponse = response.data.sort((a, b) => {
-      return a.name < b.name ? -1 : a.name > b.name ? 1 : 0;
+    const sortResponse = response.data.data.sort((a, b) => {
+      return a.attributes.name < b.attributes.name
+        ? -1
+        : a.attributes.name > b.attributes.name
+        ? 1
+        : 0;
     });
     console.log('---sort---', sortResponse);
     dispatch({

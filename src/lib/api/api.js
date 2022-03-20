@@ -2,10 +2,14 @@ import axios from 'axios';
 import { API_URL } from '../../config/constants';
 
 // https://docs-v3.strapi.io/developer-docs/latest/developer-resources/content-api/content-api.html#filters
+// ?filters[code][$eq] = w100
+//   & pagination[start]=0 & pagination[limit]=10
+//     & fields[0]=code & fields[1]=name
+// ?populate=%2A -> 모두가져오기
 
 // 로그인
 export const loginUser = (username, password) =>
-  axios.post(`${API_URL}/auth/local`, {
+  axios.post(`${API_URL}/api/auth/local`, {
     identifier: username,
     password: password,
   });
@@ -22,12 +26,26 @@ export const check = () => axios.get('/api/auth/check');
 // 코드북
 export const apiCodebook = () =>
   axios.all([
-    axios.get(`${API_URL}/code-types`),
+    axios.get(`${API_URL}/api/code-types`),
     // axios.get(`${API_URL}/customers`),
-    axios.get(`${API_URL}/code-services`),
-    axios.get(`${API_URL}/code-statuses`),
-    axios.get(`${API_URL}/code-tasks`),
+    axios.get(`${API_URL}/api/code-services`),
+    axios.get(`${API_URL}/api/code-statuses`),
+    axios.get(`${API_URL}/api/code-tasks?populate=%2A`),
   ]);
+
+// strapi v4 --->
+export const getQueryString = (path, query) =>
+  axios.get(`${API_URL}/${path}?${query}`);
+
+export const getCountProject = (path, query) =>
+  axios.all([
+    axios.get(`${API_URL}/${path}?${query[0]}`),
+    axios.get(`${API_URL}/${path}?${query[1]}`),
+    axios.get(`${API_URL}/${path}?${query[2]}`),
+    axios.get(`${API_URL}/${path}?${query[3]}`),
+  ]);
+
+// <-- strapi v4
 
 // sales 코드북
 export const salesCodebook = () =>
@@ -68,7 +86,7 @@ export const getSalesId = (id) =>
 
 // === getPathId
 export const getListPathId = (path, id) =>
-  axios.get(`${API_URL}/${path}/${id}`);
+  axios.get(`${API_URL}/${path}/${id}?populate=%2A`);
 
 // == getProjectWork==?? 이름 변경
 export const getProjectWork = (path, id) =>
@@ -155,20 +173,20 @@ export const apiAddProject = (datas, values, tasks) =>
 // 프로젝트 카운트
 export const apiProjectCount = () =>
   axios.all([
-    axios.get(`${API_URL}/projects/count?code_status.id=1`),
-    axios.get(`${API_URL}/projects/count?code_status.id=2`),
-    axios.get(`${API_URL}/projects/count?code_status.id=3`),
-    axios.get(`${API_URL}/projects/count?code_status.id=4`),
+    axios.get(`${API_URL}/api/projects/count?code_status.id=1`),
+    axios.get(`${API_URL}/api/projects/count?code_status.id=2`),
+    axios.get(`${API_URL}/api/projects/count?code_status.id=3`),
+    axios.get(`${API_URL}/api/projects/count?code_status.id=4`),
   ]);
 
 // 프로젝트 카운트 v2
 // 완료건 - 기간설정 필요 ex..6개월 or 1년 등..
 export const projectCount = () =>
   axios.all([
-    axios.get(`${API_URL}/projects/count?code_status.id=1`),
-    axios.get(`${API_URL}/projects/count?code_status.id=2`),
-    axios.get(`${API_URL}/projects/count?code_status.id=3`),
-    axios.get(`${API_URL}/projects/count?code_status.id=4`),
+    axios.get(`${API_URL}/api/projects/count?code_status.id=1`),
+    axios.get(`${API_URL}/api/projects/count?code_status.id=2`),
+    axios.get(`${API_URL}/api/projects/count?code_status.id=3`),
+    axios.get(`${API_URL}/api/projects/count?code_status.id=4`),
   ]);
 
 // 프로젝트 tasks 등록
@@ -181,7 +199,7 @@ export const apiCustomer_ProjectList = (id) =>
 // 고객 정보 조회
 export const apiCustomerList = () =>
   axios.get(`${API_URL}
-/customers`);
+/api/customers?pagination[pageSize]=100`);
 
 // 고객 등록
 export const apiAddCustomer = (data) =>
@@ -203,7 +221,11 @@ export const apiWorkList = (id) =>
 // works?user_info.users_permissions_user=3
 
 // 사용자 리스트
-export const apiUserList = () => axios.get(`${API_URL}/users?worker=true`);
+export const apiUserList = () =>
+  axios.get(
+    `${API_URL}/api/users?filters[worker][$eq]=true&sort[0]=username%3Adesc`,
+  );
 
 // Project 별 work..
-export const apiWorkId = (id) => axios.get(`${API_URL}/works?project.id=${id}`);
+export const apiWorkId = (id) =>
+  axios.get(`${API_URL}/api/works?project.id=${id}`);

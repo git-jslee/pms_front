@@ -112,7 +112,7 @@ const AddWorkDrawerForm = ({
                       ? projectList.map((list) => {
                           return (
                             <Select.Option key={list.id} value={list.id}>
-                              {list.name}
+                              {list.attributes.name}
                             </Select.Option>
                           );
                         })
@@ -133,7 +133,7 @@ const AddWorkDrawerForm = ({
                       ? tasks.map((list) => {
                           return (
                             <Select.Option key={list.id} value={list.id}>
-                              {list.code_task.name}
+                              {list.attributes.code_task.data.attributes.name}
                             </Select.Option>
                           );
                         })
@@ -172,7 +172,7 @@ const AddWorkDrawerForm = ({
                       ? progress.map((list) => {
                           return (
                             <Select.Option key={list.id} value={list.id}>
-                              {list.code}
+                              {list.attributes.code}
                             </Select.Option>
                           );
                         })

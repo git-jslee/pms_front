@@ -9,6 +9,7 @@ import * as api from '../../lib/api/api';
 import { startLoading, finishLoading } from '../../modules/loading';
 import calWorkTime from '../../modules/project/calWorkTime';
 import { weekOfMonth } from '../../modules/common/weekOfMonth';
+import { qs_projectList } from '../../lib/api/query';
 
 const ProjectListContainer = () => {
   const dispatch = useDispatch();
@@ -34,8 +35,10 @@ const ProjectListContainer = () => {
   // 컴포넌트가 처음 렌더링 될 때 프로젝트 전체 리스트 정보 가져옴
   // 페이지 이동 후 재 접속시.. 프로젝트 리스트 다시 가져옴...코드 수정 필요..
   useEffect(() => {
-    const params = 'projects?code_status.id=2';
-    dispatch(getProject(params));
+    // const params = 'projects?code_status.id=2';
+    const code_status_id = 2;
+    const query = qs_projectList(code_status_id);
+    dispatch(getProject(query));
   }, []);
 
   // 작업통계 기능 projectSubContainer 통합필요..
@@ -98,15 +101,15 @@ const ProjectListContainer = () => {
         const array = {
           key: list.id,
           no: index + 1,
-          type: list.code_type.name,
-          customer: list.customer.name,
-          name: list.name,
-          service: list.code_service.name,
-          status: list.code_status.name,
-          startdate: list.startDate,
-          lastUpdate: list.lastUpdate,
+          // type: list.code_type.name,
+          customer: list.attributes.customer.data.attributes.name,
+          name: list.attributes.name,
+          service: list.attributes.code_service.data.attributes.name,
+          status: list.attributes.code_status.data.attributes.name,
+          startdate: list.attributes.startdate,
+          lastUpdate: list.attributes.last_workupdate,
           duration: duration,
-          worktime: _worktime !== undefined ? _worktime.worktime : '',
+          // worktime: _worktime !== undefined ? _worktime.worktime : '',
           action: 'View',
         };
         return array;

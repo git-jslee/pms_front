@@ -21,6 +21,7 @@ import ProjectWorkList from '../../components/project/ProjectWorkList';
 import { ListConsumer } from 'antd/lib/list';
 import { tbl_update } from '../../modules/common/tbl_crud';
 import { weekOfMonth } from '../../modules/common/weekOfMonth';
+import { qs_projectTaskByPid, qs_workByPid } from '../../lib/api/query';
 
 const ProjectViewContainer = () => {
   const { id } = useParams();
@@ -93,7 +94,10 @@ const ProjectViewContainer = () => {
 
   // 프로젝트별 task & work 정보 가져오기
   useEffect(() => {
-    dispatch(getProjectWork(id));
+    const query = [];
+    query.push(qs_projectTaskByPid(id));
+    query.push(qs_workByPid(id));
+    dispatch(getProjectWork(query));
   }, [dispatch]);
 
   // work list
@@ -104,11 +108,12 @@ const ProjectViewContainer = () => {
         return {
           key: list.id,
           no: index + 1,
-          task: list.project_task.code_task,
-          workingDay: list.workingDay,
-          workingTime: list.workingTime,
-          progress: list.code_progress.code,
-          worker: list.users_permissions_user.username,
+          task: list.attributes.project_task.data.id,
+          workingDay: list.attributes.working_day,
+          workingTime: list.attributes.working_time,
+          progress: list.attributes.code_progress.data.attributes.code,
+          worker:
+            list.attributes.users_permissions_user.data.attributes.username,
           description: list.description,
         };
       })
@@ -137,15 +142,15 @@ const ProjectViewContainer = () => {
 
     const update_data = {
       code_status: values.status,
-      planStartDate: moment(values.planStartDate.format('YYYY-MM-DD')),
-      planEndDate: moment(values.planEndDate.format('YYYY-MM-DD')),
-      startDate: _startDate,
-      endDate: _endDate,
+      plan_startdate: moment(values.planStartDate.format('YYYY-MM-DD')),
+      plan_enddate: moment(values.planEndDate.format('YYYY-MM-DD')),
+      startdate: _startDate,
+      enddate: _endDate,
       price: values.price,
-      remark: values.description,
+      description: values.description,
       // description: values.description,
     };
-    const result = await tbl_update('projects', id, update_data);
+    const result = await tbl_update('api/projects', id, update_data);
     console.log('2.update 결과', result);
 
     dispatch(getProjectId(id));
@@ -155,24 +160,24 @@ const ProjectViewContainer = () => {
   //UpdateForm
   const updateForm = () => {
     if (mode === 'VIEW') return;
-    const _startDate = projectInfo.startDate
-      ? moment(projectInfo.startDate)
-      : null;
-    const _endDate = projectInfo.endDate ? moment(projectInfo.endDate) : null;
-    console.log('_endDate', _endDate);
+    console.log('**projectInfo**', projectInfo);
+    const pjt_info = projectInfo.attributes;
+    const _startDate = pjt_info.startdate ? moment(pjt_info.startdate) : null;
+    const _endDate = pjt_info.enddate ? moment(pjt_info.enddate) : null;
+    console.log({ startdate: _startDate, enddate: _endDate });
     const initialValues = {
-      status: projectInfo.code_status.id,
-      planStartDate: moment(projectInfo.planStartDate),
-      planEndDate: moment(projectInfo.planEndDate),
+      status: pjt_info.code_status.data.id,
+      planStartDate: moment(pjt_info.plan_startdate),
+      planEndDate: moment(pjt_info.plan_enddate),
       startDate: _startDate,
       endDate: _endDate,
-      price: projectInfo.price,
-      description: projectInfo.remark,
+      price: pjt_info.price,
+      description: pjt_info.description,
     };
     return (
       <>
         <ProjectUpdateForm
-          code_statuses={code_statuses}
+          code_statuses={code_statuses.data}
           initialValues={initialValues}
           onSubmit={onSubmit}
         />

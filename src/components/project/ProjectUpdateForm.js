@@ -13,6 +13,7 @@ import {
 
 const ProjectUpdateForm = ({ initialValues, code_statuses, onSubmit }) => {
   console.log('initialValues', initialValues);
+  console.log('code-status', code_statuses);
   return (
     <>
       <Divider />
@@ -35,8 +36,8 @@ const ProjectUpdateForm = ({ initialValues, code_statuses, onSubmit }) => {
               <Select>
                 {code_statuses.map((status, index) => {
                   return (
-                    <Select.Option key={index} value={status.id}>
-                      {status.name}
+                    <Select.Option key={status.id} value={status.id}>
+                      {status.attributes.name}
                     </Select.Option>
                   );
                 })}

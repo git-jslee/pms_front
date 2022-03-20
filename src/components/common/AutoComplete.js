@@ -77,7 +77,7 @@ const AutoComplete = ({ lists }) => {
     if (lists && text.length > 0) {
       matches = lists.filter((customer) => {
         const regex = new RegExp(`${text}`, 'gi');
-        return customer.name.match(regex);
+        return customer.attributes.name.match(regex);
       });
     }
     console.log('matches', matches);
@@ -107,12 +107,12 @@ const AutoComplete = ({ lists }) => {
     const customer_data = {
       name_eng: values.customerId,
       name: values.name,
-      businessNumber: values.businessNumber,
-      businessType: values.businessType,
-      remark: values.description,
+      business_number: values.businessNumber,
+      business_type: values.businessType,
+      description: values.description,
     };
     try {
-      const result = await tbl_insert('customers', customer_data);
+      const result = await tbl_insert('api/customers', customer_data);
       console.log('result', result);
       // addCustomer(datas);
       // 고객등록 성공시 페이지 이동 기능 구현 필요
@@ -152,7 +152,7 @@ const AutoComplete = ({ lists }) => {
                     className="suggestion"
                     onClick={() => onSuggestHandler(suggestion)}
                   >
-                    {suggestion.name}
+                    {suggestion.attributes.name}
                   </div>
                 ))}
             </div>

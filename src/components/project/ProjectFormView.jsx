@@ -54,26 +54,26 @@ const ProjectFormView = ({
   //   };
 
   // 서비스 선택시 task 정보 생성
-  if (tasks) {
-    const workTimeForm = tasks.map((list, index) => {
-      return (
-        <Form.Item label={list.name} key={index}>
-          <Form.Item
-            name={list.code}
-            style={{ display: 'inline-block', width: 'calc(50% - 8px)' }}
-          >
-            <InputNumber />
-          </Form.Item>
-          <Form.Item
-            name="11"
-            style={{ display: 'inline-block', width: 'calc(50% - 8px)' }}
-          >
-            <InputNumber />
-          </Form.Item>
-        </Form.Item>
-      );
-    });
-  }
+  // if (tasks) {
+  //   const workTimeForm = tasks.map((list, index) => {
+  //     return (
+  //       <Form.Item label={list.name} key={index}>
+  //         <Form.Item
+  //           name={list.code}
+  //           style={{ display: 'inline-block', width: 'calc(50% - 8px)' }}
+  //         >
+  //           <InputNumber />
+  //         </Form.Item>
+  //         <Form.Item
+  //           name="11"
+  //           style={{ display: 'inline-block', width: 'calc(50% - 8px)' }}
+  //         >
+  //           <InputNumber />
+  //         </Form.Item>
+  //       </Form.Item>
+  //     );
+  //   });
+  // }
 
   return (
     <>
@@ -104,8 +104,8 @@ const ProjectFormView = ({
           <Select>
             {code_types.map((type, index) => {
               return (
-                <Select.Option key={index} value={type.id}>
-                  {type.name}
+                <Select.Option key={type.id} value={type.id}>
+                  {type.attributes.name}
                 </Select.Option>
               );
             })}
@@ -115,8 +115,8 @@ const ProjectFormView = ({
           <Select>
             {customers.map((customer, index) => {
               return (
-                <Select.Option key={index} value={customer.id}>
-                  {customer.name}
+                <Select.Option key={customer.id} value={customer.id}>
+                  {customer.attributes.name}
                 </Select.Option>
               );
             })}
@@ -138,8 +138,8 @@ const ProjectFormView = ({
           <Select onChange={onChange}>
             {code_services.map((service, index) => {
               return (
-                <Select.Option key={index} value={service.id}>
-                  {service.name}
+                <Select.Option key={service.id} value={service.id}>
+                  {service.attributes.name}
                 </Select.Option>
               );
             })}
@@ -149,8 +149,8 @@ const ProjectFormView = ({
           <Select>
             {code_statuses.map((status, index) => {
               return (
-                <Select.Option key={index} value={status.id}>
-                  {status.name}
+                <Select.Option key={status.id} value={status.id}>
+                  {status.attributes.name}
                 </Select.Option>
               );
             })}
@@ -175,10 +175,10 @@ const ProjectFormView = ({
           {tasks ? (
             tasks.map((list, index) => {
               return (
-                <Col key={list.code} span={12} style={{ padding: '5px 10px' }}>
+                <Col key={list.id} span={12} style={{ padding: '5px 10px' }}>
                   <Form.Item
-                    name={list.code}
-                    label={list.name}
+                    name={list.attributes.code}
+                    label={list.attributes.name}
                     rules={[
                       {
                         required: true,
