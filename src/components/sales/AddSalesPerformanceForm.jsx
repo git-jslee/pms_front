@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import palette from '../../lib/styles/palette';
+// import moment from 'moment';
+// import 'moment/locale/ko-kr';
 import {
   Form,
   Input,
@@ -15,10 +17,13 @@ import {
   Space,
   Switch,
 } from 'antd';
+// import locale from '../../../node_modules/antd/es/date-picker/locale/ko_KR';
+// import locale from 'antd/es/date-picker/locale/ko_KR';
 
 const AddSalesPerformanceForm = ({
   probability,
   division,
+  item,
   team,
   customer,
   onChangeDivision,
@@ -33,16 +38,16 @@ const AddSalesPerformanceForm = ({
   checked,
   onChangeSwitch,
 }) => {
-  if (divisionId) {
-    console.log('>>>', division);
-    const result = division.filter((v) => {
-      return v.id === divisionId;
-    });
-    console.log('>>>', result[0].item);
-  }
+  // if (divisionId) {
+  //   console.log('>>>', division);
+  //   const result = division.filter((v) => {
+  //     return v.id === divisionId;
+  //   });
+  //   console.log('>>>', result[0].item);
+  // }
 
   console.log('==calresult', calResult);
-  console.log('profitMarginValue', profitMarginValue);
+  console.log('==profitMarginValue', profitMarginValue);
 
   return (
     <>
@@ -72,7 +77,7 @@ const AddSalesPerformanceForm = ({
                 {customer.map((list, index) => {
                   return (
                     <Select.Option key={index} value={list.id}>
-                      {list.name}
+                      {list.attributes.name}
                     </Select.Option>
                   );
                 })}
@@ -148,13 +153,13 @@ const AddSalesPerformanceForm = ({
             >
               <Select>
                 {divisionId
-                  ? division
+                  ? item
                       .filter((v) => {
-                        return v.id === divisionId;
-                      })[0]
-                      .item.map((list, index) => {
+                        return v.division === divisionId;
+                      })
+                      .map((list, index) => {
                         return (
-                          <Select.Option key={index} value={list.id}>
+                          <Select.Option key={list.id} value={list.id}>
                             {list.name}
                           </Select.Option>
                         );

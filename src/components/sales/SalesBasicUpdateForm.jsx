@@ -27,8 +27,10 @@ const SalesBasicUpdateForm = ({
 }) => {
   const [divisionId, setDivisionId] = useState(initialValues.division);
   const division = codebook.division;
+  const item = codebook.item;
   const team = codebook.team;
   console.log('codebook', codebook);
+  console.log('codebcustomerook', customer);
 
   // 체크박스 옵션
   const optionsWithDisabled = [
@@ -97,7 +99,7 @@ const SalesBasicUpdateForm = ({
                 {customer.map((list, index) => {
                   return (
                     <Select.Option key={index} value={list.id}>
-                      {list.name}
+                      {list.attributes.name}
                     </Select.Option>
                   );
                 })}
@@ -132,13 +134,13 @@ const SalesBasicUpdateForm = ({
             >
               <Select>
                 {divisionId
-                  ? division
+                  ? item
                       .filter((v) => {
-                        return v.id === divisionId;
-                      })[0]
-                      .item.map((list, index) => {
+                        return v.division === divisionId;
+                      })
+                      .map((list, index) => {
                         return (
-                          <Select.Option key={index} value={list.id}>
+                          <Select.Option key={list.id} value={list.id}>
                             {list.name}
                           </Select.Option>
                         );

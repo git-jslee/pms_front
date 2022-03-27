@@ -4,6 +4,8 @@ import AddSalesPerformanceForm from '../../components/sales/AddSalesPerformanceF
 // import tbl_insert from '../../modules/tbl_insert';
 import { tbl_insert } from '../../modules/common/tbl_crud';
 import moment from 'moment';
+import 'moment-timezone';
+// import 'moment/locale/ko-kr';
 import { useNavigate } from 'react-router-dom';
 import AutoComplete from '../../components/common/AutoComplete';
 
@@ -22,9 +24,10 @@ const AddSalesContainer = () => {
     sales_profit: null,
   });
   const [calResult, setCalResult] = useState({});
-  const { probability, division, team } = useSelector(({ codebook }) => ({
+  const { probability, division, item, team } = useSelector(({ codebook }) => ({
     probability: codebook.sales.probability,
     division: codebook.sales.division,
+    item: codebook.sales.item,
     team: codebook.sales.team,
   }));
 
@@ -113,27 +116,29 @@ const AddSalesContainer = () => {
       scode_team: values.team,
       confirmed: _confirmed,
       scode_probability: _probability,
-      sales_rec_date: moment(values.sales_rec_date.format('YYYY-MM-DD')),
+      sales_recdate: moment(values.sales_rec_date).tz('Asia/Seoul'),
       count: 1,
       description: values.description,
     };
-    const result = await tbl_insert('sales-performances', sales_data);
-    console.log('1. sales-performances', result.data);
+    console.log('1. sales_data', sales_data);
+    const result = await tbl_insert('api/sales-statuses', sales_data);
+    console.log('1. sales-statuses', result.data);
     // probability 5 -> 100% 의미함
 
     const paymentDate = values.payment_date || '';
     const profit_data = {
-      sales_performance: result.data.id,
-      confirmed: _confirmed,
+      sales_status: result.data.data.id,
       scode_probability: _probability,
       sales: values.sales,
       sales_profit: _profit,
-      profit_margin: _margin,
-      sales_rec_date: moment(values.sales_rec_date.format('YYYY-MM-DD')),
-      payment_date: moment(paymentDate),
+      sales_margin: _margin,
+      sales_recdate: moment(values.sales_rec_date).tz('Asia/Seoul'),
+      paymentdate: moment(paymentDate),
+      confirmed: _confirmed,
       description: values.memo,
     };
-    const result2 = await tbl_insert('sales-profits', profit_data);
+    console.log('1-1. sprofit_data', profit_data);
+    const result2 = await tbl_insert('api/sales-histories', profit_data);
     console.log('2. sales-profits', result2.data);
     navigate('/sales');
   };
@@ -164,6 +169,7 @@ const AddSalesContainer = () => {
           <AddSalesPerformanceForm
             probability={probability}
             division={division}
+            item={item}
             team={team}
             customer={customer}
             onChangeDivision={onChangeDivision}

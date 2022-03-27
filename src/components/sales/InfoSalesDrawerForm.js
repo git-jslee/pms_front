@@ -17,7 +17,7 @@ import { DeleteOutlined } from '@ant-design/icons';
 // import Button from '../common/Button';
 
 const InfoSalesDrawerForm = ({
-  list,
+  slist,
   tableData,
   editButtonOnClick,
   editRadioOnChange,
@@ -31,7 +31,9 @@ const InfoSalesDrawerForm = ({
 }) => {
   const [toggle, setToggle] = useState(true);
   const [value, setValue] = useState(1);
-  const sales_profits = list.sales_profits;
+  console.log('^^^sales_list^^^', slist);
+  const salesList = slist.attributes;
+  const sales_profits = salesList.sales_histories.data;
   const sales_profit = sales_profits[sales_profits.length - 1];
   console.log('sales_pofir_length', sales_profit);
   console.log('3.infoSalesVisible', infoSalesVisible);
@@ -136,42 +138,42 @@ const InfoSalesDrawerForm = ({
         </Row>
         <Descriptions title="." bordered>
           <Descriptions.Item label="매출확률">
-            {sales_profit.scode_probability}
+            {salesList.scode_probability.data.attributes.name}
           </Descriptions.Item>
           <Descriptions.Item label="매출처">
-            {list.customer.name}
+            {salesList.customer.data.attributes.name}
           </Descriptions.Item>
           <Descriptions.Item label="매출확정여부">
             {sales_profit.confirmed ? 'Yes' : 'No'}
           </Descriptions.Item>
           <Descriptions.Item label="건 명" span={2}>
-            {list.name}
+            {salesList.name}
           </Descriptions.Item>
           <Descriptions.Item label="Status">
             <Badge status="processing" text="Running" />
           </Descriptions.Item>
           <Descriptions.Item label="매출구분">
-            {list.scode_division.name}
+            {salesList.scode_division.data.attributes.name}
           </Descriptions.Item>
           <Descriptions.Item label="매출품목">
-            {list.scode_item.name}
+            {salesList.scode_item.data.attributes.name}
           </Descriptions.Item>
           <Descriptions.Item label="사업부">
-            {list.scode_team.name}
+            {salesList.scode_team.data.attributes.name}
           </Descriptions.Item>
           <Descriptions.Item label="매 출">
-            {sales_profit.sales.toLocaleString('ko-KR')}
+            {sales_profit.attributes.sales.toLocaleString('ko-KR')}
           </Descriptions.Item>
           <Descriptions.Item label="매출이익">
-            {sales_profit.sales_profit.toLocaleString('ko-KR')}
+            {sales_profit.attributes.sales_profit.toLocaleString('ko-KR')}
           </Descriptions.Item>
           <Descriptions.Item label="마진(%)">
-            {sales_profit.profit_margin}
+            {sales_profit.attributes.profit_margin}
           </Descriptions.Item>
           {/* edit 모드일때 discription 안보이게 */}
           {!editmode ? (
             <Descriptions.Item label="비 고">
-              {list.description}
+              {salesList.description}
             </Descriptions.Item>
           ) : (
             ''

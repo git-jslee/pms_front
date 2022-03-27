@@ -8,6 +8,8 @@ import { getSalesQuery, getSalesList } from '../../modules/sales';
 import SalesStatisticsContainer from './SalesStatisticsContainer';
 import SalesAdvancedSearchForm from '../../components/sales/SalesAdvancedSearchForm';
 import AddSalesDrawerContainer from './AddSalesDrawerContainer';
+import calStartEndDayFromMonth from '../../modules/common/calStartEndDayFromMonth';
+import { qs_salesByDate, qs_salesAdvanced } from '../../lib/api/query';
 
 const SalesSubContainer = () => {
   const dispatch = useDispatch();
@@ -37,7 +39,9 @@ const SalesSubContainer = () => {
   const buttonName = search ? '현황' : '상세검색';
 
   useEffect(() => {
-    dispatch(getSalesList(startMonth, endMonth));
+    const startEnd = calStartEndDayFromMonth(startMonth, endMonth);
+    const query = qs_salesByDate(startEnd[0], startEnd[1]);
+    dispatch(getSalesList(query));
     dispatch(setTitle('매출현황 관리'));
     return () => {
       dispatch(setTitle(null));
@@ -105,22 +109,23 @@ const SalesSubContainer = () => {
     console.log('검색 - selectedCustomer', selectedCustomer);
     const start = moment(value.date[0]).format('YYYY-MM');
     const end = moment(value.date[1]).format('YYYY-MM');
+
     // const startEndOfDay = startEndDay(start, end);
     // const queryDate = `sales_rec_date_gte=${startEndOfDay[0]}&sales_rec_date_lte=${startEndOfDay[1]}&deleted=false`;
-    let queryString = '';
-    if (selectedCustomer) {
-      queryString = queryString + `&customer.id=${selectedCustomer}`;
-    }
-    if (value.item) {
-      queryString = queryString + `&scode_item.id=${value.item}`;
-    } else if (value.division) {
-      queryString = queryString + `&scode_division.id=${value.division}`;
-    }
-    if (value.team) {
-      queryString = queryString + `&scode_team.id=${value.team}`;
-    }
+    // let queryString = '';
+    // if (selectedCustomer) {
+    //   queryString = queryString + `&customer.id=${selectedCustomer}`;
+    // }
+    // if (value.item) {
+    //   queryString = queryString + `&scode_item.id=${value.item}`;
+    // } else if (value.division) {
+    //   queryString = queryString + `&scode_division.id=${value.division}`;
+    // }
+    // if (value.team) {
+    //   queryString = queryString + `&scode_team.id=${value.team}`;
+    // }
 
-    dispatch(getSalesList(start, end, queryString));
+    // dispatch(getSalesList(start, end, queryString));
     // console.log('querystring', queryString);
 
     // const response = await api.getSalesQueryString(queryString);
@@ -134,15 +139,58 @@ const SalesSubContainer = () => {
   const advancedSearchOnsubmit = async (value) => {
     console.log('검색 - onSubmit', value);
     console.log('검색 - selectedCustomer', selectedCustomer);
-    const start = moment(value.date[0]).format('YYYY-MM');
-    const end = moment(value.date[1]).format('YYYY-MM');
+    let filters = {};
+    const startMonth = moment(value.date[0]).format('YYYY-MM');
+    const endMonth = moment(value.date[1]).format('YYYY-MM');
+    const startEnd = calStartEndDayFromMonth(startMonth, endMonth);
+    const cid = selectedCustomer;
+
+    if (selectedCustomer) {
+      filters = {
+        $and: [
+          {
+            sales_recdate: {
+              $gte: startEnd[0],
+            },
+          },
+          {
+            sales_recdate: {
+              $lte: startEnd[1],
+            },
+          },
+          {
+            customer: {
+              id: {
+                $eq: cid,
+              },
+            },
+          },
+        ],
+      };
+    } else {
+      filters = {
+        $and: [
+          {
+            sales_recdate: {
+              $gte: startEnd[0],
+            },
+          },
+          {
+            sales_recdate: {
+              $lte: startEnd[1],
+            },
+          },
+        ],
+      };
+    }
+
+    const query = qs_salesAdvanced(filters);
+    dispatch(getSalesList(query));
     // const startEndOfDay = startEndDay(start, end);
     // const queryDate = `sales_rec_date_gte=${startEndOfDay[0]}&sales_rec_date_lte=${startEndOfDay[1]}&deleted=false`;
     // let queryString = queryDate;
     let queryString = '';
-    if (selectedCustomer) {
-      queryString = `&customer.id=${selectedCustomer}`;
-    }
+
     if (value.item) {
       queryString = queryString + `&scode_item.id=${value.item}`;
     } else if (value.division) {
@@ -152,7 +200,7 @@ const SalesSubContainer = () => {
       queryString = queryString + `&scode_team.id=${value.team}`;
     }
 
-    dispatch(getSalesList(start, end, queryString));
+    // dispatch(getSalesList(start, end, queryString));
     // console.log('querystring', queryString);
 
     // const response = await api.getSalesQueryString(queryString);

@@ -21,7 +21,7 @@ import {
 const SalesValueUpdateForm = ({
   initialValues,
   probability,
-  list,
+  slist,
   tableData,
   onSubmit,
   radioValue,
@@ -33,7 +33,7 @@ const SalesValueUpdateForm = ({
   checked,
   onChangeSwitch,
 }) => {
-  const sales_profits = list.sales_profits;
+  // const sales_profits = slist.sales_profits;
 
   return (
     <>

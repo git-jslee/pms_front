@@ -41,8 +41,10 @@ const AddSalesDrawerForm = ({
 }) => {
   console.log('--initValues', initialValues);
   console.log('--salesConfirmed', salesConfirmed);
+  console.log('--customer', customer);
   const [divisionId, setDivisionId] = useState(initialValues.division);
   const division = codebook.division;
+  const item = codebook.item;
   const team = codebook.team;
   const probability = codebook.probability;
   console.log('codebook', codebook);
@@ -88,7 +90,7 @@ const AddSalesDrawerForm = ({
                   {customer.map((list, index) => {
                     return (
                       <Select.Option key={index} value={list.id}>
-                        {list.name}
+                        {list.attributes.name}
                       </Select.Option>
                     );
                   })}
@@ -163,11 +165,11 @@ const AddSalesDrawerForm = ({
               >
                 <Select>
                   {divisionId
-                    ? division
+                    ? item
                         .filter((v) => {
-                          return v.id === divisionId;
-                        })[0]
-                        .item.map((list, index) => {
+                          return v.division === divisionId;
+                        })
+                        .map((list, index) => {
                           return (
                             <Select.Option key={index} value={list.id}>
                               {list.name}

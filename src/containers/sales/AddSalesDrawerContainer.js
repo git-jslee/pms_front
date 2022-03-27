@@ -108,7 +108,6 @@ const AddSalesDrawerContainer = ({
   //sales-performances, /sales-profits
   const onSubmit = async (values) => {
     console.log('onSubmit', values);
-    // const jwt = auth.jwt;
     let _profit;
     let _margin;
     if (radioValue) {
@@ -130,30 +129,30 @@ const AddSalesDrawerContainer = ({
       scode_team: values.team,
       confirmed: _confirmed,
       scode_probability: _probability,
-      sales_rec_date: moment(values.sales_rec_date.format('YYYY-MM-DD')),
+      sales_recdate: moment(values.sales_rec_date.format('YYYY-MM-DD')),
       count: 1,
       description: values.description,
     };
-    const result = await tbl_insert('sales-performances', data);
+    const result = await tbl_insert('api/sales-statuses', data);
 
-    console.log('1. sales-performances', result);
+    console.log('1. api/sales-statuses', result);
     // probability 5 -> 100% 의미함
 
     const paymentDate = values.payment_date || '';
     const profit_data = {
-      sales_performance: result.data.id,
+      sales_status: result.data.data.id,
       confirmed: _confirmed,
       scode_probability: _probability,
       sales: values.sales,
       sales_profit: _profit,
-      profit_margin: _margin,
-      sales_rec_date: moment(values.sales_rec_date.format('YYYY-MM-DD')),
-      payment_date: moment(paymentDate),
+      sales_margin: _margin,
+      sales_recdate: moment(values.sales_rec_date.format('YYYY-MM-DD')),
+      paymentdate: moment(paymentDate),
       description: values.memo,
     };
-    const result2 = await tbl_insert('sales-profits', profit_data);
-    console.log('2. sales-profits', result2.data);
-    navigate('/sales');
+    const result2 = await tbl_insert('api/sales-histories', profit_data);
+    console.log('2. api/sales-histories', result2.data);
+    // navigate('/sales');
   };
 
   const onChangeSwitch = (e) => {

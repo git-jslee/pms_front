@@ -50,6 +50,7 @@ const SalesAdvancedSearchForm = ({
   const [divisionId, setDivisionId] = useState(null);
 
   useEffect(() => {
+    console.log('customers', customers);
     return () => {
       form.resetFields();
     };
@@ -62,13 +63,13 @@ const SalesAdvancedSearchForm = ({
       matches = customers.filter((customer) => {
         const regex = new RegExp(`${searchText}`, 'gi');
         console.log('regex', regex);
-        return customer.name.match(regex);
+        return customer.attributes.name.match(regex);
       });
     }
     console.log('matches', matches);
     // ant.d option 포멧 { value: "한일"}
     const suggestionText = matches.map((text) => {
-      return { value: text.name, id: text.id };
+      return { value: text.attributes.name, id: text.id };
     });
     console.log('suggestionText', suggestionText);
     setSuggestions(suggestionText);

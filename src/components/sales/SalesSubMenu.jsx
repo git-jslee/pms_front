@@ -11,6 +11,8 @@ import startEndDay from '../../modules/common/startEndDay';
 import AutoComplete from '../common/AutoComplete';
 import { getSalesQuery, getSalesList } from '../../modules/sales';
 import { RedoOutlined } from '@ant-design/icons';
+import { qs_salesByDate } from '../../lib/api/query';
+import calStartEndDayFromMonth from '../../modules/common/calStartEndDayFromMonth';
 
 const { RangePicker } = DatePicker;
 
@@ -78,9 +80,12 @@ const SalesSubMenu = ({
     // dispatch(setStartEndOfMonth(startEndOfDay));
     // dispatch(setParams(null));
     // dispatch(getSalesQuery(queryString));
-    dispatch(
-      getSalesList(moment().format('YYYY-MM'), moment().format('YYYY-MM')),
-    );
+    // dispatch(
+    //   getSalesList(moment().format('YYYY-MM'), moment().format('YYYY-MM')),
+    // );
+    const startEnd = calStartEndDayFromMonth(startMonth, endMonth);
+    const query = qs_salesByDate(startEnd[0], startEnd[1]);
+    dispatch(getSalesList(query));
   };
 
   return (

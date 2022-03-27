@@ -31,10 +31,30 @@ export const getCodebook = () => async (dispatch) => {
   }
 };
 
-export const getSalesCodebook = createRequestThunk(
-  GET_SCODEBOOK,
-  api.salesCodebook,
-);
+// export const getSalesCodebook = createRequestThunk(
+//   GET_SCODEBOOK,
+//   api.salesCodebook,
+// );
+
+export const getSalesCodebook = () => async (dispatch) => {
+  dispatch({ type: GET_SCODEBOOK });
+  console.log('getcodebook 실행');
+  try {
+    const response = await api.salesCodebook();
+    console.log('response-salescodebook', response);
+    dispatch({
+      type: GET_SCODEBOOK_SUCCESS,
+      payload: response,
+    });
+  } catch (error) {
+    dispatch({
+      type: GET_SCODEBOOK_FAILURE,
+      payload: error,
+      error: true,
+    });
+    throw error;
+  }
+};
 
 export const initialState = {
   code_types: null,
@@ -44,6 +64,7 @@ export const initialState = {
   sales: {
     probability: null,
     division: null,
+    item: null,
     team: null,
   },
   status: null,
@@ -72,23 +93,26 @@ const codebook = handleActions(
     [GET_SCODEBOOK_SUCCESS]: (state, { payload }) => ({
       ...state,
       sales: {
-        probability: payload[0].data.map((v) => {
-          return { id: v.id, name: v.name, sort: v.sort };
+        probability: payload[0].data.data.map((v) => {
+          return { id: v.id, name: v.attributes.name, sort: v.attributes.sort };
         }),
-        division: payload[1].data.map((v) => {
-          const itemlist = payload[2].data
-            .filter((item) => item.scode_division.id === v.id)
-            .map((v2) => {
-              return {
-                id: v2.id,
-                name: v2.name,
-                sort: v2.sort,
-              };
-            });
-          return { id: v.id, name: v.name, sort: v.sort, item: itemlist };
+        division: payload[1].data.data.map((v) => {
+          return {
+            id: v.id,
+            name: v.attributes.name,
+            sort: v.attributes.sort,
+          };
         }),
-        team: payload[3].data.map((v) => {
-          return { id: v.id, name: v.name, sort: v.sort };
+        item: payload[2].data.data.map((v) => {
+          return {
+            id: v.id,
+            division: v.attributes.scode_division.data.id,
+            name: v.attributes.name,
+            sort: v.attributes.sort,
+          };
+        }),
+        team: payload[3].data.data.map((v) => {
+          return { id: v.id, name: v.attributes.name, sort: v.attributes.sort };
         }),
       },
       status: true,

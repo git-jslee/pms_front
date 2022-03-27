@@ -7,6 +7,7 @@ import moment from 'moment';
 import startEndDay from '../../modules/common/startEndDay';
 import { setStartEndOfMonth, setParams } from '../../modules/common';
 import { getSalesQuery } from '../../modules/sales';
+import { qs_salesByDate, qs_salesStatistics } from '../../lib/api/query';
 
 const SalesStatisticsContainer = () => {
   const dispatch = useDispatch();
@@ -28,11 +29,13 @@ const SalesStatisticsContainer = () => {
         const startEndOfDay = startEndDay(month, month);
         total4Month.push(startEndOfDay);
         // const response = await api.getSalesStartEndDay(startEndOfDay);
-        const queryString = `sales_rec_date_gte=${startEndOfDay[0]}&sales_rec_date_lte=${startEndOfDay[1]}&deleted=false`;
-        console.log('--queryString--', queryString);
-        const response = await api.getSalesQueryString(queryString);
-        // console.log(`response[${i}]`, response.data);
-        const sum = sumSalesValueByMonth(response.data);
+        // const queryString = `sales_rec_date_gte=${startEndOfDay[0]}&sales_rec_date_lte=${startEndOfDay[1]}&deleted=false`;
+        const query = qs_salesStatistics(startEndOfDay[0], startEndOfDay[1]);
+        // console.log('--1.queryString--', query);
+        const query1 = 'populate=%2A';
+        const response = await api.getQueryString('api/sales-statuses', query);
+        console.log(`**2.response[${i}]`, response.data.data);
+        const sum = sumSalesValueByMonth(response.data.data);
         // console.log(`***sum..[${i}]****`, sum);
         obj[i] = sum;
       }
@@ -52,14 +55,15 @@ const SalesStatisticsContainer = () => {
     console.log('eeee', record);
     if (!record.month) return;
     let queryString = '';
-    const queryDate = `sales_rec_date_gte=${record.month[0]}&sales_rec_date_lte=${record.month[1]}&deleted=false`;
+    const queryDate = `**sales_rec_date_gte=${record.month[0]}&sales_rec_date_lte=${record.month[1]}&deleted=false`;
     if (record.key === '99') {
       queryString = queryDate + `&confirmed=true`;
     } else {
       queryString =
         queryDate + `&confirmed=false&scode_probability.id=${record.key}`;
     }
-    dispatch(getSalesQuery(queryString));
+    const queryString1 = 'populate=%2A';
+    dispatch(getSalesQuery(queryString1));
     // dispatch(setStartEndOfMonth(record.month));
     // dispatch(setParams({ type: 'scode_probability', key: record.key }));
   };

@@ -11,20 +11,23 @@ const sumSalesValueByMonth = (salesListValue) => {
   };
 
   const sumSalesList = salesListValue.map((list) => {
-    const value = list.sales_profits[list.count - 1];
-    // console.log('**계산용**', value);
+    const slist = list.attributes;
+    const value = slist.sales_histories.data[slist.count - 1];
+    // console.log('**계산용**', slist, value);
     // 매출 확정 일경우
-    if (value.confirmed === true) {
+    // 데이터가 없을경우 처리 로직 추가 필요..
+    if (value.attributes.confirmed === true) {
       returnData[99] = [
-        returnData[99][0] + value.sales,
-        returnData[99][1] + value.sales_profit,
+        returnData[99][0] + value.attributes.sales,
+        returnData[99][1] + value.attributes.sales_profit,
       ];
       // 객체에 값이 없을경우 생성
     } else {
       // 값이 있을 경우 기존 객체에 값 더하기
-      returnData[value.scode_probability] = [
-        returnData[value.scode_probability][0] + value.sales,
-        returnData[value.scode_probability][1] + value.sales_profit,
+      returnData[slist.scode_probability.data.id] = [
+        returnData[slist.scode_probability.data.id][0] + value.attributes.sales,
+        returnData[slist.scode_probability.data.id][1] +
+          value.attributes.sales_profit,
       ];
     }
   });

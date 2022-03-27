@@ -38,26 +38,30 @@ const CHANGE_MODE = 'sales/CHANGE_MODE';
 // sales 날짜 검색 기능
 const SET_STARTENDOFMONTH = 'sales/SET_STARTENDOFMONTH';
 
-export const getSalesList = (start, end, arg) => async (dispatch) => {
+// components/sales/SalesSubMenu 76,90
+// sales/SalesSubContainer 85, 150, 184
+export const getSalesList = (query) => async (dispatch) => {
   dispatch({ type: GET_SALESLIST }); //요청 시작을 알림
   dispatch(startLoading(GET_SALESLIST)); //loading true
   // 월 시작날짜, 마지막 날짜 구하기
-  let queryString;
-  const _start = moment(start).format('YYYY-MM');
-  const _end = moment(end).format('YYYY-MM');
-  const startEnd = calStartEndDayFromMonth(_start, _end);
-  const queayDefault = `sales_rec_date_gte=${startEnd[0]}&sales_rec_date_lte=${startEnd[1]}&deleted=false`;
-  if (!arg) {
-    queryString = queayDefault;
-  } else {
-    queryString = queayDefault + arg;
-  }
-  console.log('**getSalesList- queryString**', queryString);
+  // let queryString;
+  // const _start = moment(start).format('YYYY-MM');
+  // const _end = moment(end).format('YYYY-MM');
+  // const startEnd = calStartEndDayFromMonth(_start, _end);
+  // const queayDefault = `sales_rec_date_gte=${startEnd[0]}&sales_rec_date_lte=${startEnd[1]}&deleted=false`;
+
+  // if (!arg) {
+  //   queryString = queayDefault;
+  // } else {
+  //   queryString = queayDefault + arg;
+  // }
+
+  // console.log('**getSalesList- queryString**', query);
   try {
-    const response = await api.getSalesQueryString(queryString);
+    const response = await api.getSalesQueryString(query);
     dispatch({
       type: GET_SALESLIST_SUCCESS,
-      payload: response,
+      payload: response.data,
     }); // 요청성공
     dispatch(finishLoading(GET_SALESLIST)); // loading false
   } catch (error) {
@@ -99,6 +103,7 @@ export const getSalesParams =
   };
 
 // 전체 쿼리문을 인자로 받게 개선.중..
+// /sales/SalesStatisticsContainer.jsx 85:13-26
 export const getSalesQuery = (query) => async (dispatch) => {
   dispatch({ type: GET_SALESQUERY }); //요청 시작을 알림
   dispatch(startLoading(GET_SALESQUERY)); //loading true
@@ -141,11 +146,12 @@ export const getSalesStatistics = () => async (dispatch) => {
   }
 };
 
-export const getSalesId = (id) => async (dispatch) => {
+export const getSalesId = (query) => async (dispatch) => {
   dispatch({ type: GET_SALESID }); //요청 시작을 알림
   dispatch(startLoading(GET_SALESID)); //loading true
   try {
-    const response = await api.getSalesId(id);
+    // const response = await api.getSalesId(id);
+    const response = await api.getQueryString('api/sales-statuses', query);
     dispatch({
       type: GET_SALESID_SUCCESS,
       payload: response,
@@ -224,7 +230,7 @@ const sales = handleActions(
     // 영업현황 ID 가져오기 성공
     [GET_SALESID_SUCCESS]: (state, { payload }) => ({
       ...state,
-      detail: payload.data,
+      detail: payload.data.data[0],
     }),
     // 엽업현황 Id 가져오기 실패
     [GET_SALESID_FAILURE]: (state, { payload }) => ({

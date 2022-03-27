@@ -50,10 +50,10 @@ export const getCountProject = (path, query) =>
 // sales 코드북
 export const salesCodebook = () =>
   axios.all([
-    axios.get(`${API_URL}/scode-probabilities`),
-    axios.get(`${API_URL}/scode-divisions`),
-    axios.get(`${API_URL}/scode-items`),
-    axios.get(`${API_URL}/scode-teams`),
+    axios.get(`${API_URL}/api/scode-probabilities?populate=%2A`),
+    axios.get(`${API_URL}/api/scode-divisions?populate=%2A`),
+    axios.get(`${API_URL}/api/scode-items?populate=%2A`),
+    axios.get(`${API_URL}/api/scode-teams?populate=%2A`),
   ]);
 
 // 코드 진행상태 - code-progresses
@@ -82,7 +82,7 @@ export const getProjectListByMonth = (start, end) =>
 
 //getSalesId
 export const getSalesId = (id) =>
-  axios.get(`${API_URL}/sales-performances/${id}`);
+  axios.get(`${API_URL}/api/sales-statuses/${id}?populate=%2A`);
 
 // === getPathId
 export const getListPathId = (path, id) =>
@@ -130,8 +130,9 @@ export const getSalesParameter = (start, end, params) =>
 
 // sales 리스트 기간별 & 확률별 조회
 // projects?planStartDate_gte=2021-11-01&planStartDate_lte=2021-12-01
+// sales - getSalesList
 export const getSalesQueryString = (query) =>
-  axios.get(`${API_URL}/sales-performances?${query}`);
+  axios.get(`${API_URL}/api/sales-statuses?${query}`);
 
 // sales 리스트 기간별 조회
 // projects?planStartDate_gte=2021-11-01&planStartDate_lte=2021-12-01

@@ -27,7 +27,7 @@ const SalesListContainer = () => {
     }),
   );
 
-  console.log('saleslist', lists);
+  // console.log('saleslist', lists);
 
   // 삭제 예정 쿼리 방식 변경..
   // useEffect(() => {
@@ -58,27 +58,28 @@ const SalesListContainer = () => {
     const salesProfitData = [];
     // const summaryData = {};
     const data = lists.map((list, index) => {
+      const slist = list.attributes;
       // 매출, 매출이익, 마진 정보 가져오기, 가장 최근 입력 데이터 가져옴
-      const sales_profit = list.sales_profits[list.sales_profits.length - 1];
+      const sales_profit =
+        slist.sales_histories.data[slist.sales_histories.data.length - 1];
       salesProfitData.push(sales_profit);
       // 매출확률 %로 변환
-      const probability = ['0%', '50%', '70%', '90%', '100%'];
-      const scode_probability = parseInt(sales_profit.scode_probability);
+      // console.log('**sales_profit**', sales_profit);
       const array = {
         key: list.id,
         no: index + 1,
-        // probability: sales_profit.scode_probability,
-        probability: probability[scode_probability - 1],
-        customer: list.customer.name,
-        name: list.name,
-        division: list.scode_division.name,
-        item: list.scode_item.name,
-        team: list.scode_team.name,
-        confirmed: sales_profit.confirmed ? 'Yes' : 'No',
-        sales: sales_profit.sales.toLocaleString('ko-KR'),
-        profit: sales_profit.sales_profit.toLocaleString('ko-KR'),
-        margin: sales_profit.profit_margin,
-        sales_rec_date: sales_profit.sales_rec_date,
+        probability: slist.scode_probability.data.attributes.name,
+        // probability: probability[scode_probability - 1],
+        customer: slist.customer.data.attributes.name,
+        name: slist.name,
+        division: slist.scode_division.data.attributes.name,
+        item: slist.scode_item.data.attributes.name,
+        team: slist.scode_team.data.attributes.name,
+        confirmed: sales_profit.attributes.confirmed ? 'Yes' : 'No',
+        sales: sales_profit.attributes.sales.toLocaleString('ko-KR'),
+        profit: sales_profit.attributes.sales_profit.toLocaleString('ko-KR'),
+        margin: sales_profit.attributes.sales_margin,
+        sales_rec_date: sales_profit.attributes.sales_recdate,
       };
       return array;
     });
@@ -91,21 +92,22 @@ const SalesListContainer = () => {
     console.log('항목복사', id);
     try {
       const response = await api.getSalesId(id);
-      console.log('--response--', response.data);
-      const sales_profits = response.data.sales_profits;
+      const sdata = response.data.data.attributes;
+      console.log('--response--', sdata);
+      const sales_profits = sdata.sales_histories.data;
       const sales_profit = sales_profits[sales_profits.length - 1];
       const initValues = {
-        customer: response.data.customer.id,
-        sales_name: response.data.name,
-        probability: response.data.scode_probability.id,
-        division: response.data.scode_division.id,
-        item: response.data.scode_item.id,
-        team: response.data.scode_team.id,
+        customer: sdata.customer.data.id,
+        sales_name: sdata.name,
+        probability: sdata.scode_probability.data.id,
+        division: sdata.scode_division.data.id,
+        // item: sdata.scode_item.data.id,
+        team: sdata.scode_team.data.id,
         // sales_profit:
-        sales: sales_profit.sales,
-        sales_profit: sales_profit.sales_profit,
+        sales: sales_profit.attributes.sales,
+        sales_profit: sales_profit.attributes.sales_profit,
       };
-      if (response.data.confirmed) {
+      if (sdata.confirmed) {
         console.log('********');
         setSalesConfirmed(true);
       }
@@ -124,7 +126,7 @@ const SalesListContainer = () => {
   console.log('--1.salesConfirmed--', salesConfirmed);
 
   const infoSalesOnClick = (id) => {
-    console.log('info on click');
+    console.log('info on click', id);
     setInfoSalesVisible(true);
     setSalesId(id);
   };

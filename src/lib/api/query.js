@@ -248,6 +248,208 @@ export const qs_workListByUid = (uid) =>
 // sales
 // sales 날짜별 쿼리
 export const qs_salesByDate = (start, end) =>
-  qs.stringify({
-    //
-  });
+  qs.stringify(
+    {
+      filters: {
+        $and: [
+          {
+            sales_recdate: {
+              $gte: start,
+            },
+          },
+          {
+            sales_recdate: {
+              $lte: end,
+            },
+          },
+        ],
+      },
+      populate: {
+        fields: ['name', 'sales_recdate', 'count', 'confirmed', 'description'],
+        customer: {
+          fields: ['name'],
+        },
+        scode_division: {
+          fields: ['name'],
+        },
+        scode_item: {
+          fields: ['name'],
+        },
+        scode_team: {
+          fields: ['name'],
+        },
+        scode_probability: {
+          fields: ['name'],
+        },
+        sales_histories: {
+          fields: [
+            'sales',
+            'sales_profit',
+            'sales_margin',
+            'sales_recdate',
+            'paymentdate',
+            'confirmed',
+            'description',
+          ],
+        },
+      },
+      pagination: {
+        start: 0,
+        limit: 50,
+      },
+    },
+    {
+      encodeValuesOnly: true,
+    },
+  );
+
+//sales 항목 조회
+export const qs_salesBySid = (sid) =>
+  qs.stringify(
+    {
+      filters: {
+        id: {
+          $eq: sid,
+        },
+      },
+      // fields: ['name'],
+      populate: {
+        // fields: ['working_day', 'working_time', 'description'],
+        customer: {
+          fields: ['name'],
+        },
+        scode_division: {
+          fields: ['name'],
+        },
+        scode_item: {
+          fields: ['name'],
+        },
+        scode_team: {
+          fields: ['name'],
+        },
+        scode_probability: {
+          fields: ['name'],
+        },
+        sales_histories: {
+          populate: '*',
+          fields: [
+            'sales',
+            'sales_profit',
+            'sales_margin',
+            'sales_recdate',
+            'paymentdate',
+            'confirmed',
+            'description',
+          ],
+        },
+      },
+      pagination: {
+        start: 0,
+        limit: 50,
+      },
+    },
+    {
+      encodeValuesOnly: true,
+    },
+  );
+
+// sales 조건별.. 쿼리
+export const qs_salesAdvanced = (filters) =>
+  qs.stringify(
+    {
+      filters: filters,
+      // filters: {
+      //   $and: [
+      //     {
+      //       sales_recdate: {
+      //         $gte: start,
+      //       },
+      //     },
+      //     {
+      //       sales_recdate: {
+      //         $lte: end,
+      //       },
+      //     },
+      //     {
+      //       customer: {
+      //         id: {
+      //           $eq: cid,
+      //         },
+      //       },
+      //     },
+      //   ],
+      // },
+      populate: {
+        fields: ['name', 'sales_recdate', 'count', 'confirmed', 'description'],
+        customer: {
+          fields: ['name'],
+        },
+        scode_division: {
+          fields: ['name'],
+        },
+        scode_item: {
+          fields: ['name'],
+        },
+        scode_team: {
+          fields: ['name'],
+        },
+        scode_probability: {
+          fields: ['name'],
+        },
+        sales_histories: {
+          fields: [
+            'sales',
+            'sales_profit',
+            'sales_margin',
+            'sales_recdate',
+            'paymentdate',
+            'confirmed',
+          ],
+        },
+      },
+      pagination: {
+        start: 0,
+        limit: 50,
+      },
+    },
+    {
+      encodeValuesOnly: true,
+    },
+  );
+
+// sales 월별 통계용 쿼리
+export const qs_salesStatistics = (start, end) =>
+  qs.stringify(
+    {
+      filters: {
+        $and: [
+          {
+            sales_recdate: {
+              $gte: start,
+            },
+          },
+          {
+            sales_recdate: {
+              $lte: end,
+            },
+          },
+        ],
+      },
+      populate: {
+        fields: ['name', 'sales_recdate', 'count', 'confirmed'],
+        scode_probability: {
+          fields: ['name'],
+        },
+        sales_histories: {
+          fields: ['sales', 'sales_profit', 'confirmed'],
+        },
+      },
+      pagination: {
+        start: 0,
+        limit: 50,
+      },
+    },
+    {
+      encodeValuesOnly: true,
+    },
+  );
