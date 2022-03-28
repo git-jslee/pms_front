@@ -143,7 +143,7 @@ const SalesStatisticsTable = ({ sumValue, totalMonth, onClick }) => {
       key: '99',
       month: totalMonth[3],
       nnm_salesProjection: _nnm_999[0].toLocaleString('ko-KR'),
-      nnm_profitProjection: _nnm_999[0].toLocaleString('ko-KR'),
+      nnm_profitProjection: _nnm_999[1].toLocaleString('ko-KR'),
     },
     {
       key: '5',

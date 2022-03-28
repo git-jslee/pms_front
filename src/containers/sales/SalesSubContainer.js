@@ -20,9 +20,10 @@ const SalesSubContainer = () => {
     status: customerList.status,
     error: customerList.error,
   }));
-  const { probability, division, team } = useSelector(({ codebook }) => ({
+  const { probability, division, item, team } = useSelector(({ codebook }) => ({
     probability: codebook.sales.probability,
     division: codebook.sales.division,
+    item: codebook.sales.item,
     team: codebook.sales.team,
   }));
 
@@ -144,47 +145,88 @@ const SalesSubContainer = () => {
     const endMonth = moment(value.date[1]).format('YYYY-MM');
     const startEnd = calStartEndDayFromMonth(startMonth, endMonth);
     const cid = selectedCustomer;
+    const arg = [
+      {
+        sales_recdate: {
+          $gte: startEnd[0],
+        },
+      },
+      {
+        sales_recdate: {
+          $lte: startEnd[1],
+        },
+      },
+    ];
 
+    // if (selectedCustomer) {
+    //   filters = {
+    //     $and: [
+    //       {
+    //         sales_recdate: {
+    //           $gte: startEnd[0],
+    //         },
+    //       },
+    //       {
+    //         sales_recdate: {
+    //           $lte: startEnd[1],
+    //         },
+    //       },
+    //       {
+    //         customer: {
+    //           id: {
+    //             $eq: cid,
+    //           },
+    //         },
+    //       },
+    //     ],
+    //   };
+    // } else {
+    //   filters = {
+    //     $and: [
+    //       {
+    //         sales_recdate: {
+    //           $gte: startEnd[0],
+    //         },
+    //       },
+    //       {
+    //         sales_recdate: {
+    //           $lte: startEnd[1],
+    //         },
+    //       },
+    //     ],
+    //   };
+    // }
     if (selectedCustomer) {
-      filters = {
-        $and: [
-          {
-            sales_recdate: {
-              $gte: startEnd[0],
-            },
-          },
-          {
-            sales_recdate: {
-              $lte: startEnd[1],
-            },
-          },
-          {
-            customer: {
-              id: {
-                $eq: cid,
-              },
-            },
-          },
-        ],
-      };
-    } else {
-      filters = {
-        $and: [
-          {
-            sales_recdate: {
-              $gte: startEnd[0],
-            },
-          },
-          {
-            sales_recdate: {
-              $lte: startEnd[1],
-            },
-          },
-        ],
-      };
+      arg.push({
+        customer: {
+          id: { $eq: cid },
+        },
+      });
+    }
+    if (value.item) {
+      arg.push({
+        scode_item: {
+          id: { $eq: value.item },
+        },
+      });
+    } else if (value.division) {
+      arg.push({
+        scode_division: {
+          id: { $eq: value.division },
+        },
+      });
+    }
+    if (value.team) {
+      arg.push({
+        scode_team: {
+          id: { $eq: value.team },
+        },
+      });
     }
 
-    const query = qs_salesAdvanced(filters);
+    console.log('arg', arg);
+
+    const query = qs_salesAdvanced(arg);
     dispatch(getSalesList(query));
     // const startEndOfDay = startEndDay(start, end);
     // const queryDate = `sales_rec_date_gte=${startEndOfDay[0]}&sales_rec_date_lte=${startEndOfDay[1]}&deleted=false`;
@@ -230,6 +272,7 @@ const SalesSubContainer = () => {
           searchOnSubmit={advancedSearchOnsubmit}
           customers={customers}
           division={division}
+          item={item}
           team={team}
           customerOnSelect={customerOnSelect}
           resetSelectedCustomer={resetSelectedCustomer}

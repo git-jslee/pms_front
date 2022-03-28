@@ -232,7 +232,7 @@ const InfoSalesDrawerContainer = ({
       scode_probability: _probability,
       sales: values.sales,
       sales_profit: _profit,
-      profit_margin: _margin,
+      sales_margin: _margin,
       sales_recdate: moment(values.sales_rec_date)
         .format('YYYY-MM-DD')
         .toString(),
@@ -302,8 +302,9 @@ const InfoSalesDrawerContainer = ({
     console.log('^^^sales_profits^^^', sales_profits);
     const sales_profit = sales_profits[sales_profits.length - 1];
     const _payment_date = sales_profit.attributes.paymentdate
-      ? moment(sales_profit.paymentdate)
+      ? moment(sales_profit.attributes.paymentdate)
       : '';
+    console.log('^^^_payment_date^^^', _payment_date);
     const initialValues = {
       // SalesBasicUpdateForm
       sales_name: slist.attributes.name,
@@ -359,7 +360,7 @@ const InfoSalesDrawerContainer = ({
     confirm({
       title: 'Are you sure delete this item?',
       // icon: <ExclamationCircleOutlined />,
-      content: `[매출처 : ${slist.customer.name}], [건명 : ${slist.name}]`,
+      content: `[매출처 : ${slist.attributes.customer.data.attributes.name}], [건명 : ${slist.attributes.name}]`,
       okText: 'Yes',
       okType: 'danger',
       cancelText: 'No',
@@ -370,7 +371,7 @@ const InfoSalesDrawerContainer = ({
           deleted: true,
         };
         const result = await tbl_update(
-          'sales-performances',
+          'api/sales-statuses',
           slist.id,
           delete_data,
         );
@@ -382,21 +383,21 @@ const InfoSalesDrawerContainer = ({
       },
     });
   };
-  const onClickItemDelete = async () => {
-    console.log('매출항목 삭제', slist.id);
-    // const jwt = auth.jwt;
+  // const onClickItemDelete = async () => {
+  //   console.log('매출항목 삭제', slist.id);
+  //   // const jwt = auth.jwt;
 
-    const delete_data = {
-      deleted: true,
-    };
-    const result = await tbl_update(
-      'sales-performances',
-      slist.id,
-      delete_data,
-    );
-    console.log('항목삭제 성공', result);
-    navigate('/sales');
-  };
+  //   const delete_data = {
+  //     deleted: true,
+  //   };
+  //   const result = await tbl_update(
+  //     'sales-performances',
+  //     slist.id,
+  //     delete_data,
+  //   );
+  //   console.log('항목삭제 성공', result);
+  //   navigate('/sales');
+  // };
 
   console.log('slist', slist);
   console.log('2.infoSalesVisible', infoSalesVisible);

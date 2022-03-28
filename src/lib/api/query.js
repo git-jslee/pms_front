@@ -253,6 +253,11 @@ export const qs_salesByDate = (start, end) =>
       filters: {
         $and: [
           {
+            deleted: {
+              $eq: false,
+            },
+          },
+          {
             sales_recdate: {
               $gte: start,
             },
@@ -264,6 +269,7 @@ export const qs_salesByDate = (start, end) =>
           },
         ],
       },
+      sort: ['sales_recdate:asc'],
       populate: {
         fields: ['name', 'sales_recdate', 'count', 'confirmed', 'description'],
         customer: {
@@ -354,31 +360,14 @@ export const qs_salesBySid = (sid) =>
   );
 
 // sales 조건별.. 쿼리
-export const qs_salesAdvanced = (filters) =>
+export const qs_salesAdvanced = (arg) =>
   qs.stringify(
     {
-      filters: filters,
-      // filters: {
-      //   $and: [
-      //     {
-      //       sales_recdate: {
-      //         $gte: start,
-      //       },
-      //     },
-      //     {
-      //       sales_recdate: {
-      //         $lte: end,
-      //       },
-      //     },
-      //     {
-      //       customer: {
-      //         id: {
-      //           $eq: cid,
-      //         },
-      //       },
-      //     },
-      //   ],
-      // },
+      // filters: filters,
+      filters: {
+        $and: arg,
+      },
+      sort: ['sales_recdate:asc'],
       populate: {
         fields: ['name', 'sales_recdate', 'count', 'confirmed', 'description'],
         customer: {
@@ -423,6 +412,11 @@ export const qs_salesStatistics = (start, end) =>
     {
       filters: {
         $and: [
+          {
+            deleted: {
+              $eq: false,
+            },
+          },
           {
             sales_recdate: {
               $gte: start,

@@ -6,8 +6,12 @@ import sumSalesValueByMonth from '../../modules/sales/sumSalesValueByMonth';
 import moment from 'moment';
 import startEndDay from '../../modules/common/startEndDay';
 import { setStartEndOfMonth, setParams } from '../../modules/common';
-import { getSalesQuery } from '../../modules/sales';
-import { qs_salesByDate, qs_salesStatistics } from '../../lib/api/query';
+import { getSalesQuery, getSalesList } from '../../modules/sales';
+import {
+  qs_salesByDate,
+  qs_salesStatistics,
+  qs_salesAdvanced,
+} from '../../lib/api/query';
 
 const SalesStatisticsContainer = () => {
   const dispatch = useDispatch();
@@ -54,16 +58,82 @@ const SalesStatisticsContainer = () => {
   const onClick = (record) => {
     console.log('eeee', record);
     if (!record.month) return;
-    let queryString = '';
-    const queryDate = `**sales_rec_date_gte=${record.month[0]}&sales_rec_date_lte=${record.month[1]}&deleted=false`;
+
+    let filters = {};
     if (record.key === '99') {
-      queryString = queryDate + `&confirmed=true`;
+      const _confirmed = true;
+      filters = {
+        $and: [
+          {
+            deleted: {
+              $eq: false,
+            },
+          },
+          {
+            sales_recdate: {
+              $gte: record.month[0],
+            },
+          },
+          {
+            sales_recdate: {
+              $lte: record.month[1],
+            },
+          },
+          {
+            confirmed: {
+              $eq: _confirmed,
+            },
+          },
+        ],
+      };
     } else {
-      queryString =
-        queryDate + `&confirmed=false&scode_probability.id=${record.key}`;
+      const _confirmed = false;
+      filters = {
+        $and: [
+          {
+            deleted: {
+              $eq: false,
+            },
+          },
+          {
+            sales_recdate: {
+              $gte: record.month[0],
+            },
+          },
+          {
+            sales_recdate: {
+              $lte: record.month[1],
+            },
+          },
+          {
+            confirmed: {
+              $eq: _confirmed,
+            },
+          },
+          {
+            scode_probability: {
+              id: {
+                $eq: record.key,
+              },
+            },
+          },
+        ],
+      };
     }
-    const queryString1 = 'populate=%2A';
-    dispatch(getSalesQuery(queryString1));
+
+    const query = qs_salesAdvanced(filters);
+    dispatch(getSalesList(query));
+
+    // let queryString = '';
+    // const queryDate = `**sales_rec_date_gte=${record.month[0]}&sales_rec_date_lte=${record.month[1]}&deleted=false`;
+    // if (record.key === '99') {
+    //   queryString = queryDate + `&confirmed=true`;
+    // } else {
+    //   queryString =
+    //     queryDate + `&confirmed=false&scode_probability.id=${record.key}`;
+    // }
+    // const queryString1 = 'populate=%2A';
+    // dispatch(getSalesQuery(queryString1));
     // dispatch(setStartEndOfMonth(record.month));
     // dispatch(setParams({ type: 'scode_probability', key: record.key }));
   };

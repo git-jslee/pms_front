@@ -40,6 +40,7 @@ const SearchFormBlock = styled.div`
 const SalesAdvancedSearchForm = ({
   customers,
   division,
+  item,
   team,
   searchOnSubmit,
   customerOnSelect,
@@ -152,11 +153,11 @@ const SalesAdvancedSearchForm = ({
               <Form.Item name="item" label="매출품목">
                 <Select>
                   {divisionId
-                    ? division
+                    ? item
                         .filter((v) => {
-                          return v.id === divisionId;
-                        })[0]
-                        .item.map((list, index) => {
+                          return v.division === divisionId;
+                        })
+                        .map((list, index) => {
                           return (
                             <Select.Option key={index} value={list.id}>
                               {list.name}

@@ -144,7 +144,7 @@ const InfoSalesDrawerForm = ({
             {salesList.customer.data.attributes.name}
           </Descriptions.Item>
           <Descriptions.Item label="매출확정여부">
-            {sales_profit.confirmed ? 'Yes' : 'No'}
+            {salesList.confirmed ? 'Yes' : 'No'}
           </Descriptions.Item>
           <Descriptions.Item label="건 명" span={2}>
             {salesList.name}
