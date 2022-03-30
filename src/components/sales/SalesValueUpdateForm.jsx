@@ -32,6 +32,7 @@ const SalesValueUpdateForm = ({
   profitMarginValue,
   checked,
   onChangeSwitch,
+  btnDisabled,
 }) => {
   // const sales_profits = slist.sales_profits;
 
@@ -191,7 +192,12 @@ const SalesValueUpdateForm = ({
         </Row>
         <Col offset={0}>
           <Form.Item>
-            <Button id="submit-button" size="large" htmlType="submit">
+            <Button
+              id="submit-button"
+              size="large"
+              htmlType="submit"
+              disabled={btnDisabled}
+            >
               Update
             </Button>
           </Form.Item>

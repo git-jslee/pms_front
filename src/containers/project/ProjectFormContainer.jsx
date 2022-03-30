@@ -15,6 +15,8 @@ import { tbl_insert } from '../../modules/common/tbl_crud';
 
 const ProjectFormContainer = () => {
   const navigate = useNavigate();
+  // 중복Submit 방지
+  const [btnDisabled, setBtnDisabled] = useState(false);
   const [customers, setCustomers] = useState('');
   const dispatch = useDispatch();
   const {
@@ -87,6 +89,7 @@ const ProjectFormContainer = () => {
 
   // 프로젝트 등록 기능 구현//redux 사용 안함
   const onSubmit = async (values) => {
+    setBtnDisabled(true);
     // const jwt = auth.jwt;
     // console.log('onSubmit-values', values);
     const startDate = values.startDate || '';
@@ -127,7 +130,7 @@ const ProjectFormContainer = () => {
     });
 
     // console.log('2. tasks', test2);
-
+    setBtnDisabled(false);
     navigate('/project');
   };
   console.log({
@@ -149,6 +152,7 @@ const ProjectFormContainer = () => {
           tasks={tasks}
           onChange={onChange}
           onSubmit={onSubmit}
+          btnDisabled={btnDisabled}
         />
       ) : (
         <h1>로그인 하세요</h1>

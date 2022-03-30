@@ -16,6 +16,7 @@ import projectlist from '../../modules/projectList';
 
 const AddWorkForm = ({
   customers,
+  btnDisabled,
   // user,
   projectList,
   tasklist,
@@ -191,7 +192,12 @@ const AddWorkForm = ({
         </Form.Item>
         <Divider />
         <Form.Item>
-          <Button id="submit-button" size="large" htmlType="submit">
+          <Button
+            id="submit-button"
+            size="large"
+            htmlType="submit"
+            disabled={btnDisabled}
+          >
             Submit
           </Button>
         </Form.Item>

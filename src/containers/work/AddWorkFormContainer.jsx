@@ -14,6 +14,8 @@ import { tbl_insert, tbl_update } from '../../modules/common/tbl_crud';
 
 const AddWorkFormContainer = () => {
   const navigate = useNavigate();
+  // 중복Submit 방지
+  const [btnDisabled, setBtnDisabled] = useState(false);
   const [customers, setCustomers] = useState('');
   const [projectList, setProjectList] = useState('');
   const [tasks, setTasks] = useState('');
@@ -97,6 +99,7 @@ const AddWorkFormContainer = () => {
 
   // onSubmit
   const onSubmit = async (values) => {
+    setBtnDisabled(true);
     const work_data = {
       customer: values.customer,
       project: values.project,
@@ -117,6 +120,7 @@ const AddWorkFormContainer = () => {
 
     const work_insert = await tbl_insert('works', work_data);
     console.log('작업 등록 성공', work_insert);
+    setBtnDisabled(false);
     navigate('/work');
   };
 
@@ -126,6 +130,7 @@ const AddWorkFormContainer = () => {
       {customers && auth ? (
         <AddWorkForm
           customers={customers}
+          btnDisabled={btnDisabled}
           // userinfo={auth.user.user_info}
           projectList={projectList}
           customerOnChange={customerOnChange}

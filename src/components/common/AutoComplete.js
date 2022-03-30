@@ -64,6 +64,8 @@ const AutoCompleteBlock = styled.div`
 const AutoComplete = ({ lists }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  // 중복Submit 방지
+  const [btnDisabled, setBtnDisabled] = useState(false);
   const [text, setText] = useState('');
   const [suggestions, setSuggestions] = useState([]);
   const [visible, setVisible] = useState(false);
@@ -102,6 +104,7 @@ const AutoComplete = ({ lists }) => {
   };
 
   const onSubmit = async (values) => {
+    setBtnDisabled(true);
     console.log('고객등록-onSubmit..', values);
     // const jwt = auth.jwt;
     const customer_data = {
@@ -122,6 +125,7 @@ const AutoComplete = ({ lists }) => {
     } catch (error) {
       console.log('고객등록 에러', error);
     }
+    setBtnDisabled(false);
   };
 
   return (
@@ -241,7 +245,7 @@ const AutoComplete = ({ lists }) => {
               </Form.Item>
             </Col>
           </Row>
-          <Button type="primary" htmlType="submit">
+          <Button type="primary" htmlType="submit" disabled={btnDisabled}>
             Submit
           </Button>
         </Form>

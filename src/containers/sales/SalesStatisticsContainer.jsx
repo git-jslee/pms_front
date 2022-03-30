@@ -59,69 +59,65 @@ const SalesStatisticsContainer = () => {
     console.log('eeee', record);
     if (!record.month) return;
 
-    let filters = {};
+    let arg = {};
     if (record.key === '99') {
       const _confirmed = true;
-      filters = {
-        $and: [
-          {
-            deleted: {
-              $eq: false,
-            },
+      arg = [
+        {
+          deleted: {
+            $eq: false,
           },
-          {
-            sales_recdate: {
-              $gte: record.month[0],
-            },
+        },
+        {
+          sales_recdate: {
+            $gte: record.month[0],
           },
-          {
-            sales_recdate: {
-              $lte: record.month[1],
-            },
+        },
+        {
+          sales_recdate: {
+            $lte: record.month[1],
           },
-          {
-            confirmed: {
-              $eq: _confirmed,
-            },
+        },
+        {
+          confirmed: {
+            $eq: _confirmed,
           },
-        ],
-      };
+        },
+      ];
     } else {
       const _confirmed = false;
-      filters = {
-        $and: [
-          {
-            deleted: {
-              $eq: false,
+      arg = [
+        {
+          deleted: {
+            $eq: false,
+          },
+        },
+        {
+          sales_recdate: {
+            $gte: record.month[0],
+          },
+        },
+        {
+          sales_recdate: {
+            $lte: record.month[1],
+          },
+        },
+        {
+          confirmed: {
+            $eq: _confirmed,
+          },
+        },
+        {
+          scode_probability: {
+            id: {
+              $eq: record.key,
             },
           },
-          {
-            sales_recdate: {
-              $gte: record.month[0],
-            },
-          },
-          {
-            sales_recdate: {
-              $lte: record.month[1],
-            },
-          },
-          {
-            confirmed: {
-              $eq: _confirmed,
-            },
-          },
-          {
-            scode_probability: {
-              id: {
-                $eq: record.key,
-              },
-            },
-          },
-        ],
-      };
+        },
+      ];
     }
 
-    const query = qs_salesAdvanced(filters);
+    const query = qs_salesAdvanced(arg);
     dispatch(getSalesList(query));
 
     // let queryString = '';

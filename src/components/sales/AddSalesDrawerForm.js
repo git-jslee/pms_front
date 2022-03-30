@@ -38,6 +38,7 @@ const AddSalesDrawerForm = ({
   onSubmit,
   initialValues,
   salesConfirmed,
+  btnDisabled,
 }) => {
   console.log('--initValues', initialValues);
   console.log('--salesConfirmed', salesConfirmed);
@@ -320,7 +321,7 @@ const AddSalesDrawerForm = ({
             </Col>
           </Row>
 
-          <Button type="primary" htmlType="submit">
+          <Button type="primary" htmlType="submit" disabled={btnDisabled}>
             Submit
           </Button>
         </Form>

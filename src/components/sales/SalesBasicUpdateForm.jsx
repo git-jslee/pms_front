@@ -24,6 +24,7 @@ const SalesBasicUpdateForm = ({
   customer,
   codebook,
   onSubmitBasic,
+  btnDisabled,
 }) => {
   const [divisionId, setDivisionId] = useState(initialValues.division);
   const division = codebook.division;
@@ -71,7 +72,12 @@ const SalesBasicUpdateForm = ({
           </Col>
           <Col offset={5}>
             <Form.Item>
-              <Button id="submit-button" size="large" htmlType="submit">
+              <Button
+                id="submit-button"
+                size="large"
+                htmlType="submit"
+                disabled={btnDisabled}
+              >
                 Update
               </Button>
             </Form.Item>

@@ -50,6 +50,8 @@ const ProjectViewContainer = () => {
   const { mode } = useSelector(({ common }) => ({
     mode: common.mode,
   }));
+  // 중복Submit 방지
+  const [btnDisabled, setBtnDisabled] = useState(false);
 
   // 코드북 수정
   // 코드북 가져오기
@@ -135,7 +137,8 @@ const ProjectViewContainer = () => {
 
   //onSubmit -> Update
   const onSubmit = async (values) => {
-    console.log('1.onsubmit', values);
+    setBtnDisabled(true);
+    console.log('1--.onsubmit', values);
     // const jwt = auth.jwt;
     const _startDate = values.startDate ? moment(values.startDate) : null;
     const _endDate = values.endDate ? moment(values.endDate) : null;
@@ -155,6 +158,7 @@ const ProjectViewContainer = () => {
 
     dispatch(getProjectId(id));
     dispatch(changeMode({ mode: 'VIEW' }));
+    setBtnDisabled(false);
   };
 
   //UpdateForm
@@ -180,6 +184,7 @@ const ProjectViewContainer = () => {
           code_statuses={code_statuses.data}
           initialValues={initialValues}
           onSubmit={onSubmit}
+          btnDisabled={btnDisabled}
         />
       </>
     );

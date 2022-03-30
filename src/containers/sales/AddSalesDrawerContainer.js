@@ -23,6 +23,8 @@ const AddSalesDrawerContainer = ({
     codebook: codebook.sales,
     customer: customerList.data,
   }));
+  // 중복Submit 방지
+  const [btnDisabled, setBtnDisabled] = useState(false);
 
   const { customerid } = useSelector(({ common }) => ({
     customerid: common.customerid,
@@ -107,6 +109,7 @@ const AddSalesDrawerContainer = ({
   // sales 테이블 insert
   //sales-performances, /sales-profits
   const onSubmit = async (values) => {
+    setBtnDisabled(true);
     console.log('onSubmit', values);
     let _profit;
     let _margin;
@@ -153,6 +156,8 @@ const AddSalesDrawerContainer = ({
     const result2 = await tbl_insert('api/sales-histories', profit_data);
     console.log('2. api/sales-histories', result2.data);
     // navigate('/sales');
+    setAddSalesVisible(false);
+    setBtnDisabled(false);
   };
 
   const onChangeSwitch = (e) => {
@@ -201,6 +206,7 @@ const AddSalesDrawerContainer = ({
             radioValue={radioValue}
             profitMarginValue={profitMarginValue}
             salesConfirmed={salesConfirmed}
+            btnDisabled={btnDisabled}
           />
         </>
       ) : (

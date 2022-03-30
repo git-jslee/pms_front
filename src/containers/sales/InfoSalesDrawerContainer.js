@@ -23,6 +23,8 @@ const InfoSalesDrawerContainer = ({
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  // 중복Submit 방지
+  const [btnDisabled, setBtnDisabled] = useState(false);
   const [tableData, setTableData] = useState();
   const { customer, codebook } = useSelector(({ codebook, customerList }) => ({
     codebook: codebook.sales,
@@ -196,6 +198,7 @@ const InfoSalesDrawerContainer = ({
 
   // 매출항목 매출수정 update 시
   const onSubmit = async (values) => {
+    setBtnDisabled(true);
     console.log('onSubmit', values);
     let _profit;
     let _margin;
@@ -249,11 +252,13 @@ const InfoSalesDrawerContainer = ({
         editmode: false,
       }),
     );
+    setBtnDisabled(false);
     // navigate(`/sales/${id}`);
   };
 
   // 매출항목 기본정보 update 시
   const onSubmitBasic = async (values) => {
+    setBtnDisabled(true);
     console.log('onSubmitBasic', values);
     const basic_data = {
       name: values.sales_name,
@@ -273,6 +278,7 @@ const InfoSalesDrawerContainer = ({
         editmode: false,
       }),
     );
+    setBtnDisabled(false);
     // navigate(`/sales/${id}`);
   };
 
@@ -341,6 +347,7 @@ const InfoSalesDrawerContainer = ({
               profitMarginOnchange={profitMarginOnchange}
               checked={checked}
               onChangeSwitch={onChangeSwitch}
+              btnDisabled={btnDisabled}
             />
           </>
         ) : (
@@ -349,6 +356,7 @@ const InfoSalesDrawerContainer = ({
             customer={customer}
             codebook={codebook}
             onSubmitBasic={onSubmitBasic}
+            btnDisabled={btnDisabled}
           />
         )}
       </>

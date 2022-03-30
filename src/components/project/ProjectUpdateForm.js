@@ -11,9 +11,15 @@ import {
   DatePicker,
 } from 'antd';
 
-const ProjectUpdateForm = ({ initialValues, code_statuses, onSubmit }) => {
+const ProjectUpdateForm = ({
+  initialValues,
+  code_statuses,
+  onSubmit,
+  btnDisabled,
+}) => {
   console.log('initialValues', initialValues);
   console.log('code-status', code_statuses);
+  console.log('====btnDisabled====', btnDisabled);
   return (
     <>
       <Divider />
@@ -91,7 +97,12 @@ const ProjectUpdateForm = ({ initialValues, code_statuses, onSubmit }) => {
         </Col>
         <Col offset={4}>
           <Form.Item>
-            <Button id="submit-button" size="large" htmlType="submit">
+            <Button
+              id="submit-button"
+              size="large"
+              htmlType="submit"
+              disabled={btnDisabled}
+            >
               Update
             </Button>
           </Form.Item>

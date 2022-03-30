@@ -39,6 +39,7 @@ const ProjectFormView = ({
   customers,
   onChange,
   onSubmit,
+  btnDisabled,
 }) => {
   const [componentSize, setComponentSize] = useState('default');
   const [service, setService] = useState();
@@ -201,7 +202,12 @@ const ProjectFormView = ({
           <Input.TextArea size="large" id="description" />
         </Form.Item>
         <Form.Item>
-          <Button id="submit-button" size="large" htmlType="submit">
+          <Button
+            id="submit-button"
+            size="large"
+            htmlType="submit"
+            disabled={btnDisabled}
+          >
             Submit
           </Button>
         </Form.Item>

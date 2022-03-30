@@ -25,6 +25,7 @@ const DrawerBlock = styled.div`
 const AddWorkDrawerForm = ({
   customers,
   progress,
+  btnDisabled,
   customerOnChange,
   projectList,
   projectOnChange,
@@ -190,7 +191,7 @@ const AddWorkDrawerForm = ({
             </Row>
             <Row gutter={16}>
               <Col>
-                <Button type="primary" htmlType="submit">
+                <Button type="primary" htmlType="submit" disabled={btnDisabled}>
                   Submit
                 </Button>
               </Col>

@@ -37,6 +37,7 @@ const AddSalesPerformanceForm = ({
   profitMarginValue,
   checked,
   onChangeSwitch,
+  btnDisabled,
 }) => {
   // if (divisionId) {
   //   console.log('>>>', division);
@@ -310,7 +311,12 @@ const AddSalesPerformanceForm = ({
         </Col>
         <Col offset={4}>
           <Form.Item>
-            <Button id="submit-button" size="large" htmlType="submit">
+            <Button
+              id="submit-button"
+              size="large"
+              htmlType="submit"
+              disabled={btnDisabled}
+            >
               Submit
             </Button>
           </Form.Item>

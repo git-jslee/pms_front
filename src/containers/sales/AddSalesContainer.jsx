@@ -11,7 +11,8 @@ import AutoComplete from '../../components/common/AutoComplete';
 
 const AddSalesContainer = () => {
   const navigate = useNavigate();
-
+  // 중복Submit 방지
+  const [btnDisabled, setBtnDisabled] = useState(false);
   const [divisionId, setDivisionId] = useState(null);
   const [radioValue, setRadioValue] = useState(true);
   const [salesValue, setSalesValue] = useState(null);
@@ -95,6 +96,7 @@ const AddSalesContainer = () => {
   // sales 테이블 insert
   //sales-performances, /sales-profits
   const onSubmit = async (values) => {
+    setBtnDisabled(true);
     console.log('onSubmit', values);
     let _profit;
     let _margin;
@@ -140,6 +142,7 @@ const AddSalesContainer = () => {
     console.log('1-1. sprofit_data', profit_data);
     const result2 = await tbl_insert('api/sales-histories', profit_data);
     console.log('2. sales-profits', result2.data);
+    setBtnDisabled(false);
     navigate('/sales');
   };
 
@@ -183,6 +186,7 @@ const AddSalesContainer = () => {
             profitMarginValue={profitMarginValue}
             checked={checked}
             onChangeSwitch={onChangeSwitch}
+            btnDisabled={btnDisabled}
           />
         </>
       ) : (

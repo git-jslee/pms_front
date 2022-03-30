@@ -9,6 +9,8 @@ import { qs_projectList, qs_projectByCid } from '../../lib/api/query';
 
 const AddWorkDrawerContainer = () => {
   const dispatch = useDispatch();
+  // 중복Submit 방지
+  const [btnDisabled, setBtnDisabled] = useState(false);
   const [visible, setVisible] = useState(false);
   const [customers, setCustomers] = useState('');
   //   const [customerid, setCustomerid] = useState('');
@@ -131,6 +133,7 @@ const AddWorkDrawerContainer = () => {
 
   // 5. onSubmit
   const onSubmit = async (values) => {
+    setBtnDisabled(true);
     const work_data = {
       customer: values.customer,
       project: values.project,
@@ -156,6 +159,7 @@ const AddWorkDrawerContainer = () => {
     const work_insert = await tbl_insert('api/works', work_data);
     console.log('작업 등록 성공', work_insert);
     setVisible(false);
+    setBtnDisabled(false);
     setResetfields(true);
     // 아래 개선필요..화면깜빡임
     dispatch(set_worker({ userInfoId: 0 }));
@@ -167,6 +171,7 @@ const AddWorkDrawerContainer = () => {
       <AddWorkDrawerForm
         showDrawer={showDrawer}
         customers={customers}
+        btnDisabled={btnDisabled}
         customerOnChange={customerOnChange}
         projectList={projectList}
         projectOnChange={projectOnChange}
