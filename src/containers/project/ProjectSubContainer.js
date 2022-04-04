@@ -112,7 +112,9 @@ const ProjectSubContainer = () => {
 
   const subMenuForm = () => {
     if (subMenu === 'menu1') {
-      return <ProjectCountForm count={count} />;
+      return (
+        <ProjectCountForm count={count} countFormOnclick={countFormOnclick} />
+      );
     } else if (subMenu === 'menu2') {
       return (
         <SubWorkStatistics
@@ -127,6 +129,12 @@ const ProjectSubContainer = () => {
     } else {
       <h1>...</h1>;
     }
+  };
+
+  const countFormOnclick = (code_status_id) => {
+    console.log('count Form OnClick - ', code_status_id);
+    const query = qs_projectList(code_status_id);
+    dispatch(getProject(query));
   };
 
   const reload = () => {

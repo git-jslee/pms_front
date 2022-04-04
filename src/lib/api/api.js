@@ -30,7 +30,7 @@ export const apiCodebook = () =>
     // axios.get(`${API_URL}/customers`),
     axios.get(`${API_URL}/api/code-services`),
     axios.get(`${API_URL}/api/code-statuses`),
-    axios.get(`${API_URL}/api/code-tasks?populate=%2A`),
+    axios.get(`${API_URL}/api/code-tasks?populate=%2A&pagination[pageSize]=50`),
   ]);
 
 // strapi v4 --->

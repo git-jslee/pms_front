@@ -13,7 +13,9 @@ import {
   Row,
   Col,
   Empty,
+  Space,
 } from 'antd';
+import { MinusCircleOutlined } from '@ant-design/icons';
 
 const FormBox = styled.div`
   position: relative;
@@ -190,6 +192,7 @@ const ProjectFormView = ({
                     {/* <InputNumber /> */}
                     <InputNumber addonAfter="일" />
                   </Form.Item>
+                  {/* <MinusCircleOutlined /> */}
                 </Col>
               );
             })
