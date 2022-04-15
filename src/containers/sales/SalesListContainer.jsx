@@ -101,11 +101,13 @@ const SalesListContainer = () => {
         sales_name: sdata.name,
         probability: sdata.scode_probability.data.id,
         division: sdata.scode_division.data.id,
-        // item: sdata.scode_item.data.id,
+        item: sdata.scode_item.data.id,
         team: sdata.scode_team.data.id,
         // sales_profit:
         sales: sales_profit.attributes.sales,
         sales_profit: sales_profit.attributes.sales_profit,
+        description: sdata.description,
+        memo: sales_profit.attributes.description,
       };
       if (sdata.confirmed) {
         console.log('********');

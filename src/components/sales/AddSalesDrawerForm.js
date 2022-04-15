@@ -48,7 +48,7 @@ const AddSalesDrawerForm = ({
   const item = codebook.item;
   const team = codebook.team;
   const probability = codebook.probability;
-  console.log('codebook', codebook);
+  console.log('initialValues', initialValues);
 
   const onChangeDivision = (e) => {
     console.log('division change', e);
