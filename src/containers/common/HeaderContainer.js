@@ -4,10 +4,10 @@ import { useSelector, useDispatch } from 'react-redux';
 import Header from '../../components/common/Header';
 import { logout } from '../../modules/auth';
 
-const HeaderContainer = () => {
-  const { user, title } = useSelector(({ auth, common }) => ({
+const HeaderContainer = ({ title }) => {
+  const { user } = useSelector(({ auth, common }) => ({
     user: auth.auth,
-    title: common.title,
+    // title: common.title,
   }));
   const dispatch = useDispatch();
   const navigate = useNavigate();

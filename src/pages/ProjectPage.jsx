@@ -10,7 +10,7 @@ import ProjectSubContainer from '../containers/project/ProjectSubContainer';
 const ProjectPage = () => {
   return (
     <>
-      <HeaderContainer />
+      <HeaderContainer title="프로젝트" />
       <SiteHeader />
       <FormTemplate>
         <ProjectSubContainer />

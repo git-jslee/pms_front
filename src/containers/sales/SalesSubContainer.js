@@ -147,6 +147,11 @@ const SalesSubContainer = () => {
     const cid = selectedCustomer;
     const arg = [
       {
+        deleted: {
+          $eq: false,
+        },
+      },
+      {
         sales_recdate: {
           $gte: startEnd[0],
         },

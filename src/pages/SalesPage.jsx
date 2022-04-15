@@ -17,7 +17,7 @@ const SalesPage = () => {
 
   return (
     <>
-      <HeaderContainer />
+      <HeaderContainer title="매출현황" />
       <SiteHeader />
       <SalesCodebookContainer />
       <FormTemplate>

@@ -12,7 +12,7 @@ import AddWorkDrawerContainer from '../containers/work/AddWorkDrawerContainer';
 const WorkFormPage = () => {
   return (
     <>
-      <HeaderContainer />
+      <HeaderContainer title="작업현황" />
       <SiteHeader />
       <CodeBookContainer />
       <FormTemplate>

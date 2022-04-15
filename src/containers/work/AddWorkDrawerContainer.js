@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
+import 'moment-timezone';
 import { useDispatch, useSelector } from 'react-redux';
 import * as api from '../../lib/api/api';
 import { tbl_insert, tbl_update } from '../../modules/common/tbl_crud';
@@ -138,14 +139,14 @@ const AddWorkDrawerContainer = () => {
       customer: values.customer,
       project: values.project,
       project_task: values.project_task,
-      working_day: moment(values.workingDay),
+      working_day: moment(values.workingDay).tz('Asia/Seoul'),
       working_time: parseInt(values.workingTime),
       code_progress: values.code_progress,
       users_permissions_user: auth.user.id,
       description: values.description,
     };
     const pjt_data = {
-      last_workupdate: moment(values.workingDay),
+      last_workupdate: moment(values.workingDay).tz('Asia/Seoul'),
     };
     // 프로젝트 작업등로 시간 업데이트
     const pjtUpdate = await tbl_update(

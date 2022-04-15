@@ -9,7 +9,7 @@ import CustomerListContainer from '../containers/customer/CustomerListContainer'
 const CustomerPage = () => {
   return (
     <>
-      <HeaderContainer />
+      <HeaderContainer title="고객관리" />
       <SiteHeader />
       <FormTemplate>
         <h1>고객정보 페이지</h1>
