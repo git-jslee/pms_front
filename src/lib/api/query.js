@@ -447,3 +447,52 @@ export const qs_salesStatistics = (start, end) =>
       encodeValuesOnly: true,
     },
   );
+
+// 유지보수&프로젝트 - 사용중 고객사 정보 가져오기
+export const qs_customerByUsed = (arg) =>
+  qs.stringify(
+    {
+      filters: arg,
+      fields: ['id'],
+      populate: {
+        customer: {
+          fields: ['name'],
+        },
+      },
+      pagination: {
+        start: 0,
+        limit: 100,
+      },
+    },
+    {
+      encodeValuesOnly: true,
+    },
+  );
+
+// 유지보수 - 고객사 ID 에 해당하는 정보
+export const qs_maintenanceByCid = (cid) =>
+  qs.stringify({
+    filters: {
+      $and: [
+        {
+          customer: {
+            id: {
+              $eq: cid,
+            },
+          },
+        },
+        {
+          used: true,
+        },
+      ],
+    },
+    fields: ['title', 'contracted'],
+    // populate: {
+    //   scode_item: {
+    //     fields: ['name'],
+    //   },
+    //   scode_team: {
+    //     fields: ['name'],
+    //   },
+    // },
+  });

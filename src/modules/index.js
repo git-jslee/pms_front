@@ -12,6 +12,7 @@ import work from './work';
 import sales from './sales';
 import common from './common';
 import customer from './customer';
+import apiGetList from './apiGetList';
 
 const rootReducer = combineReducers({
   auth,
@@ -26,6 +27,7 @@ const rootReducer = combineReducers({
   sales,
   common,
   customer,
+  apiGetList,
 });
 
 export default rootReducer;

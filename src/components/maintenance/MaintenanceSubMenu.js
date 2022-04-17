@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Button } from 'antd';
 import { RedoOutlined } from '@ant-design/icons';
@@ -17,7 +17,7 @@ const MaintenanceSubMenu = ({ onClickSub, reload }) => {
       <SubMenuBlock>
         <Button onClick={() => onClickSub('menu1')}>등록</Button>
         {/* <Button onClick={() => onClickSub('menu1')}>Count</Button> */}
-        <Button onClick={() => onClickSub('menu2')}>통계</Button>
+        <Button onClick={() => onClickSub('menu2')}>현황</Button>
         <Button onClick={() => onClickSub('menu3')}>조회</Button>
 
         <div className="search">
