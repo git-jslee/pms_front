@@ -101,8 +101,8 @@ const AddMainDrawerForm = ({
                       onChange={onClickIncome}
                       buttonStyle="solid"
                     >
-                      <Radio.Button value="income">수입</Radio.Button>
-                      <Radio.Button value="expenditure">지출</Radio.Button>
+                      <Radio.Button value="income">매출</Radio.Button>
+                      <Radio.Button value="expenditure">매입</Radio.Button>
                     </Radio.Group>
                     {/* </Form.Item> */}
                   </Col>

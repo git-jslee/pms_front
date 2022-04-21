@@ -208,7 +208,7 @@ const AddMainDrawerContainer = ({ visible, setVisible }) => {
           warranty_to: value.service_date[1],
           payment_date: value.payment_date,
           cost: value.cost,
-          cost_m: cost,
+          cost_m: Math.round(cost),
           memo: value.memo,
         };
         console.log('create_data', create_data);
@@ -232,7 +232,7 @@ const AddMainDrawerContainer = ({ visible, setVisible }) => {
           warranty_to: value.service_date[1],
           payment_date: value.payment_date,
           cost: value.cost * -1,
-          cost_m: cost * -1,
+          cost_m: Math.round(cost * -1),
           memo: value.memo,
         };
         console.log('create_data', create_data);

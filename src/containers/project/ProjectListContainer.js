@@ -9,7 +9,7 @@ import * as api from '../../lib/api/api';
 import { startLoading, finishLoading } from '../../modules/loading';
 import calWorkTime from '../../modules/project/calWorkTime';
 import { weekOfMonth } from '../../modules/common/weekOfMonth';
-import { qs_projectList } from '../../lib/api/query';
+import { qs_projectList, qs_workListAll } from '../../lib/api/query';
 
 const ProjectListContainer = () => {
   const dispatch = useDispatch();
@@ -24,6 +24,7 @@ const ProjectListContainer = () => {
   const { wlist } = useSelector(({ project }) => ({
     wlist: project.wlist,
   }));
+  const [totalWorkTime, setTotalWorktime] = useState([]);
 
   // const { startMonth, endMonth } = useSelector(({ common }) => ({
   //   startMonth: common.month[0],
@@ -39,7 +40,32 @@ const ProjectListContainer = () => {
     const code_status_id = 2;
     const query = qs_projectList(code_status_id);
     dispatch(getProject(query));
+
+    ////
+    calTotalWorkTime();
   }, []);
+
+  const calTotalWorkTime = async () => {
+    const result = [];
+    const statusId = 2;
+    let start = 0;
+    const limit = 50;
+    const query = qs_workListAll(statusId, start, limit);
+    const request = await api.getQueryString('api/works', query);
+    result.push(...request.data.data);
+    // console.log('-----request-----', request.data);
+    const total = request.data.meta.pagination.total;
+    for (start = start + limit; start <= total; start += limit) {
+      const query = qs_workListAll(statusId, start, limit);
+      const request = await api.getQueryString('api/works', query);
+      result.push(...request.data.data);
+      // console.log('-----request-----', start, '--', request.data);
+    }
+    console.log('-----result------', result);
+    const worktime = calWorkTime(result);
+    console.log('--calworktime--', worktime);
+    setTotalWorktime(worktime);
+  };
 
   // 작업통계 기능 projectSubContainer 통합필요..
   const [worktime, setWorktime] = useState([]);
@@ -95,29 +121,36 @@ const ProjectListContainer = () => {
     if (lists) {
       console.log('**list**', lists);
       const tableList = lists.map((list, index) => {
-        const duration = moment().diff(moment(list.startDate), 'days');
-        const _worktime = worktime.filter((v) => v.id === list.id)[0];
-        console.log('**worktime**', index, _worktime);
+        const elapsed = moment().diff(
+          moment(list.attributes.startdate),
+          'days',
+        );
+        const elapsed_last = moment().diff(
+          moment(list.attributes.last_workupdate),
+          'days',
+        );
+        const _totalworktime = totalWorkTime.filter((v) => v.id === list.id)[0];
+        console.log('**worktime**', index, _totalworktime);
         const array = {
           key: list.id,
           no: index + 1,
-          // type: list.code_type.name,
           customer: list.attributes.customer.data.attributes.name,
           name: list.attributes.name,
           service: list.attributes.code_service.data.attributes.name,
           status: list.attributes.code_status.data.attributes.name,
           startdate: list.attributes.startdate,
           lastUpdate: list.attributes.last_workupdate,
-          duration: duration,
-          // worktime: _worktime !== undefined ? _worktime.worktime : '',
+          elapsed: elapsed,
+          elapsed_last: elapsed_last,
+          totaltime:
+            _totalworktime !== undefined ? _totalworktime.worktime : '',
           action: 'View',
         };
         return array;
       });
-      // tableData = tableList;
       setTableData(tableList);
     }
-  }, [lists, worktime]);
+  }, [lists, totalWorkTime]);
 
   console.log('tableList', tableData);
 

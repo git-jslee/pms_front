@@ -44,10 +44,10 @@ const ProjectListTable = ({ tableData, loading }) => {
     },
     {
       title: '경과일',
-      key: 'duration',
-      dataIndex: 'duration',
+      key: 'elapsed',
+      dataIndex: 'elapsed',
       align: 'right',
-      sorter: (a, b) => a.duration - b.duration,
+      sorter: (a, b) => a.elapsed - b.elapsed,
     },
     {
       title: '최근작업일',
@@ -56,9 +56,16 @@ const ProjectListTable = ({ tableData, loading }) => {
       align: 'center',
     },
     {
-      title: '시간(기간)',
-      key: 'worktime',
-      dataIndex: 'worktime',
+      title: '경과일',
+      key: 'elapsed_last',
+      dataIndex: 'elapsed_last',
+      align: 'right',
+      sorter: (a, b) => a.elapsed_last - b.elapsed_last,
+    },
+    {
+      title: '투입시간',
+      key: 'totaltime',
+      dataIndex: 'totaltime',
       align: 'center',
     },
     {

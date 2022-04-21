@@ -1,4 +1,5 @@
 import qs from 'qs';
+import moment from 'moment';
 
 // 프로젝트 카운트
 export const qs_projectCount = (codeid) =>
@@ -52,12 +53,15 @@ export const qs_projectList = (params) =>
         code_service: {
           fields: ['name'],
         },
+        project_tasks: {
+          fields: ['plan_day'],
+        },
       },
       pagination: {
         // page: 1,
         // pageSize: 10,
         start: 0,
-        limit: 50,
+        limit: 100,
       },
     },
     {
@@ -87,6 +91,7 @@ export const qs_workList = (start, end) =>
       populate: {
         fields: ['working_day', 'working_time'],
         project: {
+          // populate: '*',
           fields: ['name'],
         },
         project_task: {
@@ -105,6 +110,52 @@ export const qs_workList = (start, end) =>
       pagination: {
         start: 0,
         limit: 50,
+      },
+    },
+    {
+      encodeValuesOnly: true,
+    },
+  );
+
+// 프로젝트 작업 리스트 - 진행중 작업 전체
+export const qs_workListAll = (status, start, limit) =>
+  qs.stringify(
+    {
+      filters: {
+        $and: [
+          {
+            project: {
+              code_status: {
+                id: {
+                  $eq: status, //1-시작전, 2-진행중, 3-보류, 4-완료
+                },
+              },
+            },
+          },
+        ],
+      },
+      fields: ['working_day', 'working_time'],
+      populate: {
+        project: {
+          // populate: '*',
+          fields: ['name'],
+        },
+        //   project_task: {
+        //     fields: ['plan_day'],
+        //   },
+        //   customer: {
+        //     fields: ['name'],
+        //   },
+        //   users_permissions_user: {
+        //     fields: ['username'],
+        //   },
+        //   code_progress: {
+        //     fields: ['code'],
+        //   },
+      },
+      pagination: {
+        start: start,
+        limit: limit,
       },
     },
     {
@@ -495,4 +546,113 @@ export const qs_maintenanceByCid = (cid) =>
     //     fields: ['name'],
     //   },
     // },
+  });
+
+// 유지보수 - 상세 정보
+export const qs_maintenanceByid = (mid) =>
+  qs.stringify({
+    filters: {
+      $and: [
+        {
+          id: {
+            $eq: mid,
+          },
+        },
+        // {
+        //   used: true,
+        // },
+      ],
+    },
+    fields: ['title', 'contracted', 'description'],
+    populate: {
+      customer: {
+        fields: ['name'],
+      },
+      scode_item: {
+        fields: ['name'],
+      },
+      scode_team: {
+        fields: ['name'],
+      },
+    },
+  });
+
+// 유지보수 - 매입/매출 정보(기간내)
+export const qs_mainHistoryByMid = (mid) =>
+  qs.stringify({
+    filters: {
+      $and: [
+        {
+          maintenance: {
+            id: {
+              $eq: mid,
+            },
+          },
+        },
+        {
+          warranty_from: {
+            $lte: moment().format('YYYY-MM-DD'),
+          },
+        },
+        {
+          warranty_to: {
+            $gte: moment().format('YYYY-MM-DD'),
+          },
+        },
+      ],
+    },
+    fields: [
+      'warranty_from',
+      'warranty_to',
+      'payment_date',
+      'cost',
+      'cost_m',
+      'memo',
+    ],
+    populate: {
+      code_ma_inex: {
+        fields: ['code', 'name'],
+      },
+      code_ma_item: {
+        fields: ['name'],
+      },
+      code_ma_term: {
+        fields: ['name'],
+      },
+    },
+  });
+
+// 유지보수 - 매입/매출 정보(전체)
+export const qs_mainHistoryAllByMid = (mid) =>
+  qs.stringify({
+    filters: {
+      $and: [
+        {
+          maintenance: {
+            id: {
+              $eq: mid,
+            },
+          },
+        },
+      ],
+    },
+    fields: [
+      'warranty_from',
+      'warranty_to',
+      'payment_date',
+      'cost',
+      'cost_m',
+      'memo',
+    ],
+    populate: {
+      code_ma_inex: {
+        fields: ['code', 'name'],
+      },
+      code_ma_item: {
+        fields: ['name'],
+      },
+      code_ma_term: {
+        fields: ['name'],
+      },
+    },
   });

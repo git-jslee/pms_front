@@ -41,6 +41,14 @@ const ProjectCountForm = ({ count, countFormOnclick }) => {
         <Progress
           type="circle"
           // percent={(count[2].data / sum) * 100}
+          format={() => `대기-건`}
+          status="exception"
+          // onClick={() => countFormOnclick(3)}
+        />
+        <span>--</span>
+        <Progress
+          type="circle"
+          // percent={(count[2].data / sum) * 100}
           format={() => `보류-${count[2] ? count[2].count : 0}건`}
           status="exception"
           onClick={() => countFormOnclick(3)}

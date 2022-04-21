@@ -139,14 +139,14 @@ const AddWorkDrawerContainer = () => {
       customer: values.customer,
       project: values.project,
       project_task: values.project_task,
-      working_day: moment(values.workingDay).tz('Asia/Seoul'),
+      working_day: moment(values.workingDay),
       working_time: parseInt(values.workingTime),
       code_progress: values.code_progress,
       users_permissions_user: auth.user.id,
       description: values.description,
     };
     const pjt_data = {
-      last_workupdate: moment(values.workingDay).tz('Asia/Seoul'),
+      last_workupdate: moment(values.workingDay),
     };
     // 프로젝트 작업등로 시간 업데이트
     const pjtUpdate = await tbl_update(
@@ -158,7 +158,8 @@ const AddWorkDrawerContainer = () => {
 
     // 작업등록
     const work_insert = await tbl_insert('api/works', work_data);
-    console.log('작업 등록 성공', work_insert);
+    console.log('2. 작업 등록 data', work_data);
+    console.log('2. 작업 등록 성공', work_insert);
     setVisible(false);
     setBtnDisabled(false);
     setResetfields(true);

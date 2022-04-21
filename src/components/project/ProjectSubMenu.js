@@ -22,6 +22,7 @@ const ProjectSubMenu = ({ advancedSearch, subMenuSelect, reload }) => {
         <Button onClick={() => subMenuSelect('menu1')}>Count</Button>
         <Button onClick={() => subMenuSelect('menu2')}>작업통계</Button>
         <Button onClick={() => subMenuSelect('menu3')}>상세조회</Button>
+        <Button>투입률</Button>
 
         <div className="search">
           <RedoOutlined
