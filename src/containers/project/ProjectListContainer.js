@@ -130,7 +130,7 @@ const ProjectListContainer = () => {
           'days',
         );
         const _totalworktime = totalWorkTime.filter((v) => v.id === list.id)[0];
-        console.log('**worktime**', index, _totalworktime);
+        // console.log('**worktime**', index, _totalworktime);
         const array = {
           key: list.id,
           no: index + 1,
@@ -142,8 +142,10 @@ const ProjectListContainer = () => {
           lastUpdate: list.attributes.last_workupdate,
           elapsed: elapsed,
           elapsed_last: elapsed_last,
-          totaltime:
-            _totalworktime !== undefined ? _totalworktime.worktime : '',
+          totalday:
+            _totalworktime !== undefined
+              ? Math.round(_totalworktime.worktime / 8)
+              : '',
           action: 'View',
         };
         return array;

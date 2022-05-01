@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { Table, Button, Space } from 'antd';
 
 const WorkListTable = ({ lists, code_tasks }) => {
-  console.log('worklisttable', lists);
+  console.log('=====worklisttable======', lists);
   const columns = [
     {
-      title: 'ID',
-      dataIndex: 'id',
-      key: 'id',
+      title: '구분',
+      dataIndex: 'type',
+      key: 'type',
     },
     {
       title: '고객사',
@@ -15,17 +15,17 @@ const WorkListTable = ({ lists, code_tasks }) => {
       key: 'customer',
     },
     {
-      title: '프로젝트명',
-      dataIndex: 'projectName',
-      key: 'projectName',
+      title: '건 명',
+      dataIndex: 'title',
+      key: 'title',
     },
     {
-      title: '서비스',
+      title: '서비스/지원종류',
       dataIndex: 'service',
       key: 'service',
     },
     {
-      title: 'TASK',
+      title: 'TASK/내용',
       key: 'task',
       dataIndex: 'task',
     },
@@ -33,11 +33,6 @@ const WorkListTable = ({ lists, code_tasks }) => {
       title: '작업시간',
       key: 'workingTime',
       dataIndex: 'workingTime',
-    },
-    {
-      title: '진행률',
-      key: 'progress',
-      dataIndex: 'progress',
     },
     {
       title: '작업자',
@@ -68,7 +63,7 @@ const WorkListTable = ({ lists, code_tasks }) => {
 
   const tableData = [];
   console.log('1.code_tasks', code_tasks);
-  console.log('1.lists', lists);
+  console.log('^^^^^^1.lists^^^^^^^', lists);
   const tableList = lists.map((list, index) => {
     const wlist = list.attributes;
     // console.log('2-1.list_name', list.project_task.code_task);
@@ -76,27 +71,52 @@ const WorkListTable = ({ lists, code_tasks }) => {
     // const taskName = code_tasks.filter(
     //   (code) => code.id === wlist.project_task.code_task,
     // );
-    // console.log('taskName', taskName);
-
-    const array = {
-      key: list.id,
-      id: list.id,
-      customer: wlist.customer.data.attributes.name,
-      projectName: wlist.project.data.attributes.name,
-      // service: taskName[0].code_service.code,
-      // task: taskName[0].name,
-      progress: wlist.code_progress.data.code,
-      user: wlist.users_permissions_user.data.attributes.username,
-      workingDay: wlist.working_day,
-      workingTime: wlist.working_time,
-      action: 'View',
-    };
-    tableData.push(array);
+    // console.log('====key 확인====', 'project' in wlist);
+    if ('project' in wlist) {
+      // console.log('****실행 project *****');
+      const array = {
+        key: list.id,
+        type: '프로젝트',
+        customer: wlist.customer.data.attributes.name,
+        title: wlist.project.data.attributes.name,
+        service:
+          wlist.project.data.attributes.code_service.data.attributes.name,
+        task: wlist.project_task.data.attributes.code_task.data.attributes.name,
+        progress: wlist.code_progress.data.code,
+        user: wlist.users_permissions_user.data.attributes.username,
+        workingDay: wlist.working_day,
+        workingTime: wlist.working_time,
+        action: 'View',
+      };
+      tableData.push(array);
+    } else if ('maintenance' in wlist) {
+      // console.log('****실행 maintenance *****');
+      const array = {
+        key: list.id,
+        type: '유지보수',
+        customer: wlist.customer.data.attributes.name,
+        title: wlist.maintenance.data.attributes.title,
+        service: wlist.code_ma_support.data.attributes.name,
+        task: wlist.title,
+        user: wlist.users_permissions_user.data.attributes.username,
+        workingDay: wlist.working_day,
+        workingTime: wlist.working_time,
+        action: 'View',
+      };
+      tableData.push(array);
+    }
+    // tableData 오름차순 정렬기능 추가..
+    //
   });
+  console.log('**** table data****', tableData);
 
   return (
     <>
-      <Table columns={columns} dataSource={tableData} />
+      <Table
+        columns={columns}
+        dataSource={tableData}
+        pagination={{ pageSize: 9 }}
+      />
     </>
   );
 };

@@ -8,7 +8,7 @@ export const qs_projectCount = (codeid) =>
       filters: {
         code_status: {
           id: {
-            $eq: codeid, //1-시작전, 2-진행중, 3-보류, 4-완료
+            $eq: codeid, //1-시작전, 2-진행중, 3-보류, 4-완료, 5-대기
           },
         },
       },
@@ -271,9 +271,12 @@ export const qs_workListByUid = (uid) =>
       populate: {
         fields: ['working_day', 'working_time'],
         project: {
+          // populate: '*',
+          populate: ['code_service'],
           fields: ['name'],
         },
         project_task: {
+          populate: ['code_task'],
           fields: ['plan_day'],
         },
         customer: {
@@ -558,9 +561,6 @@ export const qs_maintenanceByid = (mid) =>
             $eq: mid,
           },
         },
-        // {
-        //   used: true,
-        // },
       ],
     },
     fields: ['title', 'contracted', 'description'],
@@ -656,3 +656,42 @@ export const qs_mainHistoryAllByMid = (mid) =>
       },
     },
   });
+
+// user 별 유지보수 작업리스트
+export const qs_mainWorkListByUid = (uid) =>
+  qs.stringify(
+    {
+      filters: {
+        users_permissions_user: {
+          id: {
+            $eq: uid,
+          },
+        },
+      },
+      // 작업등록일 기준 정렬
+      sort: ['working_day:desc'],
+      // fields: ['name'],
+      populate: {
+        fields: ['working_day', 'working_time', 'title'],
+        customer: {
+          fields: ['name'],
+        },
+        maintenance: {
+          fields: ['title'],
+        },
+        code_ma_support: {
+          fields: ['name'],
+        },
+        users_permissions_user: {
+          fields: ['username'],
+        },
+      },
+      pagination: {
+        start: 0,
+        limit: 30,
+      },
+    },
+    {
+      encodeValuesOnly: true,
+    },
+  );

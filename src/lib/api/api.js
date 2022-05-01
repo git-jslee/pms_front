@@ -43,6 +43,7 @@ export const getCountProject = (path, query) =>
     axios.get(`${API_URL}/${path}?${query[1]}`),
     axios.get(`${API_URL}/${path}?${query[2]}`),
     axios.get(`${API_URL}/${path}?${query[3]}`),
+    axios.get(`${API_URL}/${path}?${query[4]}`),
   ]);
 
 // <-- strapi v4

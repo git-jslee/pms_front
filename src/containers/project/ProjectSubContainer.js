@@ -42,7 +42,7 @@ const ProjectSubContainer = () => {
 
   useEffect(() => {
     const query = [];
-    for (let i = 1; i < 5; i++) {
+    for (let i = 1; i <= 5; i++) {
       query.push(qs_projectCount(i));
     }
     console.log('**query**', query);
@@ -98,7 +98,7 @@ const ProjectSubContainer = () => {
     setEnd(end);
   };
 
-  console.log('start', start);
+  // console.log('start', start);
 
   // 프로젝트ID 별 카운트
   // [{id:100, name:스케치미디어 홈페이지, worktime:10},{id:101, name:화영 홈페이지, worktime:10}]

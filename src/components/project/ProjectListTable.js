@@ -9,6 +9,7 @@ const ProjectListTable = ({ tableData, loading }) => {
       title: 'No',
       dataIndex: 'no',
       key: 'no',
+      sorter: (a, b) => a.no - b.no,
     },
     // {
     //   title: '구분',
@@ -63,10 +64,11 @@ const ProjectListTable = ({ tableData, loading }) => {
       sorter: (a, b) => a.elapsed_last - b.elapsed_last,
     },
     {
-      title: '투입시간',
-      key: 'totaltime',
-      dataIndex: 'totaltime',
+      title: '투입일',
+      key: 'totalday',
+      dataIndex: 'totalday',
       align: 'center',
+      sorter: (a, b) => a.totalday - b.totalday,
     },
     {
       title: 'Action',

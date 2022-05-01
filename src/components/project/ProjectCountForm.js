@@ -18,7 +18,7 @@ const StyledBlock = styled.div`
 
 const ProjectCountForm = ({ count, countFormOnclick }) => {
   console.log('**count**', count);
-  //0-시작전, 1-진행중, 2-보류, 3-완료
+  //0-시작전, 1-진행중, 2-보류, 3-완료, 4-대기
 
   return (
     <>
@@ -40,10 +40,9 @@ const ProjectCountForm = ({ count, countFormOnclick }) => {
         <span>--</span>
         <Progress
           type="circle"
-          // percent={(count[2].data / sum) * 100}
-          format={() => `대기-건`}
+          format={() => `대기-${count[4] ? count[4].count : 0}건`}
           status="exception"
-          // onClick={() => countFormOnclick(3)}
+          onClick={() => countFormOnclick(5)}
         />
         <span>--</span>
         <Progress

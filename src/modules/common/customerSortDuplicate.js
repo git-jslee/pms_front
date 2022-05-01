@@ -4,7 +4,7 @@ const customerSortDuplicate = async (path, query) => {
   const request = await api.getQueryString(path, query);
   //   console.log('**result**', request.data.data);
 
-  // 1. 경로 정리
+  // 1. 배열 최적화
   const step1 = request.data.data.map((cus) => {
     return {
       id: cus.attributes.customer.data.id,

@@ -16,11 +16,7 @@ const WorkFormPage = () => {
       <SiteHeader />
       <CodeBookContainer />
       <FormTemplate>
-        <h1>작업 페이지</h1>
         <AddWorkDrawerContainer />
-        {/* <Link to="/addwork">
-          <Button>작업 등록</Button>
-        </Link> */}
         <hr />
         <WorkFilterContainer />
         <hr />

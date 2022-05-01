@@ -38,7 +38,7 @@ const SalesStatisticsContainer = () => {
         // console.log('--1.queryString--', query);
         const query1 = 'populate=%2A';
         const response = await api.getQueryString('api/sales-statuses', query);
-        console.log(`**2.response[${i}]`, response.data.data);
+        // console.log(`**2.response[${i}]`, response.data.data);
         const sum = sumSalesValueByMonth(response.data.data);
         // console.log(`***sum..[${i}]****`, sum);
         obj[i] = sum;
@@ -133,6 +133,7 @@ const SalesStatisticsContainer = () => {
     // dispatch(setStartEndOfMonth(record.month));
     // dispatch(setParams({ type: 'scode_probability', key: record.key }));
   };
+  console.log('***sum value***', sumValue);
 
   return (
     <>
