@@ -695,3 +695,42 @@ export const qs_mainWorkListByUid = (uid) =>
       encodeValuesOnly: true,
     },
   );
+
+// 투입률 계산용
+export const qs_workingTime = (startdate, enddate, start, limit) =>
+  qs.stringify(
+    {
+      filters: {
+        $and: [
+          {
+            working_day: {
+              $gte: startdate,
+            },
+          },
+          {
+            working_day: {
+              $lte: enddate,
+            },
+          },
+        ],
+      },
+      fields: ['working_day', 'working_time'],
+      populate: {
+        users_permissions_user: {
+          // populate: '*',
+          fields: ['username'],
+          populate: '*',
+        },
+        code_pj_team: {
+          fields: ['name'],
+        },
+      },
+      pagination: {
+        start: start,
+        limit: limit,
+      },
+    },
+    {
+      encodeValuesOnly: true,
+    },
+  );

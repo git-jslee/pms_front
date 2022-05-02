@@ -6,11 +6,7 @@ import {
   Col,
   Row,
   Input,
-  Select,
-  Space,
-  Switch,
   DatePicker,
-  Divider,
   Checkbox,
   AutoComplete,
 } from 'antd';

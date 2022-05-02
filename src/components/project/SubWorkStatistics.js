@@ -42,62 +42,22 @@ const SubWorkStatistics = ({
 
   return (
     <FormBlock>
-      <Layout>
-        <Sider width={400}>
-          <Form
-            labelCol={{
-              span: 5,
-            }}
-            wrapperCol={{
-              span: 19,
-            }}
-            labelAlign="left"
-            labelWrap
-            form={form}
-            // layout="vertical"
-            hideRequiredMark
-            onFinish={subWorkStatisticsOnSubmit}
-          >
-            <Row>
-              <Col span={24}>
-                <Form.Item
-                  name="date"
-                  label="기준일자"
-                  rules={[{ required: true }]}
-                >
-                  <RangePicker />
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row gutter={16}>
-              <Col offset={2}>
-                <Button type="primary" htmlType="submit">
-                  조회
-                </Button>
-              </Col>
-              <Col>
-                <Button htmlType="button" onClick={onReset}>
-                  초기화
-                </Button>
-              </Col>
-            </Row>
-          </Form>
-        </Sider>
-        <Content>
-          <div>
-            통계기준일자 : {start} ~ {end}
-          </div>
-          <ul>
-            {worktime.map((list, index) => {
-              return (
-                <li key={index}>
-                  {list.name} : {list.worktime}시간 / {list.worktime / 8}일
-                </li>
-              );
-            })}
-          </ul>
-        </Content>
-      </Layout>
+      {/* <Layout>
+        <Content> */}
+      <div>
+        통계기준일자 : {start} ~ {end}
+      </div>
+      <ul>
+        {worktime.map((list, index) => {
+          return (
+            <li key={index}>
+              {list.name} : {list.worktime}시간 / {list.worktime / 8}일
+            </li>
+          );
+        })}
+      </ul>
+      {/* </Content>
+      </Layout> */}
     </FormBlock>
   );
 };
