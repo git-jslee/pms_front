@@ -72,7 +72,7 @@ const InfoMainDrawerForm = ({
   let warranty_from = '';
   let warranty_to = '';
 
-  // 서비스 리스트
+  // 서비스 리스트 전체
   const tableData = historyData
     ? historyData[0].map((list, index) => {
         console.log('***list***', list);
@@ -91,7 +91,7 @@ const InfoMainDrawerForm = ({
       })
     : '';
 
-  // 전체 매출이익(월), 매출, 매입 계산용
+  // 전체 매출이익(월), 매출, 매입 계산용(유지보수 기간내..데이터만 가져옴)
   const costData = historyData
     ? historyData[1].map((list, index) => {
         console.log('***list***', list);

@@ -523,6 +523,43 @@ export const qs_customerByUsed = (arg) =>
     },
   );
 
+// 유지보수 - 상세 정보
+export const qs_maintenanceAll = () =>
+  qs.stringify({
+    filters: {
+      used: {
+        $eq: true,
+      },
+    },
+    fields: ['title', 'contracted', 'description'],
+    populate: {
+      customer: {
+        fields: ['name'],
+      },
+      scode_item: {
+        fields: ['name'],
+      },
+      scode_team: {
+        fields: ['name'],
+      },
+      maintenance_histories: {
+        fields: ['warranty_from', 'warranty_to', 'cost', 'cost_m'],
+        populate: {
+          code_ma_inex: {
+            fields: ['code', 'name'],
+          },
+          code_ma_term: {
+            fields: ['name'],
+          },
+        },
+      },
+    },
+    pagination: {
+      start: 0,
+      limit: 50,
+    },
+  });
+
 // 유지보수 - 고객사 ID 에 해당하는 정보
 export const qs_maintenanceByCid = (cid) =>
   qs.stringify({

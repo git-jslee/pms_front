@@ -3,13 +3,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import MaintenanceSubMenu from '../../components/maintenance/MaintenanceSubMenu';
 import AddMainDrawerContainer from './AddMainDrawerContainer';
 import { getMaintenanceList } from '../../modules/apiGetList';
+import { qs_maintenanceAll } from '../../lib/api/query';
 
 const MaintenanceSubCon = () => {
   const dispatch = useDispatch();
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    const query = 'populate=%2A';
+    // const query = 'populate=%2A';
+    const query = qs_maintenanceAll();
     dispatch(getMaintenanceList(query));
   }, [dispatch]);
 

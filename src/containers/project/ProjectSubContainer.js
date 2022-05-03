@@ -128,7 +128,7 @@ const ProjectSubContainer = () => {
     }
     console.log('********resultArray********', resultArray);
     const newArray = resultArray.map((list) => {
-      const work_week = moment(list.attributes.working_day).format('YY-MM-wo');
+      const work_week = moment(list.attributes.working_day).format('YY-wo');
       const work_time = list.attributes.working_time;
 
       const team = list.attributes.code_pj_team.data.id;
