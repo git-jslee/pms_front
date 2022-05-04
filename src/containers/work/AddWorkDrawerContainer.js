@@ -156,6 +156,10 @@ const AddWorkDrawerContainer = () => {
   const onSubmit = async (values) => {
     if (addMode === 'project') {
       setBtnDisabled(true);
+      // 22-05-04 작업테이블 user 팀 정보 가져오기
+      const query = `filters[users][id][$eq]=${auth.user.id}&fields[0]=name`;
+      const requestTeam = await api.getQueryString('api/code-pj-teams', query);
+
       const work_data = {
         customer: values.customer,
         project: values.project,
@@ -165,11 +169,12 @@ const AddWorkDrawerContainer = () => {
         code_progress: values.code_progress,
         users_permissions_user: auth.user.id,
         description: values.description,
+        code_pj_team: requestTeam.data.data[0].id,
       };
       const pjt_data = {
         last_workupdate: moment(values.workingDay),
       };
-      // 프로젝트 작업등로 시간 업데이트
+      // 프로젝트 작업등록 시간 업데이트
       const pjtUpdate = await tbl_update(
         'api/projects',
         values.project,

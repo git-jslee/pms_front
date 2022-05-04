@@ -33,13 +33,19 @@ const ProjectSubContainer = () => {
   }, [dispatch]);
 
   // sub메뉴 버튼 클릭시 동작 구현
-  const [subMenu, setSubMenu] = useState('menu2');
+  const [subMenu, setSubMenu] = useState('menu1');
   const subMenuSelect = (menu) => {
     // console.log('subMenuSelect 버튼 클릭', menu);
     setSubMenu(menu);
-    // if (menu === 'menu4') {
-    //   calInputRate();
-    // }
+    if (menu === 'menu4') {
+      const date = startEndDay(
+        moment().subtract(4, 'months').format('YYYY-MM'),
+        moment().format('YYYY-MM'),
+      );
+      const startDate = date[0];
+      const endDate = date[1];
+      calInputRate(startDate, endDate);
+    }
   };
 
   //카운터(전체, 진행중, 완료, ..)
@@ -178,7 +184,7 @@ const ProjectSubContainer = () => {
     setEnd(end);
   };
 
-  const subSearchOnSubmit = (e) => {
+  const subSearchOnSubmit = async (e) => {
     console.log('***on submit***', e);
     if (e.date === undefined) return;
     if (subMenu === 'menu4') {

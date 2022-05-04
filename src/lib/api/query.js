@@ -1,6 +1,25 @@
 import qs from 'qs';
 import moment from 'moment';
 
+// 유저 팀 정보 가져오기
+// 사용 : 작업등록시 user 팀 정보 추가
+export const qs_teamByUserId = (uid) =>
+  qs.stringify(
+    {
+      filters: {
+        users: {
+          id: {
+            $eq: uid,
+          },
+        },
+      },
+      fields: ['name'],
+    },
+    {
+      encodeValuesOnly: true,
+    },
+  );
+
 // 프로젝트 카운트
 export const qs_projectCount = (codeid) =>
   qs.stringify(
