@@ -9,7 +9,6 @@ import {
   Col,
   Row,
   Radio,
-  Popconfirm,
   Drawer,
 } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';

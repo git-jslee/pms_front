@@ -86,7 +86,11 @@ const AddSalesPerformanceForm = ({
             </Form.Item>
           </Col>
           <Col offset={1} span={5}>
-            <Form.Item label={checked.name} name="confirmed">
+            <Form.Item
+              label={checked.name}
+              name="confirmed"
+              valuePropName="checked"
+            >
               <Switch onChange={onChangeSwitch} />
             </Form.Item>
           </Col>

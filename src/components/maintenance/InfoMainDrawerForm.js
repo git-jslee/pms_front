@@ -78,6 +78,7 @@ const InfoMainDrawerForm = ({
         console.log('***list***', list);
         const data = list.attributes;
         return {
+          key: list.id,
           no: index + 1,
           code_ma_inex: data.code_ma_inex.data.attributes.name,
           code_ma_item: data.code_ma_item.data.attributes.name,

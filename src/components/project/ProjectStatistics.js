@@ -86,7 +86,7 @@ const ProjectStatistics = ({ statistic, duration }) => {
         <Row gutter={16}>
           {statistic.map((list) => {
             return (
-              <div>
+              <div key={list.id}>
                 <span>{list.name}</span>
                 <Col>
                   <Card>

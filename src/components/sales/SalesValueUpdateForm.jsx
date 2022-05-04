@@ -48,7 +48,11 @@ const SalesValueUpdateForm = ({
       >
         <Row gutter={16}>
           <Col offset={0} span={8}>
-            <Form.Item label={checked.name} name="confirmed">
+            <Form.Item
+              label={checked.name}
+              name="confirmed"
+              valuePropName="checked"
+            >
               <Switch
                 onChange={onChangeSwitch}
                 defaultChecked={initialValues.confirmed}

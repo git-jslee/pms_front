@@ -8,13 +8,23 @@ const MaintenanceListForm = ({
   tblOnClick,
   totalCost,
 }) => {
-  const ict_in = totalCost['ict'][0];
-  const ict_ex = totalCost['ict'][1];
-  const con_in = totalCost['con'][0];
-  const con_ex = totalCost['con'][1];
-  const total_in = ict_in + con_in;
-  const total_ex = ict_ex + con_ex;
-  console.log('**1111**', totalCost);
+  const ict_in = totalCost['ict'][0].toLocaleString('ko-KR');
+  const ict_ex = totalCost['ict'][1].toLocaleString('ko-KR');
+  const con_in = totalCost['con'][0].toLocaleString('ko-KR');
+  const con_ex = totalCost['con'][1].toLocaleString('ko-KR');
+  const total_in = (totalCost['ict'][0] + totalCost['con'][0]).toLocaleString(
+    'ko-KR',
+  );
+  const total_ex = (totalCost['ict'][1] + totalCost['con'][1]).toLocaleString(
+    'ko-KR',
+  );
+  const total_profit = (
+    totalCost['ict'][0] +
+    totalCost['con'][0] -
+    totalCost['ict'][1] -
+    totalCost['con'][1]
+  ).toLocaleString('ko-KR');
+
   const columns = [
     {
       title: 'No',
@@ -95,15 +105,9 @@ const MaintenanceListForm = ({
       ) : (
         <>
           <div>
-            <h1>{`매출: ${total_in.toLocaleString(
-              'ko-KR',
-            )} | 매입:${total_ex.toLocaleString('ko-KR')} `}</h1>
-            <h2>{`ICT매출: ${ict_in.toLocaleString(
-              'ko-KR',
-            )} - ICT매입:${ict_ex.toLocaleString('ko-KR')} | 
-            콘텐츠매출: ${con_in.toLocaleString(
-              'ko-KR',
-            )} - 콘텐츠매입:${con_ex.toLocaleString('ko-KR')} `}</h2>
+            <h1>{`이익:${total_profit} | 매출: ${total_in} | 매입:${total_ex}`}</h1>
+            <h3>{`( ICT매출: ${ict_in} - ICT매입:${ict_ex} | 
+            콘텐츠매출: ${con_in} - 콘텐츠매입:${con_ex} )`}</h3>
           </div>
           <Table
             columns={columns}

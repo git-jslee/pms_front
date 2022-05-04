@@ -1,22 +1,5 @@
 import React, { useState } from 'react';
-import {
-  Form,
-  Input,
-  Table,
-  Descriptions,
-  Badge,
-  Space,
-  Button,
-  Divider,
-  Row,
-  Col,
-  Switch,
-  Select,
-  InputNumber,
-  Radio,
-  DatePicker,
-  Checkbox,
-} from 'antd';
+import { Form, Input, Button, Divider, Row, Col, Select, Checkbox } from 'antd';
 // import Button from '../common/Button';
 
 const SalesBasicUpdateForm = ({

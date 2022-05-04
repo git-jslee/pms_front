@@ -2,9 +2,6 @@ import React from 'react';
 import {
   Form,
   Input,
-  Table,
-  Descriptions,
-  Badge,
   Space,
   Button,
   Divider,
@@ -57,7 +54,11 @@ const SalesUpdateForm = ({
       >
         <Row>
           <Col offset={2} span={6}>
-            <Form.Item label={checked.name} name="confirmed">
+            <Form.Item
+              label={checked.name}
+              name="confirmed"
+              valuePropName="checked"
+            >
               <Switch
                 onChange={onChangeSwitch}
                 defaultChecked={initialValues.confirmed}

@@ -1,19 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import {
-  Drawer,
   Form,
   Button,
   Col,
   Row,
-  Input,
   Select,
-  Space,
-  Switch,
   DatePicker,
-  Divider,
-  Checkbox,
   AutoComplete,
+  Input,
 } from 'antd';
 
 const { RangePicker } = DatePicker;
@@ -100,7 +95,6 @@ const SalesAdvancedSearchForm = ({
           }}
           //   wrapperCol={{ flex: 1 }}
           labelAlign="left"
-          labelWrap
           form={form}
           // layout="vertical"
           hideRequiredMark
@@ -131,7 +125,7 @@ const SalesAdvancedSearchForm = ({
             </Col>
             <Col span={6} offset={1}>
               <Form.Item name="probability" label="매출확률">
-                {/* <Input /> */}
+                <Input disabled={true} />
               </Form.Item>
             </Col>
           </Row>
@@ -172,7 +166,7 @@ const SalesAdvancedSearchForm = ({
           <Row gutter={16}>
             <Col span={10}>
               <Form.Item name="salesname" label="건명">
-                {/* <Input /> */}
+                <Input disabled={true} />
               </Form.Item>
             </Col>
             <Col span={7}>

@@ -345,10 +345,12 @@ const AddMainDrawerForm = ({
                 <Divider />
                 <Row>
                   <Col span={12}>
-                    <Form.Item label="계약여부" name="contracted">
-                      <Switch
-                      // onChange={onChange}
-                      />
+                    <Form.Item
+                      label="계약여부"
+                      name="contracted"
+                      valuePropName="checked"
+                    >
+                      <Switch />
                     </Form.Item>
                   </Col>
                 </Row>

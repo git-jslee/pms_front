@@ -168,9 +168,8 @@ const ProjectFormView = ({
         <Form.Item label="종료일" name="endDate">
           <DatePicker />
         </Form.Item>
-        <Form.Item label="수주금액" name="price">
-          {/* <InputNumber /> */}
-          <InputNumber addonBefore="+" addonAfter="￦" defaultValue={0} />
+        <Form.Item label="수주금액" name="price" rules={[{ required: true }]}>
+          <InputNumber addonBefore="+" addonAfter="￦" />
         </Form.Item>
         {/* {ProjectTaskForm 추가..}} */}
         <Divider />
@@ -189,10 +188,8 @@ const ProjectFormView = ({
                     ]}
                     // noStyle
                   >
-                    {/* <InputNumber /> */}
                     <InputNumber addonAfter="일" />
                   </Form.Item>
-                  {/* <MinusCircleOutlined /> */}
                 </Col>
               );
             })

@@ -21,6 +21,10 @@ const WorkFilterForm = ({ userList, workerId, userOnChange }) => {
     });
   }, []);
 
+  const onReset = () => {
+    form.resetFields();
+  };
+
   return (
     <>
       <Row>

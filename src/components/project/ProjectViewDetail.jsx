@@ -81,7 +81,7 @@ const ProjectViewDetail = () => {
         <Row gutter={16}>
           {lists.map((list) => {
             return (
-              <div>
+              <div key={list.id}>
                 <span>{list.id}</span>
                 <Col>
                   <Progress

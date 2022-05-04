@@ -189,7 +189,7 @@ const AddMainDrawerContainer = ({ visible, setVisible }) => {
             ? false
             : true,
       };
-      console.log('create_data', create_data);
+      console.log('create_data', value);
       const result = await tbl_insert('api/maintenances', create_data);
       console.log('1. maintenances', result.data);
     }

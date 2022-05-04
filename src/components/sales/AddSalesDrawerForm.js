@@ -110,7 +110,11 @@ const AddSalesDrawerForm = ({
           </Row>
           <Row gutter={16}>
             <Col span={12}>
-              <Form.Item name="confirmed" label={probabilityChecked.name}>
+              <Form.Item
+                name="confirmed"
+                label={probabilityChecked.name}
+                valuePropName="checked"
+              >
                 <Switch
                   defaultChecked={salesConfirmed}
                   onChange={onChangeSwitch}

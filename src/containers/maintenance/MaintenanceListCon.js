@@ -34,7 +34,7 @@ const MaintenanceListCon = () => {
     let con_expense = 0;
 
     const data = lists.map((list, index) => {
-      console.log('**list**', list);
+      // console.log('**list**', list);
       const value = list.attributes;
       const contracted = list.attributes.contracted;
       const team = list.attributes.scode_team.data.id;
@@ -43,7 +43,7 @@ const MaintenanceListCon = () => {
       const histories = list.attributes.maintenance_histories.data;
       if (histories.length > 0) {
         // 유지보수 서비스 항목 있을경우..
-        console.log('***length*** ===> 0이상');
+        // console.log('***length*** ===> 0이상');
         const calCost = histories.map((v) => {
           const index = v.attributes.code_ma_inex.data.attributes.code;
           const term = v.attributes.code_ma_term.data.attributes.name;
@@ -74,6 +74,7 @@ const MaintenanceListCon = () => {
       }
 
       return {
+        key: list.id,
         no: index + 1,
         id: list.id,
         customer: value.customer.data.attributes.name,
