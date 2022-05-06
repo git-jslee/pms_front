@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Table, Button, Space } from 'antd';
 
-const WorkListTable = ({ lists, code_tasks }) => {
+const WorkListTable = ({ lists, code_tasks, drawerOnClick }) => {
   console.log('=====worklisttable======', lists);
   const columns = [
     {
@@ -30,11 +30,6 @@ const WorkListTable = ({ lists, code_tasks }) => {
       dataIndex: 'task',
     },
     {
-      title: '작업시간',
-      key: 'workingTime',
-      dataIndex: 'workingTime',
-    },
-    {
       title: '작업자',
       key: 'user',
       dataIndex: 'user',
@@ -45,13 +40,18 @@ const WorkListTable = ({ lists, code_tasks }) => {
       dataIndex: 'workingDay',
     },
     {
+      title: '작업시간',
+      key: 'workingTime',
+      dataIndex: 'workingTime',
+    },
+    {
       title: 'Action',
       key: 'action',
       render: (text, record) => (
         <Space size="middle">
           <Button
             onClick={() => {
-              // onClick(record.key);
+              drawerOnClick(text);
             }}
           >
             View
@@ -73,7 +73,7 @@ const WorkListTable = ({ lists, code_tasks }) => {
     // );
     // console.log('====key 확인====', 'project' in wlist);
     if ('project' in wlist) {
-      // console.log('****실행 project *****');
+      console.log('****실행 project *****', wlist.project_task);
       const array = {
         key: list.id,
         type: '프로젝트',

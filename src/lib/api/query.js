@@ -2,7 +2,7 @@ import qs from 'qs';
 import moment from 'moment';
 
 // 유저 팀 정보 가져오기
-// 사용 : 작업등록시 user 팀 정보 추가
+// 사용 : 작업등록시 user 팀 정보 추가->사용안함
 export const qs_teamByUserId = (uid) =>
   qs.stringify(
     {
@@ -213,6 +213,31 @@ export const qs_projectTaskByPid = (pid) =>
     },
   );
 
+// 프로젝트 task 정보만.. 가져오기
+// 작업정보 수정Form 에서 사용
+export const qs_projectByTasks = () =>
+  qs.stringify(
+    {
+      fields: ['name'],
+      populate: {
+        project_tasks: {
+          populate: {
+            code_task: {
+              fields: ['code', 'name', 'sort', ['used']],
+            },
+          },
+        },
+      },
+      pagination: {
+        start: 0,
+        limit: 50,
+      },
+    },
+    {
+      encodeValuesOnly: true,
+    },
+  );
+
 // 프로젝트 정보 - 고객사ID & 진행중
 export const qs_projectByCid = (cid) =>
   qs.stringify({
@@ -236,7 +261,8 @@ export const qs_projectByCid = (cid) =>
     },
   });
 
-// Project id works
+// 프로젝트 상세 조회 - Project id works
+// 프로젝트 start, limit 추가 필요..
 export const qs_workByPid = (pid) =>
   qs.stringify(
     {
@@ -245,6 +271,9 @@ export const qs_workByPid = (pid) =>
           id: {
             $eq: pid,
           },
+        },
+        deleted: {
+          $eq: false,
         },
       },
       // fields: ['name'],
@@ -278,11 +307,20 @@ export const qs_workListByUid = (uid) =>
   qs.stringify(
     {
       filters: {
-        users_permissions_user: {
-          id: {
-            $eq: uid,
+        $and: [
+          {
+            users_permissions_user: {
+              id: {
+                $eq: uid,
+              },
+            },
           },
-        },
+          {
+            deleted: {
+              $eq: false,
+            },
+          },
+        ],
       },
       // 작업등록일 기준 정렬
       sort: ['working_day:desc'],
@@ -311,6 +349,45 @@ export const qs_workListByUid = (uid) =>
       pagination: {
         start: 0,
         limit: 30,
+      },
+    },
+    {
+      encodeValuesOnly: true,
+    },
+  );
+
+// Work 정보 by ID
+export const qs_workById = (id) =>
+  qs.stringify(
+    {
+      filters: {
+        id: {
+          $eq: id,
+        },
+      },
+      fields: ['working_day', 'working_time', 'description'],
+      populate: {
+        project: {
+          fields: ['name'],
+          populate: ['code_service'],
+        },
+        project_task: {
+          populate: ['code_task'],
+          fields: ['plan_day'],
+        },
+        customer: {
+          fields: ['name'],
+        },
+        users_permissions_user: {
+          fields: ['username'],
+        },
+        code_progress: {
+          fields: ['code'],
+        },
+      },
+      pagination: {
+        start: 0,
+        limit: 50,
       },
     },
     {
