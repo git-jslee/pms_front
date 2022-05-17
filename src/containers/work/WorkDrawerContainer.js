@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import WorkDrawerForm from '../../components/work/WorkDrawerForm';
 import * as api from '../../lib/api/api';
 import moment from 'moment-timezone';
@@ -15,6 +16,10 @@ const WorkDrawerContainer = ({
   const [progress, setProgress] = useState([]);
   const [btnDisabled, setBtnDisabled] = useState(false);
   const [tasks, setTasks] = useState([]);
+
+  const { userId } = useSelector(({ auth }) => ({
+    userId: auth.auth.user.id,
+  }));
 
   const editOnclick = async (type, pid) => {
     //
@@ -77,6 +82,7 @@ const WorkDrawerContainer = ({
     <>
       <WorkDrawerForm
         visible={visible}
+        userId={userId}
         drawerOnClose={drawerOnClose}
         initialValues={initialValues}
         editmode={editmode}

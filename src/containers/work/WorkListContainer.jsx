@@ -82,6 +82,7 @@ const WorkListContainer = () => {
       task: workinfo.project_task.data.attributes.code_task.data.attributes
         .name,
       user: workinfo.users_permissions_user.data.attributes.username,
+      userId: workinfo.users_permissions_user.data.id,
       working_day: moment(workinfo.working_day),
       working_day_str: workinfo.working_day,
       working_time: workinfo.working_time,

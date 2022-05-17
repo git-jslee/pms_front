@@ -20,6 +20,7 @@ import FormItem from 'antd/lib/form/FormItem';
 const WorkDrawerForm = ({
   btnDisabled,
   visible,
+  userId,
   drawerOnClose,
   initialValues,
   editmode,
@@ -29,6 +30,7 @@ const WorkDrawerForm = ({
   progress,
   tasks,
 }) => {
+  const editDisabled = userId === initialValues.userId ? false : true;
   console.log('***tasks***', tasks);
   console.log('***progress***', progress);
   return (
@@ -45,6 +47,7 @@ const WorkDrawerForm = ({
           <Space>
             <Button
               onClick={() => editOnclick(initialValues.type, initialValues.pid)}
+              disabled={editDisabled}
             >
               수정
             </Button>
@@ -52,6 +55,7 @@ const WorkDrawerForm = ({
               onClick={() =>
                 deleteOnclick(initialValues.type, initialValues.id)
               }
+              disabled={editDisabled}
             >
               삭제
             </Button>
