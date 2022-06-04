@@ -23,6 +23,9 @@ const SET_SEARCHTABLE = 'common/SET_SEARCHTABLE';
 
 const SET_CUSTOMERID = 'common/SET_CUSTOMERID';
 
+// webgl 필드 추가
+const SET_WEBGLNAME = 'common/SET_WEBGLNAME';
+
 // VIEW - EDIT 모드 변경
 export const changeMode = createAction(CHANGE_MODE, (mode) => mode);
 
@@ -43,6 +46,8 @@ export const setStartEndOfMonth = createAction(
 );
 
 export const setParams = createAction(SET_PARAMS, (params) => params);
+
+export const setWebglName = createAction(SET_WEBGLNAME, (webgl) => webgl);
 
 // 서브메뉴 상세검색 클릭시
 export const setSearchTable = createAction(SET_SEARCHTABLE, (mode) => mode);
@@ -92,6 +97,10 @@ const common = handleActions(
     [SET_PARAMS]: (state, { payload }) => ({
       ...state,
       params: payload,
+    }),
+    [SET_WEBGLNAME]: (state, { payload }) => ({
+      ...state,
+      webgl: payload,
     }),
   },
   initialState,

@@ -10,8 +10,8 @@ const SiteHeader = () => {
       <Link to="/maintenance">유지보수</Link>
       <Link to="/work">작업</Link>
       <Link to="/customer">고객</Link>
-      <Link to="/dday">D-DAY</Link>
       <Link to="/webgl">WEB3D</Link>
+      <Link to="/scrape">지원사업</Link>
       {/* <Link to="/login">로그인</Link> */}
     </div>
   );
