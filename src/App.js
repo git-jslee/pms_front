@@ -27,6 +27,7 @@ import AddSalesPage from './pages/AddSalesPage';
 import SalesViewPage from './pages/SalesViewPage';
 import MaintenancePage from './pages/MaintenancePage';
 import WebglPage from './pages/WebglPage';
+import ScrapePage from './pages/ScrapePage';
 
 function App() {
   // const { user } = useSelector(({ auth }) => ({ user: auth.auth }));
@@ -56,6 +57,7 @@ function App() {
           <Route path="/addsales" element={<AddSalesPage />} />
           <Route path="/maintenance" element={<MaintenancePage />} />
           <Route path="/webgl" element={<WebglPage />} />
+          <Route path="/scrape" element={<ScrapePage />} />
           <Route path="/*" element={<ErrorPage />} />
         </Route>
       </Routes>

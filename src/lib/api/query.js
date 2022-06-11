@@ -867,3 +867,68 @@ export const qs_workingTime = (startdate, enddate, start, limit) =>
       encodeValuesOnly: true,
     },
   );
+
+// scrape
+// scrape_review 리스트
+export const qs_scrapeReview = () =>
+  qs.stringify({
+    // filters: {
+    //   $and: [
+    //     {
+    //       id: {
+    //         $eq: mid,
+    //       },
+    //     },
+    //   ],
+    // },
+    populate: {
+      type_input: {
+        fields: ['code', 'name'],
+      },
+      type_orgname: {
+        fields: ['code', 'name'],
+      },
+      review_result: {
+        fields: ['code', 'name'],
+      },
+      attachment: {
+        fields: '*',
+      },
+    },
+  });
+
+export const qs_scrapeCheck = () =>
+  qs.stringify({
+    // filters: {
+    //   $and: [
+    //     {
+    //       id: {
+    //         $eq: mid,
+    //       },
+    //     },
+    //   ],
+    // },
+    populate: {
+      type_orgname: {
+        fields: ['code', 'name'],
+      },
+      check_result: {
+        fields: ['code', 'name'],
+      },
+    },
+  });
+
+// codebook
+export const qs_codebook = (type) =>
+  qs.stringify({
+    filters: {
+      $and: [
+        {
+          type: {
+            $eq: type,
+          },
+        },
+      ],
+    },
+    populate: '*',
+  });
