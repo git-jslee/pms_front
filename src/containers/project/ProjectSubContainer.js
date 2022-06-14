@@ -4,7 +4,7 @@ import * as api from '../../lib/api/api';
 import moment from 'moment';
 import { setTitle } from '../../modules/common';
 import { getProject, getWork, getProjectWorkList } from '../../modules/project';
-import ProjectSubMenu from '../../components/project/ProjectSubMenu';
+import ProjectSubButton from '../../components/project/ProjectSubButton';
 import ProjectAdvancedSearchForm from '../../components/project/ProjectAdvancedSearchForm';
 import ProjectCountForm from '../../components/project/ProjectCountForm';
 import calWorkTime from '../../modules/project/calWorkTime';
@@ -18,7 +18,7 @@ import {
 } from '../../lib/api/query';
 import startEndDay from '../../modules/common/startEndDay';
 
-const ProjectSubContainer = () => {
+const ProjectSubContainer = ({ setMode }) => {
   const dispatch = useDispatch();
   const { wlist } = useSelector(({ project }) => ({
     wlist: project.wlist,
@@ -34,8 +34,14 @@ const ProjectSubContainer = () => {
 
   // sub메뉴 버튼 클릭시 동작 구현
   const [subMenu, setSubMenu] = useState('menu1');
-  const subMenuSelect = (menu) => {
-    // console.log('subMenuSelect 버튼 클릭', menu);
+
+  const handleOnClick = (menu) => {
+    console.log('subMenuSelect 버튼 클릭', menu);
+    if (menu === 'add') {
+      setMode(menu);
+      return;
+    }
+    //
     setSubMenu(menu);
     if (menu === 'menu4') {
       const date = startEndDay(
@@ -210,8 +216,8 @@ const ProjectSubContainer = () => {
 
   return (
     <>
-      <ProjectSubMenu
-        subMenuSelect={subMenuSelect}
+      <ProjectSubButton
+        handleOnClick={handleOnClick}
         reload={reload}
         subMenu={subMenu}
         subSearchOnSubmit={subSearchOnSubmit}

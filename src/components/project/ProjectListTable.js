@@ -6,16 +6,16 @@ const ProjectListTable = ({ tableData, loading }) => {
   const navigate = useNavigate();
   const columns = [
     {
-      title: 'No',
-      dataIndex: 'no',
-      key: 'no',
+      title: 'ID',
+      dataIndex: 'id',
+      key: 'id',
       sorter: (a, b) => a.no - b.no,
     },
-    // {
-    //   title: '구분',
-    //   dataIndex: 'type',
-    //   key: 'type',
-    // },
+    {
+      title: '계약',
+      dataIndex: 'contracted',
+      key: 'contracted',
+    },
     {
       title: '고객사',
       dataIndex: 'customer',
@@ -30,6 +30,12 @@ const ProjectListTable = ({ tableData, loading }) => {
       title: '서비스',
       dataIndex: 'service',
       key: 'service',
+    },
+    {
+      title: '사업부',
+      key: 'team',
+      dataIndex: 'team',
+      align: 'center',
     },
     {
       title: '상태',
@@ -70,22 +76,22 @@ const ProjectListTable = ({ tableData, loading }) => {
       align: 'center',
       sorter: (a, b) => a.totalday - b.totalday,
     },
-    {
-      title: 'Action',
-      key: 'action',
-      align: 'center',
-      render: (text, record) => (
-        <Space size="middle">
-          <Button
-            onClick={() => {
-              onClick(record.key);
-            }}
-          >
-            View
-          </Button>
-        </Space>
-      ),
-    },
+    // {
+    //   title: 'Action',
+    //   key: 'action',
+    //   align: 'center',
+    //   render: (text, record) => (
+    //     <Space size="middle">
+    //       <Button
+    //         onClick={() => {
+    //           onClick(record.key);
+    //         }}
+    //       >
+    //         View
+    //       </Button>
+    //     </Space>
+    //   ),
+    // },
   ];
 
   const onClick = (id) => {

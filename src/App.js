@@ -9,12 +9,12 @@ import PublicRoute from './components/common/PublicRoute';
 //page import
 import SiteHeader from './components/SiteHeader';
 import MainPage from './pages/MainPage';
-import ErrorPage from './pages/ErrorPage';
 import ProjectPage from './pages/ProjectPage';
+import ProjectViewPage from './pages/ProjectViewPage';
+//수정중 --
 import CustomerPage from './pages/CustomerPage';
 import WorkPage from './pages/WorkPage';
 import AntdPage from './pages/Antd';
-import ProjectViewPage from './pages/ProjectViewPage';
 import ProjectView from './pages/ProjectView';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
@@ -28,6 +28,7 @@ import SalesViewPage from './pages/SalesViewPage';
 import MaintenancePage from './pages/MaintenancePage';
 import WebglPage from './pages/WebglPage';
 import ScrapePage from './pages/ScrapePage';
+import ErrorPage from './pages/ErrorPage';
 
 function App() {
   // const { user } = useSelector(({ auth }) => ({ user: auth.auth }));
@@ -47,6 +48,7 @@ function App() {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/project" element={<ProjectPage />} />
           <Route path="/project/:id" element={<ProjectViewPage />} />
+
           <Route path="/addproject/" element={<AddPorjectPage />} />
           <Route path="/customer" element={<CustomerPage />} />
           <Route path="/addcustomer" element={<AddCustomerPage />} />

@@ -33,6 +33,14 @@ export const apiCodebook = () =>
     axios.get(`${API_URL}/api/code-tasks?populate=%2A&pagination[pageSize]=50`),
   ]);
 
+// 코드북 - project > projectAddContainer(22.06.11)
+export const pjtCodebook = () =>
+  axios.all([
+    axios.get(`${API_URL}/api/code-services`),
+    axios.get(`${API_URL}/api/code-statuses`),
+    // axios.get(`${API_URL}/api/code-tasks?populate=%2A&pagination[pageSize]=50`),
+  ]);
+
 // strapi v4 --->
 export const getQueryString = (path, query) =>
   axios.get(`${API_URL}/${path}?${query}`);

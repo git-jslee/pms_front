@@ -6,6 +6,7 @@ import ProjectCountContainer from '../containers/project/ProjectCountContainer';
 import FormTemplate from '../components/common/FormTemplate';
 import ProjectSearchContainer from '../containers/project/ProjectSearchContainer';
 import ProjectSubContainer from '../containers/project/ProjectSubContainer';
+import ProjectTemplete from '../containers/project/ProjectTemplete';
 
 const ProjectPage = () => {
   return (
@@ -13,9 +14,10 @@ const ProjectPage = () => {
       <HeaderContainer title="프로젝트" />
       <SiteHeader />
       <FormTemplate>
-        <ProjectSubContainer />
+        {/* <ProjectSubContainer />
         <hr />
-        <ProjectListContainer />
+        <ProjectListContainer /> */}
+        <ProjectTemplete />
       </FormTemplate>
     </>
   );

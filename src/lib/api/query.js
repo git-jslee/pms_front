@@ -1,6 +1,49 @@
 import qs from 'qs';
 import moment from 'moment';
 
+// 사용중인 전체고객사 정보 가져오기
+// project > projectaddcontainer
+export const qs_customer_all = (start, limit) =>
+  qs.stringify(
+    {
+      filters: {
+        $and: [
+          {
+            used: {
+              $eq: true,
+            },
+          },
+        ],
+      },
+      fields: ['name_eng', 'name'],
+      pagination: {
+        start: start,
+        limit: limit,
+      },
+    },
+    {
+      encodeValuesOnly: true,
+    },
+  );
+
+// 프로젝트 > 프로젝트 등록 > 서비스별 task 정보 가져오기
+export const qs_tasksBySid = (sid) =>
+  qs.stringify(
+    {
+      filters: {
+        code_service: {
+          id: {
+            $eq: sid,
+          },
+        },
+      },
+      fields: ['code', 'name', 'sort'],
+    },
+    {
+      encodeValuesOnly: true,
+    },
+  );
+
 // 유저 팀 정보 가져오기
 // 사용 : 작업등록시 user 팀 정보 추가->사용안함
 export const qs_teamByUserId = (uid) =>
