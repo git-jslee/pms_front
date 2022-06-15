@@ -27,17 +27,11 @@ const ProjectContentContainer = () => {
   }));
   const [totalWorkTime, setTotalWorktime] = useState([]);
 
-  // const { startMonth, endMonth } = useSelector(({ common }) => ({
-  //   startMonth: common.month[0],
-  //   endMonth: common.month[1],
-  // }));
-
-  // const [tableData, setTableData] = useState(null);
-
   // 컴포넌트가 처음 렌더링 될 때 프로젝트 전체 리스트 정보 가져옴
   // 페이지 이동 후 재 접속시.. 프로젝트 리스트 다시 가져옴...코드 수정 필요..
   useEffect(() => {
     // const params = 'projects?code_status.id=2';
+    // 1-시작전, 2-진행중, 3-보류, 4-완료, 5-대기
     const code_status_id = 2;
     const query = qs_projectList(code_status_id);
     dispatch(getProject(query));
@@ -77,46 +71,6 @@ const ProjectContentContainer = () => {
     setWorktime(result);
   }, [wlist]);
 
-  // useEffect(() => {
-  //   if (error) {
-  //     console.log('프로젝트 리스트 가져오기 오류');
-  //     console.log(error);
-  //   }
-  //   // if (status) {
-  //   //   console.log('프로젝트 리스트 가져오기 성공');
-  //   //   console.log(status);
-  //   // }
-  // }, [error]);
-
-  // const tableData = [];
-  // if (!list) {
-  //   return;
-  // }
-
-  // useEffect(() => {
-  //   if (lists) {
-  //     const tableList = lists.map((list, index) => {
-  //       const duration = moment().diff(moment(list.startDate), 'days');
-  //       const array = {
-  //         key: list.id,
-  //         no: index + 1,
-  //         type: list.code_type.name,
-  //         customer: list.customer.name,
-  //         name: list.name,
-  //         service: list.code_service.name,
-  //         status: list.code_status.name,
-  //         startdate: list.startDate,
-  //         duration: duration,
-  //         action: 'View',
-  //       };
-  //       // tableData.push(array);
-  //       return array;
-  //     });
-  //     setTableData(tableList);
-  //   }
-  // }, [lists]);
-
-  // let tableData = [];
   const [tableData, setTableData] = useState([]);
   useEffect(() => {
     if (lists) {
@@ -134,12 +88,25 @@ const ProjectContentContainer = () => {
         // console.log('**worktime**', index, _totalworktime);
         const array = {
           key: list.id,
-          no: index + 1,
+          id: list.id,
+          contracted:
+            list.attributes.contracted === null ||
+            list.attributes.contracted === false
+              ? 'No'
+              : 'Yes',
           customer: list.attributes.customer.data.attributes.name,
           name: list.attributes.name,
           service: list.attributes.code_service.data.attributes.name,
+          team:
+            list.attributes.scode_team.data === null
+              ? ''
+              : list.attributes.scode_team.data.attributes.name,
           status: list.attributes.code_status.data.attributes.name,
+          plan_startdate: list.attributes.plan_startdate,
+          plan_enddate: list.attributes.plan_enddate,
           startdate: list.attributes.startdate,
+          enddate: list.attributes.enddate,
+          price: list.attributes.price,
           lastUpdate: list.attributes.last_workupdate,
           elapsed: elapsed,
           elapsed_last: elapsed_last,

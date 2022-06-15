@@ -11,7 +11,7 @@
     "antd": "^4.20.7",
     "axios": "^0.27.2",
     "chart.js": "^3.8.0",
-    "dayjs": "^1.11.2",
+    "dayjs": "^1.11.3",
     "graphql": "^16.5.0",
     "immer": "^9.0.14",
     "moment": "^2.29.3",
@@ -57,5 +57,8 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://192.168.20.99:1337"
+  "proxy": "http://192.168.20.99:1337",
+  "devDependencies": {
+    "antd-dayjs-webpack-plugin": "^1.0.6"
+  }
 }

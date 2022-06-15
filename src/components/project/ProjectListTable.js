@@ -1,15 +1,16 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Button, Table, Space, Spin } from 'antd';
+import React, { useState } from 'react';
+import { Button, Table, Space, Spin, Row, Col, Descriptions } from 'antd';
+import ProjectEditForm from './ProjectEditForm';
 
 const ProjectListTable = ({ tableData, loading }) => {
-  const navigate = useNavigate();
+  const [visible, setVisible] = useState(false);
+  const [record, setRecord] = useState();
   const columns = [
     {
       title: 'ID',
       dataIndex: 'id',
       key: 'id',
-      sorter: (a, b) => a.no - b.no,
+      sorter: (a, b) => a.id - b.id,
     },
     {
       title: '계약',
@@ -21,6 +22,7 @@ const ProjectListTable = ({ tableData, loading }) => {
       dataIndex: 'customer',
       key: 'customer',
     },
+    Table.EXPAND_COLUMN,
     {
       title: '프로젝트명',
       dataIndex: 'name',
@@ -50,27 +52,27 @@ const ProjectListTable = ({ tableData, loading }) => {
       align: 'right',
     },
     {
-      title: '경과일',
+      title: '(start)',
       key: 'elapsed',
       dataIndex: 'elapsed',
       align: 'right',
       sorter: (a, b) => a.elapsed - b.elapsed,
     },
+    // {
+    //   title: '최근작업일',
+    //   key: 'lastUpdate',
+    //   dataIndex: 'lastUpdate',
+    //   align: 'center',
+    // },
     {
-      title: '최근작업일',
-      key: 'lastUpdate',
-      dataIndex: 'lastUpdate',
-      align: 'center',
-    },
-    {
-      title: '경과일',
+      title: '(update)',
       key: 'elapsed_last',
       dataIndex: 'elapsed_last',
       align: 'right',
       sorter: (a, b) => a.elapsed_last - b.elapsed_last,
     },
     {
-      title: '투입일',
+      title: '투입(일)',
       key: 'totalday',
       dataIndex: 'totalday',
       align: 'center',
@@ -97,7 +99,14 @@ const ProjectListTable = ({ tableData, loading }) => {
   const onClick = (id) => {
     console.log('키..', id);
     // project..view..코드 작성
-    navigate(`/project/${id}`);
+    // navigate(`/project/${id}`);
+  };
+
+  const handleEdit = (record) => {
+    //
+    console.log('****record****', record);
+    setRecord(record);
+    setVisible(true);
   };
 
   return (
@@ -106,7 +115,57 @@ const ProjectListTable = ({ tableData, loading }) => {
         columns={columns}
         dataSource={tableData}
         pagination={{ pageSize: 20 }}
+        expandable={{
+          expandedRowRender: (record) => (
+            <Row>
+              <Col span={24}>
+                <Descriptions
+                  title={record.name}
+                  bordered
+                  column={3}
+                  labelStyle={{ backgroundColor: '#d6e4ff' }}
+                  contentStyle={{ backgroundColor: '#f0f5ff' }}
+                  extra={
+                    <>
+                      <Button>상세조회</Button>
+                      <Button
+                        type="primary"
+                        disabled={record.status === '완료'}
+                        onClick={() => handleEdit(record)}
+                      >
+                        수정
+                      </Button>
+                    </>
+                  }
+                >
+                  <Descriptions.Item label="계획(시작/종료)">
+                    {`${record.plan_startdate} / ${record.plan_enddate}`}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="Start Date">
+                    {` ${record.startdate} / (${record.elapsed}일 경과)`}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="계약여부">
+                    {record.contracted}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="실행(시작/종료)">
+                    {`${record.startdate} / ${record.enddate}`}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="Update Date">
+                    {`${record.lastUpdate} / (${record.elapsed_last}일 경과)`}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="금액">
+                    {record.price}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="비 고" span={3}>
+                    {record.description}
+                  </Descriptions.Item>
+                </Descriptions>
+              </Col>
+            </Row>
+          ),
+        }}
       />
+      {visible ? <ProjectEditForm visible={visible} record={record} /> : ''}
       {loading ? <Spin tip="Loading..." /> : ''}
     </>
   );

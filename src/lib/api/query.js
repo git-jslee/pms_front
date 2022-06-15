@@ -104,6 +104,7 @@ export const qs_projectList = (params) =>
           },
         },
       },
+      sort: ['id:desc'],
       // fields: ['name'],
       populate: {
         customer: {
@@ -113,6 +114,9 @@ export const qs_projectList = (params) =>
           fields: ['name'],
         },
         code_service: {
+          fields: ['name'],
+        },
+        scode_team: {
           fields: ['name'],
         },
         project_tasks: {
