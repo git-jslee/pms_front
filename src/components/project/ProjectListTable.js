@@ -1,10 +1,17 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button, Table, Space, Spin, Row, Col, Descriptions } from 'antd';
 import ProjectEditForm from './ProjectEditForm';
 
-const ProjectListTable = ({ tableData, loading }) => {
-  const [visible, setVisible] = useState(false);
-  const [record, setRecord] = useState();
+const ProjectListTable = ({
+  tableData,
+  loading,
+  handleEdit,
+  handleSearch1,
+}) => {
+  // const [visible, setVisible] = useState(false);
+  // const [record, setRecord] = useState();
+  const navigate = useNavigate();
   const columns = [
     {
       title: 'ID',
@@ -96,18 +103,24 @@ const ProjectListTable = ({ tableData, loading }) => {
     // },
   ];
 
+  const onClick1 = (id) => {
+    console.log('키..', id);
+    // project..view..코드 작성
+    navigate(`/projects/${id}`);
+  };
+
   const onClick = (id) => {
     console.log('키..', id);
     // project..view..코드 작성
-    // navigate(`/project/${id}`);
+    navigate(`/project/${id}`);
   };
 
-  const handleEdit = (record) => {
-    //
-    console.log('****record****', record);
-    setRecord(record);
-    setVisible(true);
-  };
+  // const handleEdit = (record) => {
+  //   //
+  //   console.log('****record****', record);
+  //   setRecord(record);
+  //   setVisible(true);
+  // };
 
   return (
     <>
@@ -127,7 +140,12 @@ const ProjectListTable = ({ tableData, loading }) => {
                   contentStyle={{ backgroundColor: '#f0f5ff' }}
                   extra={
                     <>
-                      <Button>상세조회</Button>
+                      <Button onClick={() => onClick1(record.id)}>
+                        상세조회-old
+                      </Button>
+                      <Button onClick={() => onClick(record.id)}>
+                        상세조회
+                      </Button>
                       <Button
                         type="primary"
                         disabled={record.status === '완료'}
@@ -165,7 +183,7 @@ const ProjectListTable = ({ tableData, loading }) => {
           ),
         }}
       />
-      {visible ? <ProjectEditForm visible={visible} record={record} /> : ''}
+      {/* {visible ? <ProjectEditForm visible={visible} record={record} /> : ''} */}
       {loading ? <Spin tip="Loading..." /> : ''}
     </>
   );

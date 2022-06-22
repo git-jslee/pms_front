@@ -4,6 +4,7 @@ import { getProjectList, getProject } from '../../modules/project';
 import moment from 'moment';
 // import { getProjectList } from '../../modules/projectList';
 import ProjectListTable from '../../components/project/ProjectListTable';
+import ProjectEditForm from '../../components/project/ProjectEditForm';
 import { apiCustomerList } from '../../lib/api/api';
 import * as api from '../../lib/api/api';
 import { startLoading, finishLoading } from '../../modules/loading';
@@ -11,17 +12,29 @@ import calWorkTime from '../../modules/project/calWorkTime';
 import { weekOfMonth } from '../../modules/common/weekOfMonth';
 import { qs_projectList, qs_workListAll } from '../../lib/api/query';
 import ProjectSubContainer from './ProjectSubContainer';
+import { message } from 'antd';
+import { tbl_update, tbl_insert } from '../../modules/common/tbl_crud';
+import { isTypeSystemDefinitionNode } from 'graphql';
 
 const ProjectContentContainer = () => {
   const dispatch = useDispatch();
+  const { auth } = useSelector(({ auth }) => ({
+    auth: auth.auth,
+  }));
   // const [projectList, setProjectList] = useState();
   const { lists, error, loading } = useSelector(({ project, loading }) => ({
     lists: project.list,
     error: project.error,
     loading: loading['project/GET_PROJECT'],
   }));
-  console.log('loading', loading);
-  console.log('list', lists);
+  const [btnDisabled, setBtnDisabled] = useState(false);
+  const [visible, setVisible] = useState(false);
+  const [record, setRecord] = useState();
+  const [codestatus, setCodestatus] = useState();
+  const [checkbox, setCheckbox] = useState({});
+  //
+  // console.log('loading', loading);
+  // console.log('list', lists);
   const { wlist } = useSelector(({ project }) => ({
     wlist: project.wlist,
   }));
@@ -56,9 +69,9 @@ const ProjectContentContainer = () => {
       result.push(...request.data.data);
       // console.log('-----request-----', start, '--', request.data);
     }
-    console.log('-----result------', result);
+    // console.log('-----result------', result);
     const worktime = calWorkTime(result);
-    console.log('--calworktime--', worktime);
+    // console.log('--calworktime--', worktime);
     setTotalWorktime(worktime);
   };
 
@@ -74,7 +87,7 @@ const ProjectContentContainer = () => {
   const [tableData, setTableData] = useState([]);
   useEffect(() => {
     if (lists) {
-      console.log('**list**', lists);
+      // console.log('**list**', lists);
       const tableList = lists.map((list, index) => {
         const elapsed = moment().diff(
           moment(list.attributes.startdate),
@@ -122,11 +135,123 @@ const ProjectContentContainer = () => {
     }
   }, [lists, totalWorkTime]);
 
-  console.log('tableList', tableData);
+  // console.log('tableList', tableData);
+
+  const handleEdit = async (record) => {
+    //
+    console.log('****record****', record);
+    try {
+      const request = await api.getQueryString(
+        'api/code-statuses',
+        'populate=%2A',
+      );
+      console.log('****code-statuses****', request.data.data);
+      setCodestatus(request.data.data);
+      setRecord(record);
+      setVisible(true);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const onClose = (status) => {
+    //
+    console.log('----onClose----');
+    if (status) {
+      setRecord();
+      setCheckbox({});
+      setVisible(false);
+    } else {
+      alert('프로젝트 update 중...');
+    }
+  };
+
+  const onSubmit = async (value) => {
+    console.log('>>>>>>', value);
+    try {
+      setBtnDisabled(true);
+      const update_data = {};
+      for (let k in checkbox) {
+        const v = checkbox[k];
+        if (v === true && typeof value[k] === 'object') {
+          update_data[k] = moment(value[k]).format('YYYY-MM-DD').toString();
+        } else if (v === true && typeof value[k] !== 'object') {
+          update_data[k] = value[k];
+        }
+      }
+      console.log('1.>>>>>>>', update_data);
+      if (typeof update_data.code_status === 'string') {
+        return message.error(`입력 오류 - 서비스 상태`, 3);
+      }
+      const request = await tbl_update('api/projects', value.id, update_data);
+      console.log('-----------', request);
+      message.success(`update - ${request.statusText}`, 3);
+      const status_filter = (key) => {
+        const test = codestatus.filter((f) => f.id === key);
+        return test[0].attributes.name;
+      };
+      // prject_change table insert
+      for (let k in update_data) {
+        let changevalue;
+        if (k === 'code_status') {
+          changevalue = status_filter(update_data[k]);
+        } else changevalue = update_data[k].toString();
+
+        const insert_data = {
+          project: value.id,
+          type: k,
+          change: changevalue,
+          users_permissions_user: auth.user.id,
+        };
+        // console.log('-----------', insert_data);
+        const insert = await tbl_insert('api/project-changes', insert_data);
+        // console.log('-----insert------', insert);
+      }
+      message.success(`수정 완료`, 3);
+    } catch (error) {
+      console.error(error);
+      message.error(`관리자에게 문의 바랍니다.`, 3);
+    } finally {
+      setCheckbox({});
+      setVisible(false);
+      setBtnDisabled(false);
+    }
+    //
+  };
+
+  // 수정 form 에서 체크 박스 변경시
+  const handleCheck = (e) => {
+    const name = e.target['data-id'];
+    setCheckbox({ ...checkbox, [name]: e.target.checked });
+  };
+
+  const handleSearch1 = (id) => [
+    //
+    console.log('id', id),
+  ];
 
   return (
     <>
-      <ProjectListTable tableData={tableData} loading={loading} />
+      <ProjectListTable
+        tableData={tableData}
+        loading={loading}
+        handleEdit={handleEdit}
+        handleSearch1={handleSearch1}
+      />
+      {visible ? (
+        <ProjectEditForm
+          visible={visible}
+          btnDisabled={btnDisabled}
+          record={record}
+          code_statuses={codestatus}
+          onClose={onClose}
+          onSubmit={onSubmit}
+          handleCheck={handleCheck}
+          checkbox={checkbox}
+        />
+      ) : (
+        ''
+      )}
     </>
   );
 };

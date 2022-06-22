@@ -255,7 +255,11 @@ const ProjectAddForm = (props) => {
               </Form.Item>
             </Col>
             <Col span={6}>
-              <Form.Item label="계획(종료)" name="plan_enddate">
+              <Form.Item
+                label="계획(종료)"
+                name="plan_enddate"
+                rules={[{ required: true }]}
+              >
                 <DatePicker />
               </Form.Item>
             </Col>

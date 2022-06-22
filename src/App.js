@@ -10,6 +10,7 @@ import PublicRoute from './components/common/PublicRoute';
 import SiteHeader from './components/SiteHeader';
 import MainPage from './pages/MainPage';
 import ProjectPage from './pages/ProjectPage';
+import ProjectDetailPage from './pages/ProjectDetailPage';
 import ProjectViewPage from './pages/ProjectViewPage';
 //수정중 --
 import CustomerPage from './pages/CustomerPage';
@@ -47,7 +48,8 @@ function App() {
           <Route path="/" element={<ProjectPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/project" element={<ProjectPage />} />
-          <Route path="/project/:id" element={<ProjectViewPage />} />
+          <Route path="project/:id" element={<ProjectDetailPage />} />
+          <Route path="/projects/:id" element={<ProjectViewPage />} />
 
           <Route path="/addproject/" element={<AddPorjectPage />} />
           <Route path="/customer" element={<CustomerPage />} />

@@ -12,7 +12,7 @@ const ProjectViewPage = () => {
       <HeaderContainer />
       <SiteHeader />
       <FormTemplate>
-        <ModeChangeButtonContainer />
+        {/* <ModeChangeButtonContainer /> */}
         <ProjectStatisticsContainer />
         <hr />
         <ProjectViewContainer />

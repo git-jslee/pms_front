@@ -209,11 +209,11 @@ const InfoSalesDrawerContainer = ({
       _margin = parseInt(profitMarginValue.margin);
       _profit = parseInt(calResult.profit);
     }
-    const _confirmed = checked.checked === true ? true : false;
-    const _probability = checked.checked === true ? 5 : values.probability;
+    // const _confirmed = checked.checked === true ? true : false;
+    const _probability = values.confirmed === true ? 5 : values.probability;
     // const _sales_recdate = moment(values.sales_rec_date).to
     const update_data = {
-      confirmed: _confirmed,
+      confirmed: values.confirmed,
       scode_probability: _probability,
       sales_recdate: moment(values.sales_rec_date)
         .format('YYYY-MM-DD')
@@ -231,7 +231,7 @@ const InfoSalesDrawerContainer = ({
     const paymentDate = values.payment_date || '';
     const payment_data = {
       sales_status: slist.id,
-      confirmed: _confirmed,
+      confirmed: values.confirmed,
       scode_probability: _probability,
       sales: values.sales,
       sales_profit: _profit,
@@ -346,7 +346,7 @@ const InfoSalesDrawerContainer = ({
               salesValueOnchange={salesValueOnchange}
               profitMarginOnchange={profitMarginOnchange}
               checked={checked}
-              onChangeSwitch={onChangeSwitch}
+              // onChangeSwitch={onChangeSwitch}
               btnDisabled={btnDisabled}
             />
           </>

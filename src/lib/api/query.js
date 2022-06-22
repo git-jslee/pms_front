@@ -38,7 +38,60 @@ export const qs_tasksBySid = (sid) =>
         },
       },
       fields: ['code', 'name', 'sort'],
+
+      // pagination: {
+      //   start: start,
+      //   limit: limit,
+      // },
     },
+    {
+      encodeValuesOnly: true,
+    },
+  );
+
+//work
+export const qs_worksByPid = (pid) =>
+  qs.stringify(
+    {
+      filters: {
+        $and: [
+          {
+            project: {
+              id: {
+                $eq: pid,
+              },
+            },
+          },
+          {
+            deleted: {
+              $eq: false,
+            },
+          },
+        ],
+      },
+      fields: ['working_day', 'working_time', 'description'],
+      // populate: '*',
+      populate: {
+        project_task: {
+          fields: ['plan_day'],
+          populate: {
+            code_task: {
+              fields: ['code', 'name'],
+            },
+          },
+        },
+        code_pj_team: {
+          fields: ['name'],
+        },
+        code_progress: {
+          fields: ['code'],
+        },
+        users_permissions_user: {
+          fields: ['username', 'email'],
+        },
+      },
+    },
+    //code_pj_team-name, code_progress-code,users_permissions_user-name,e-mail
     {
       encodeValuesOnly: true,
     },

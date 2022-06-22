@@ -2,13 +2,14 @@ import React from 'react';
 import { Descriptions, Badge, Space, Divider, Button } from 'antd';
 
 const ProjectInfoTable = ({ projectInfo, updateForm }) => {
+  console.log('>>>>>>', projectInfo);
   const pview = projectInfo.attributes;
   console.log('projectInfo', projectInfo);
   return (
     <>
       <Descriptions title="Project Info" bordered column={3}>
         <Descriptions.Item label="구분">
-          {pview.code_type.data.attributes.name}
+          {/* {pview.code_type.data.attributes.name} */}
         </Descriptions.Item>
         <Descriptions.Item label="고객사" span={1}>
           {pview.customer.data.attributes.name}

@@ -62,7 +62,7 @@ const ProjectInputRate = ({ inputRate }) => {
   });
   const data_mv = labels.map((v) => {
     const result = inputRate[v]['4']
-      ? Math.round((inputRate[v]['4'] / (40 * 1)) * 100)
+      ? Math.round((inputRate[v]['4'] / (40 * 2)) * 100)
       : 0;
     return result;
   });
