@@ -21,7 +21,7 @@ const ProjectEditForm = ({
   visible,
   btnDisabled,
   record,
-  code_statuses,
+  code_status,
   onClose,
   onSubmit,
   handleCheck,
@@ -40,7 +40,7 @@ const ProjectEditForm = ({
   const contracted = record.contracted === 'Yes' ? true : false;
   const initialValues = {
     id: record.id,
-    code_status: record.status,
+    code_status: record.code_status,
     plan_startdate: moment(record.plan_startdate),
     plan_enddate: moment(record.plan_enddate),
     startdate: moment(record.startdate),
@@ -85,7 +85,7 @@ const ProjectEditForm = ({
                 rules={[{ required: _status }]}
               >
                 <Select disabled={!_status}>
-                  {code_statuses.map((status, index) => {
+                  {code_status.map((status, index) => {
                     return (
                       <Select.Option key={status.id} value={status.id}>
                         {status.attributes.name}

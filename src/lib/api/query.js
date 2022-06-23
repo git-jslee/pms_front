@@ -116,6 +116,52 @@ export const qs_teamByUserId = (uid) =>
     },
   );
 
+// 프로젝트
+// Projwct id quf...project-tasks
+export const qs_projectByPid = () =>
+  qs.stringify(
+    {
+      // filters: {
+      //   id: {
+      //     $eq: pid,
+      //   },
+      // },
+      // fields: ['name'],
+      populate: {
+        // fields: ['plan_day'],
+        customer: {
+          fields: ['name'],
+        },
+        code_service: {
+          fields: ['name', 'code'],
+        },
+        code_status: {
+          fields: ['name'],
+        },
+        project_tasks: {
+          fields: ['plan_day', 'cus_task'],
+          populate: '*',
+        },
+        scode_team: {
+          fields: ['name'],
+        },
+        project_costs: {
+          // fields: ['name'],
+        },
+        project_changes: {
+          fields: ['type', 'change', 'date', 'description'],
+        },
+      },
+      pagination: {
+        start: 0,
+        limit: 50,
+      },
+    },
+    {
+      encodeValuesOnly: true,
+    },
+  );
+
 // 프로젝트 카운트
 export const qs_projectCount = (codeid) =>
   qs.stringify(

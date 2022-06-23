@@ -48,8 +48,8 @@ const ProjectListTable = ({
     },
     {
       title: '상태',
-      key: 'status',
-      dataIndex: 'status',
+      key: 'code_status',
+      dataIndex: 'code_status',
       align: 'center',
     },
     {
@@ -148,7 +148,7 @@ const ProjectListTable = ({
                       </Button>
                       <Button
                         type="primary"
-                        disabled={record.status === '완료'}
+                        disabled={record.code_status === '완료'}
                         onClick={() => handleEdit(record)}
                       >
                         수정

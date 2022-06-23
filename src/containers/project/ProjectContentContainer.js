@@ -114,7 +114,7 @@ const ProjectContentContainer = () => {
             list.attributes.scode_team.data === null
               ? ''
               : list.attributes.scode_team.data.attributes.name,
-          status: list.attributes.code_status.data.attributes.name,
+          code_status: list.attributes.code_status.data.attributes.name,
           plan_startdate: list.attributes.plan_startdate,
           plan_enddate: list.attributes.plan_enddate,
           startdate: list.attributes.startdate,
@@ -184,18 +184,24 @@ const ProjectContentContainer = () => {
         return message.error(`입력 오류 - 서비스 상태`, 3);
       }
       const request = await tbl_update('api/projects', value.id, update_data);
-      console.log('-----------', request);
+      // console.log('-----------', request);
       message.success(`update - ${request.statusText}`, 3);
       const status_filter = (key) => {
         const test = codestatus.filter((f) => f.id === key);
         return test[0].attributes.name;
       };
       // prject_change table insert
+      console.log('record-----------', record);
+      let count = 0;
       for (let k in update_data) {
         let changevalue;
         if (k === 'code_status') {
-          changevalue = status_filter(update_data[k]);
-        } else changevalue = update_data[k].toString();
+          changevalue = `${record[k]} -> ${status_filter(update_data[k])}`;
+        } else {
+          const newvalue =
+            update_data[k] !== undefined ? update_data[k].toString() : '';
+          changevalue = `${record[k]} -> ${newvalue}`;
+        }
 
         const insert_data = {
           project: value.id,
@@ -205,9 +211,10 @@ const ProjectContentContainer = () => {
         };
         // console.log('-----------', insert_data);
         const insert = await tbl_insert('api/project-changes', insert_data);
+        count++;
         // console.log('-----insert------', insert);
       }
-      message.success(`수정 완료`, 3);
+      message.success(`${count}건 처리 완료`, 3);
     } catch (error) {
       console.error(error);
       message.error(`관리자에게 문의 바랍니다.`, 3);
@@ -243,7 +250,7 @@ const ProjectContentContainer = () => {
           visible={visible}
           btnDisabled={btnDisabled}
           record={record}
-          code_statuses={codestatus}
+          code_status={codestatus}
           onClose={onClose}
           onSubmit={onSubmit}
           handleCheck={handleCheck}
