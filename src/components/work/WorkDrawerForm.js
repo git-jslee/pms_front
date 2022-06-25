@@ -24,6 +24,7 @@ const WorkDrawerForm = ({
   drawerOnClose,
   initialValues,
   editmode,
+  setEditmode,
   editOnclick,
   editworkOnSubmit,
   deleteOnclick,
@@ -175,7 +176,7 @@ const WorkDrawerForm = ({
                     label="진행률"
                     rules={[{ required: true }]}
                   >
-                    <Select>
+                    <Select disabled={true}>
                       {progress.map((list) => {
                         return (
                           <Select.Option key={list.id} value={list.id}>
@@ -194,9 +195,25 @@ const WorkDrawerForm = ({
                   </Form.Item>
                 </Col>
               </Row>
-              <Button type="primary" htmlType="submit" disabled={btnDisabled}>
-                Submit
-              </Button>
+              <Row gutter={16}>
+                <Col>
+                  <Button
+                    type="primary"
+                    htmlType="submit"
+                    disabled={btnDisabled}
+                  >
+                    Submit
+                  </Button>
+                </Col>
+                <Col>
+                  <Button
+                    onClick={() => setEditmode(false)}
+                    disabled={btnDisabled}
+                  >
+                    Cancle
+                  </Button>
+                </Col>
+              </Row>
             </Form>
           </>
         ) : (

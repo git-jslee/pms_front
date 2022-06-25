@@ -10,6 +10,7 @@ import {
 } from '../../lib/api/query';
 import moment from 'moment';
 import WorkDrawerContainer from './WorkDrawerContainer';
+import { message } from 'antd';
 
 const WorkListContainer = () => {
   const [workList, setWorkList] = useState([]);
@@ -87,6 +88,7 @@ const WorkListContainer = () => {
       working_day_str: workinfo.working_day,
       working_time: workinfo.working_time,
       code_progress: workinfo.code_progress.data.id,
+      revision: workinfo.revision ? workinfo.revision : 0,
       progress: workinfo.code_progress.data.attributes.code,
       description: workinfo.description,
     };
@@ -101,6 +103,11 @@ const WorkListContainer = () => {
     console.log('***닫기***', e);
     if (e) {
       setVisible(false);
+    } else {
+      message.error(
+        `작업 수정 중...SUBMIT(수정) or Calcle(취소) 후 다시 시도하세요`,
+        3,
+      );
     }
   };
 

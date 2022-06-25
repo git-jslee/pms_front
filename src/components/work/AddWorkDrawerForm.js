@@ -39,33 +39,74 @@ const AddWorkDrawerForm = ({
   // onClickAddWork,
   visible,
   resetfields,
-  setResetfields,
+  // setResetfields,
+  customers,
+  step,
+  // initialValues,
+  resetForm,
+  revEnable,
+  handleRevision,
 }) => {
   const [form] = Form.useForm();
+  console.log('--reset step--', resetForm);
 
-  if (resetfields) {
-    form.resetFields();
-    if (customerId !== null) {
-      form.setFieldsValue({
-        customer: customerId,
-        workingDay: moment(),
-      });
-      console.log('***cusID***', customerId);
-    }
-    form.setFieldsValue({ workingDay: moment() });
-    setResetfields(false);
-  }
+  // if (resetfields) {
+  //   form.resetFields();
+  //   if (customerId !== null) {
+  //     form.setFieldsValue({
+  //       customer: customerId,
+  //       workingDay: moment(),
+  //     });
+  //     console.log('***cusID***', customerId);
+  //   }
+  //   form.setFieldsValue({ workingDay: moment() });
+  //   setResetfields(false);
+  // }
 
   const onReset = () => {
     form.resetFields();
     form.setFieldsValue({ workingDay: moment() });
   };
 
-  useEffect(() => {
-    form.setFieldsValue({ workingDay: moment() });
-  }, []);
+  // useEffect(() => {
+  //   form.setFieldsValue({ workingDay: moment() });
+  // }, []);
 
-  console.log('***drwpdownlist***', dropdownLists);
+  useEffect(() => {
+    if (resetForm.step === 'step-0') {
+      form.resetFields();
+      form.setFieldsValue({ workingDay: moment() });
+    }
+    // step.1 - 프로젝트, 작업명, 진행상태 초기화
+    if (resetForm.step === 'step-1') {
+      form.setFieldsValue({
+        project: '',
+        project_task: '',
+        code_progress: '',
+        revision: '',
+        last_workupdate: '',
+      });
+    }
+    // step.2 - 작업명, 진행상태 초기화
+    if (resetForm.step === 'step-2') {
+      form.setFieldsValue({
+        project_task: '',
+        code_progress: '',
+        revision: '',
+        last_workupdate: '',
+      });
+    }
+    // step.3 - 진행상태 초기화
+    if (resetForm.step === 'step-3') {
+      form.setFieldsValue({
+        code_progress: resetForm.parms,
+        revision: resetForm.revision,
+        last_workupdate: resetForm.last_workupdate,
+      });
+    }
+  }, [resetForm]);
+
+  // console.log('***drwpdownlist***', dropdownLists);
 
   return (
     <>
@@ -92,6 +133,7 @@ const AddWorkDrawerForm = ({
             layout="vertical"
             hideRequiredMark
             onFinish={onSubmit}
+            // initialValues={initialValues}
           >
             <Row>
               <Col span={12}>
@@ -109,15 +151,15 @@ const AddWorkDrawerForm = ({
             {addMode === 'project' ? (
               <>
                 <Row gutter={16}>
-                  <Col span={12}>
+                  <Col span={8}>
                     <Form.Item
                       name="customer"
                       label="고객명"
                       rules={[{ required: true, message: '고객을 선택하세요' }]}
                     >
                       <Select onChange={customerOnChange}>
-                        {dropdownLists.customers
-                          ? dropdownLists.customers.map((customer, index) => {
+                        {customers
+                          ? customers.map((customer, index) => {
                               return (
                                 <Select.Option
                                   key={customer.id}
@@ -131,7 +173,7 @@ const AddWorkDrawerForm = ({
                       </Select>
                     </Form.Item>
                   </Col>
-                  <Col span={12}>
+                  <Col span={16}>
                     <Form.Item
                       name="project"
                       label="프로젝트명"
@@ -140,8 +182,8 @@ const AddWorkDrawerForm = ({
                       ]}
                     >
                       <Select onChange={projectOnChange}>
-                        {dropdownLists.items1
-                          ? dropdownLists.items1.map((list) => {
+                        {step.step1
+                          ? step.step1.map((list) => {
                               return (
                                 <Select.Option key={list.id} value={list.id}>
                                   {list.attributes.name}
@@ -154,21 +196,21 @@ const AddWorkDrawerForm = ({
                   </Col>
                 </Row>
                 <Row gutter={16}>
-                  <Col span={12}>
+                  <Col span={8}>
                     <Form.Item
                       label="작업명"
                       name="project_task"
                       rules={[{ required: true }]}
                     >
                       <Select onChange={taskOnChange}>
-                        {dropdownLists.items2
-                          ? dropdownLists.items2.map((list) => {
+                        {step.step2
+                          ? step.step2.map((list) => {
                               return (
                                 <Select.Option key={list.id} value={list.id}>
-                                  {
-                                    list.attributes.code_task.data.attributes
-                                      .name
-                                  }
+                                  {list.attributes.cus_task
+                                    ? list.attributes.cus_task
+                                    : list.attributes.code_task.data.attributes
+                                        .name}
                                 </Select.Option>
                               );
                             })
@@ -176,7 +218,7 @@ const AddWorkDrawerForm = ({
                       </Select>
                     </Form.Item>
                   </Col>
-                  <Col span={12}>
+                  <Col span={6}>
                     <Form.Item
                       label="작업일"
                       name="workingDay"
@@ -185,9 +227,12 @@ const AddWorkDrawerForm = ({
                       <DatePicker format={'YYYY-MM-DD'} />
                     </Form.Item>
                   </Col>
-                </Row>
-                <Row gutter={16}>
-                  <Col span={12}>
+                  <Col span={6}>
+                    <Form.Item label="last work update" name="last_workupdate">
+                      <Input disabled={true} />
+                    </Form.Item>
+                  </Col>
+                  <Col span={4}>
                     <Form.Item
                       label="작업시간"
                       name="workingTime"
@@ -196,15 +241,17 @@ const AddWorkDrawerForm = ({
                       <InputNumber />
                     </Form.Item>
                   </Col>
-                  <Col span={12}>
+                </Row>
+                <Row gutter={16}>
+                  <Col span={8}>
                     <Form.Item
                       name="code_progress"
                       label="진행상태"
                       rules={[{ required: true }]}
                     >
                       <Select>
-                        {dropdownLists.items3
-                          ? dropdownLists.items3.map((list) => {
+                        {step.step3
+                          ? step.step3.map((list) => {
                               return (
                                 <Select.Option key={list.id} value={list.id}>
                                   {list.attributes.code}
@@ -214,6 +261,23 @@ const AddWorkDrawerForm = ({
                           : []}
                       </Select>
                     </Form.Item>
+                  </Col>
+                  <Col span={8}>
+                    <Form.Item name="revision" label="revision count">
+                      <InputNumber disabled={true} />
+                    </Form.Item>
+                    {/* <span>revision count</span>
+                    <h4>0</h4> */}
+                  </Col>
+                  <Col span={8}>
+                    <br />
+                    <Button
+                      onClick={handleRevision}
+                      disabled={!revEnable}
+                      type="primary"
+                    >
+                      Rev + 1
+                    </Button>
                   </Col>
                 </Row>
               </>

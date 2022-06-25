@@ -48,7 +48,7 @@ const WorkDrawerContainer = ({
       const update_data = {
         working_day: moment(e.working_day).format('YYYY-MM-DD').toString(),
         working_time: e.working_time,
-        code_progress: e.code_progress,
+        // code_progress: e.code_progress,
         // project_task: e.task,
         description: e.description,
       };
@@ -86,6 +86,7 @@ const WorkDrawerContainer = ({
         drawerOnClose={drawerOnClose}
         initialValues={initialValues}
         editmode={editmode}
+        setEditmode={setEditmode}
         editOnclick={editOnclick}
         editworkOnSubmit={editworkOnSubmit}
         deleteOnclick={deleteOnclick}

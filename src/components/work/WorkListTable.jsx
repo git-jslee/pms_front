@@ -30,6 +30,11 @@ const WorkListTable = ({ lists, code_tasks, drawerOnClick }) => {
       dataIndex: 'task',
     },
     {
+      title: 'Rev',
+      key: 'revision',
+      dataIndex: 'revision',
+    },
+    {
       title: '작업자',
       key: 'user',
       dataIndex: 'user',
@@ -83,6 +88,7 @@ const WorkListTable = ({ lists, code_tasks, drawerOnClick }) => {
           wlist.project.data.attributes.code_service.data.attributes.name,
         task: wlist.project_task.data.attributes.code_task.data.attributes.name,
         progress: wlist.code_progress.data.code,
+        revision: wlist.revision ? wlist.revision : 0,
         user: wlist.users_permissions_user.data.attributes.username,
         workingDay: wlist.working_day,
         workingTime: wlist.working_time,
