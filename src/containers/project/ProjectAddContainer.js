@@ -6,9 +6,12 @@ import { tbl_insert } from '../../modules/common/tbl_crud';
 import * as api from '../../lib/api/api';
 import apiQueryAll from '../../lib/api/apiQueryAll';
 import { qs_customer_all, qs_tasksBySid } from '../../lib/api/query';
-import { storeValueIsStoreObject } from '@apollo/client/cache/inmemory/helpers';
+import { message } from 'antd';
 
 const ProjectAddContainer = ({ mode, setMode }) => {
+  const { auth } = useSelector(({ auth }) => ({
+    auth: auth.auth,
+  }));
   // 중복submit 방지 기능
   const [btnDisabled, setBtnDisabled] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -26,7 +29,7 @@ const ProjectAddContainer = ({ mode, setMode }) => {
 
       // 프로젝트 코드북 가져오기
       const res_code = await api.pjtCodebook();
-      //   console.log('>>>>', res_code);
+      // console.log('res_code>>>>', res_code);
 
       // custom code_task ID 정보만 가져오기 , custom:6
       // 서비스에 해당하는 task 추가시 가져온 ID 에 1:1 매칭
@@ -76,13 +79,13 @@ const ProjectAddContainer = ({ mode, setMode }) => {
 
   const handleOnChange = async (e) => {
     //
+    // console.log('******', e);
     try {
       const query = qs_tasksBySid(e);
       const request = await api.getQueryString('api/code-tasks', query);
       const sort_req = request.data.data.sort((a, b) => {
         return a.attributes.sort - b.attributes.sort;
       });
-      //   console.log('******', sort_req);
       setTasks(sort_req);
     } catch (error) {
       console.error(error);
@@ -92,11 +95,12 @@ const ProjectAddContainer = ({ mode, setMode }) => {
   const onSubmit = async (values) => {
     try {
       console.log('>>>>>>onSubmit>>>>>>>', values);
+      let count = 0;
       setBtnDisabled(true);
       // 프로젝트 등록
       const pjt_insert = await tbl_insert('api/projects', values);
       // console.log('>>>>> 1. project_insert 성공', insert);
-
+      message.success('프로젝트 등록 성공', 3);
       //프로젝트 task 등록
       // project task 값 추출 - 키에서 '__' 포함 키 배열로 변경
       const projectId = pjt_insert.data.data.id;
@@ -125,12 +129,34 @@ const ProjectAddContainer = ({ mode, setMode }) => {
           };
           //   console.log('>>>>>>taskArr>>>>>>>', task_data);
           const task_insert = await tbl_insert('api/project-tasks', task_data);
-          console.log(
-            `>>>> 2. task-${task_insert.data.data.id} : `,
-            task_insert.data,
-          );
+          count++;
+          // console.log(
+          //   `>>>> 2. task-${task_insert.data.data.id} : `,
+          //   task_insert.data,
+          // );
         }
       }
+
+      // project_change 등등..프로젝트 등록정보, 프로젝트 상태 정보
+      const _code_state =
+        codebook[1].data.data[values.code_status].attributes.name;
+      const project_change1 = {
+        project: projectId,
+        type: 'init',
+        change: '프로젝트 생성',
+        users_permissions_user: auth.user.id,
+      };
+      const project_change2 = {
+        project: projectId,
+        type: 'code_status',
+        change: `init -> ${_code_state}`,
+        users_permissions_user: auth.user.id,
+      };
+      const insert1 = await tbl_insert('api/project-changes', project_change1);
+      const insert2 = await tbl_insert('api/project-changes', project_change2);
+
+      // 완료메시지
+      message.success(`프로젝트 task ${count}건 등록`, 3);
     } catch (error) {
       console.error(error);
     }

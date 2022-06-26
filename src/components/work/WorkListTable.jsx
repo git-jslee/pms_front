@@ -30,6 +30,11 @@ const WorkListTable = ({ lists, code_tasks, drawerOnClick }) => {
       dataIndex: 'task',
     },
     {
+      title: '%',
+      key: 'code_progress',
+      dataIndex: 'code_progress',
+    },
+    {
       title: 'Rev',
       key: 'revision',
       dataIndex: 'revision',
@@ -45,7 +50,7 @@ const WorkListTable = ({ lists, code_tasks, drawerOnClick }) => {
       dataIndex: 'workingDay',
     },
     {
-      title: '작업시간',
+      title: '시간',
       key: 'workingTime',
       dataIndex: 'workingTime',
     },
@@ -53,7 +58,7 @@ const WorkListTable = ({ lists, code_tasks, drawerOnClick }) => {
       title: 'Action',
       key: 'action',
       render: (text, record) => (
-        <Space size="middle">
+        <Space size="small">
           <Button
             onClick={() => {
               drawerOnClick(text);
@@ -67,7 +72,7 @@ const WorkListTable = ({ lists, code_tasks, drawerOnClick }) => {
   ];
 
   const tableData = [];
-  console.log('1.code_tasks', code_tasks);
+  // console.log('1.code_tasks', code_tasks);
   console.log('^^^^^^1.lists^^^^^^^', lists);
   const tableList = lists.map((list, index) => {
     const wlist = list.attributes;
@@ -78,7 +83,10 @@ const WorkListTable = ({ lists, code_tasks, drawerOnClick }) => {
     // );
     // console.log('====key 확인====', 'project' in wlist);
     if ('project' in wlist) {
-      console.log('****실행 project *****', wlist.project_task);
+      console.log(
+        '****실행 project *****',
+        wlist.users_permissions_user.data.attributes.username,
+      );
       const array = {
         key: list.id,
         type: '프로젝트',

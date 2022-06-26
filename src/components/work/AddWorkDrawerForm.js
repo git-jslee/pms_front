@@ -99,7 +99,7 @@ const AddWorkDrawerForm = ({
     // step.3 - 진행상태 초기화
     if (resetForm.step === 'step-3') {
       form.setFieldsValue({
-        code_progress: resetForm.parms,
+        code_progress: resetForm.progress,
         revision: resetForm.revision,
         last_workupdate: resetForm.last_workupdate,
       });

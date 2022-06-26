@@ -50,3 +50,58 @@ export const qs_projectNameByCid = (cid) =>
   });
 
 // 작업 >  작업등록(프로젝트) - task 정보 가져오기
+
+// <-- work
+// 작업 > user 별 작업리스트
+export const qs_workListByUid = (uid, start, end) =>
+  qs.stringify(
+    {
+      filters: {
+        $and: [
+          {
+            users_permissions_user: {
+              id: {
+                $eq: uid,
+              },
+            },
+          },
+          {
+            deleted: {
+              $eq: false,
+            },
+          },
+        ],
+      },
+      // 작업등록일 기준 정렬
+      sort: ['working_day:desc'],
+      // fields: ['name'],
+      populate: {
+        fields: ['working_day', 'working_time'],
+        project: {
+          // populate: '*',
+          populate: ['code_service'],
+          fields: ['name'],
+        },
+        project_task: {
+          populate: ['code_task'],
+          fields: ['plan_day', 'cus_task'],
+        },
+        customer: {
+          fields: ['name'],
+        },
+        users_permissions_user: {
+          fields: ['username'],
+        },
+        code_progress: {
+          fields: ['code'],
+        },
+      },
+      pagination: {
+        start: 0,
+        limit: 50,
+      },
+    },
+    {
+      encodeValuesOnly: true,
+    },
+  );

@@ -37,6 +37,7 @@ const AddWorkDrawerContainer = () => {
   const [revEnable, setRevEnable] = useState(false);
   // const [progressId, setProgressId] = useState();
   const [step, setStep] = useState({ step1: null, step2: null, step3: null });
+  const [taskname, setTaskname] = useState();
   //
   const [dropdownLists, setDropdownLists] = useState({
     customers: null,
@@ -125,7 +126,9 @@ const AddWorkDrawerContainer = () => {
       });
     }
     setCustomerId(cid);
-    setResetForm({ step: 'step-1', parms: cid });
+    setRevEnable(false);
+    // setResetForm({ step: 'step-1', parms: cid });
+    setResetForm({ step: 'step-1' });
     // setResetfields(true);
   };
 
@@ -147,7 +150,9 @@ const AddWorkDrawerContainer = () => {
       });
 
       setStep({ ...step, step2: sortTasks, step3: null });
-      setResetForm({ step: 'step-2', parms: pid });
+      setRevEnable(false);
+      // setResetForm({ step: 'step-2', parms: pid });
+      setResetForm({ step: 'step-2' });
       // console.log('**test', sortTasks);
 
       //기존방식
@@ -192,6 +197,7 @@ const AddWorkDrawerContainer = () => {
       // 10% -> id 2
       const _progressid = code_progress !== null ? code_progress.id : 2;
       // progressid 값이 7(100%)일경우 revEnable -> true
+      setRevEnable(false);
       if (_progressid === 7) setRevEnable(true);
       // progress id 미만 값 필터
       const filter_progress = progress.filter((f) => f.id >= _progressid);
@@ -200,10 +206,13 @@ const AddWorkDrawerContainer = () => {
       const _last_workupdate = selectedTask.last_workupdate
         ? moment(selectedTask.last_workupdate).format('YYYY-MM-DD').toString()
         : '';
-      // setProgressId(_progressid);
+      const _taskname = selectedTask.cus_task
+        ? selectedTask.cus_task
+        : selectedTask.code_task.data.attributes.name;
+      setTaskname(`${taskid}-${_taskname}`); // project_change 업데이트용..
       setResetForm({
         step: 'step-3',
-        parms: _progressid,
+        progress: _progressid,
         revision: _revision,
         last_workupdate: _last_workupdate,
       });
@@ -221,13 +230,14 @@ const AddWorkDrawerContainer = () => {
     try {
       if (addMode === 'project') {
         setBtnDisabled(true);
-        // 22-05-04 작업테이블 user 팀 정보 가져오기
+        // 1. 22-05-04 작업테이블 user 팀 정보 가져오기
         const query = `filters[users][id][$eq]=${auth.user.id}&fields[0]=name`;
         const requestTeam = await api.getQueryString(
           'api/code-pj-teams',
           query,
         );
 
+        // 2. work table insert
         const work_data = {
           customer: values.customer,
           project: values.project,
@@ -243,7 +253,7 @@ const AddWorkDrawerContainer = () => {
         const work_insert = await tbl_insert('api/works', work_data);
         console.log('1.work insert 결과', work_insert);
 
-        // 프로젝트 작업등록 시간 업데이트
+        // 3. 프로젝트 작업등록 시간 업데이트
         // last_workupdate 시 기존 date 값과 비교 기능 추가 필요
         const pjt_data = {
           last_workupdate: _working_day,
@@ -255,7 +265,7 @@ const AddWorkDrawerContainer = () => {
         );
         console.log('2.project update 결과', pjtUpdate);
 
-        // project task - 작업시간, revision update
+        // 4. project task - 작업시간, revision update
         const task_data = {
           code_progress: values.code_progress,
           last_workupdate: _working_day,
@@ -267,6 +277,20 @@ const AddWorkDrawerContainer = () => {
           task_data,
         );
         console.log('3.task update 결과', taskUpdate);
+
+        // 5. project_change insert (revision && task 100% )
+        // 100%일때 최초 1회만 update
+        if (values.code_progress === 7 && resetForm.progress !== 7) {
+          //
+          const insert_data = {
+            project: values.project,
+            type: 'state_100',
+            change: `${taskname}_Rev-${values.revision}`,
+            users_permissions_user: auth.user.id,
+            date: _working_day,
+          };
+          const insert = await tbl_insert('api/project-changes', insert_data);
+        }
 
         // 작업등록
         message.success('작업등록 성공', 3);
@@ -343,7 +367,7 @@ const AddWorkDrawerContainer = () => {
     setRevEnable(false);
     setResetForm({
       ...resetForm,
-      parms: 2,
+      progress: 2,
       revision: resetForm.revision + 1,
     });
     setStep({ ...step, step3: progress });

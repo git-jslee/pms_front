@@ -5,12 +5,13 @@ import WorkListTable from '../../components/work/WorkListTable';
 import MainWorkListTable from '../../components/work/MainWorkListTable';
 import {
   qs_mainWorkListByUid,
-  qs_workListByUid,
+  // qs_workListByUid,
   qs_workById,
 } from '../../lib/api/query';
 import moment from 'moment';
 import WorkDrawerContainer from './WorkDrawerContainer';
 import { message } from 'antd';
+import { qs_workListByUid } from '../../lib/api/queryProject';
 
 const WorkListContainer = () => {
   const [workList, setWorkList] = useState([]);
@@ -30,23 +31,36 @@ const WorkListContainer = () => {
   //   const maintenance = await
 
   // };
+  const api_worklist = async (path, query, setState) => {
+    try {
+      const request = await api.getQueryString(path, query);
+      console.log(`>>>api_worklist>>> - ${path}`, request);
+      setState(request.data.data);
+      console.log(`>>>worklist>>>`, workList);
+    } catch (error) {
+      message.error('에러발생');
+      console.error(error);
+    }
+  };
 
   // 컴포넌트 렌더링 시 작업 리스트 정보 가져옴
   useEffect(() => {
-    setWorkList([]);
+    console.log('useEffect 실행', selectedUserId);
+    // setWorkList([]);
     const query_project = qs_workListByUid(selectedUserId);
     const query_main = qs_mainWorkListByUid(selectedUserId);
 
     //프로젝트 & 유지보수 작업 리스트
-    api
-      .getQueryString('api/works', query_project)
-      .then((result) => {
-        console.log('****11111*****', result.data.data);
-        setWorkList(result.data.data);
-      })
-      .catch((error) => {
-        console.error('에러발생', error);
-      });
+    api_worklist('api/works', query_project, setWorkList);
+    // api
+    //   .getQueryString('api/works', query_project)
+    //   .then((result) => {
+    //     console.log('****11111*****', result.data.data);
+    //     setWorkList(result.data.data);
+    //   })
+    //   .catch((error) => {
+    //     console.error('에러발생', error);
+    //   });
 
     // 유지보수 작업 리스트
     api
