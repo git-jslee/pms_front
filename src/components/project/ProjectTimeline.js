@@ -1,7 +1,7 @@
 import React from 'react';
 import { Timeline } from 'antd';
 
-const ProjectTimeline = ({ timeline_sample }) => {
+const ProjectTimeline = ({ timeline }) => {
   const TimelineItem = ({ item }) => {
     const array = item.map((v) => {
       return (
@@ -15,7 +15,7 @@ const ProjectTimeline = ({ timeline_sample }) => {
   return (
     <>
       <Timeline>
-        <TimelineItem item={timeline_sample} />
+        <TimelineItem item={timeline} />
       </Timeline>
     </>
   );

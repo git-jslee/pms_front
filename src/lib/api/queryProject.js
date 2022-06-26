@@ -105,3 +105,115 @@ export const qs_workListByUid = (uid, start, end) =>
       encodeValuesOnly: true,
     },
   );
+
+// 프로젝트
+// Projwct id quf...project-tasks
+export const qs_project = () =>
+  qs.stringify(
+    {
+      populate: {
+        // fields: ['plan_day'],
+        customer: {
+          fields: ['name'],
+        },
+        code_service: {
+          fields: ['name', 'code'],
+        },
+        code_status: {
+          fields: ['name'],
+        },
+        project_tasks: {
+          fields: ['plan_day', 'cus_task'],
+          populate: '*',
+        },
+        scode_team: {
+          fields: ['name'],
+        },
+        project_costs: {
+          // fields: ['name'],
+        },
+        // project_changes: {
+        //   fields: ['type', 'change', 'date', 'description'],
+        // },
+      },
+      pagination: {
+        start: 0,
+        limit: 50,
+      },
+    },
+    {
+      encodeValuesOnly: true,
+    },
+  );
+
+// 프로젝트 상세 조회 - Project id works
+// 프로젝트 관리 > 상세조회
+export const qs_workallByPid = (start, limit, pid) =>
+  qs.stringify(
+    {
+      filters: {
+        project: {
+          id: {
+            $eq: pid,
+          },
+        },
+        deleted: {
+          $eq: false,
+        },
+      },
+      sort: ['working_day:desc'],
+      // fields: ['name'],
+      populate: {
+        fields: ['working_day', 'working_time', 'description'],
+        project: {
+          fields: ['name'],
+        },
+        project_task: {
+          populate: ['code_task'],
+          fields: ['plan_day', 'cus_task'],
+        },
+        code_progress: {
+          fields: ['code'],
+        },
+        users_permissions_user: {
+          fields: ['username'],
+        },
+      },
+      pagination: {
+        start: start,
+        limit: limit,
+      },
+    },
+    {
+      encodeValuesOnly: true,
+    },
+  );
+
+// 프로젝트 상세 조회 -
+// 프로젝트 관리 > 상세조회 > 프로젝트 별 project_change 전체 리스트
+export const qs_changeallByPid = (start, limit, pid) =>
+  qs.stringify(
+    {
+      filters: {
+        project: {
+          id: {
+            $eq: pid,
+          },
+        },
+      },
+      sort: ['id:asc'],
+      fields: ['type', 'change', 'date', 'description', 'createdAt'],
+      populate: {
+        users_permissions_user: {
+          fields: ['username'],
+        },
+      },
+      pagination: {
+        start: start,
+        limit: limit,
+      },
+    },
+    {
+      encodeValuesOnly: true,
+    },
+  );
