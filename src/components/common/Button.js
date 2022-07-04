@@ -2,55 +2,47 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import palette from '../../lib/styles/palette';
+import paletteJY from '../../lib/styles/palette_JY';
 
 const buttonStyle = css`
-    border: none;
-    border-radius: 4px;
-    font-size: 1rem;
-    font-weight: bold;
-    padding: 0.25rem 1rem;
-    color: white;
-    outline: none;
-    cursor: pointer;
-
-    background: ${palette.gray[8]};
-    &:hover {
-        background: ${palette.gray[6]};
-    }
-
-    ${props => 
-        props.fullWidth &&
-        css`
-            padding-top: 0.75rem;
-            padding-bottom: 0.75rem;
-            width: 100%;
-            font-size: 1.125rem;
-    `}
-
-    ${props => 
-        props.cyan &&
-        css`
-            background: ${palette.cyan[5]};
-            &:hover {
-                background: ${palette.cyan[4]}
-            }
-        `}
+  border: none;
+  border-radius: 40px;
+  font-size: 14px;
+  padding: 14px 0 10px;
+  color: ${paletteJY.gray[2]};
+  outline: none;
+  cursor: pointer;
+  width: 231px;
+  box-shadow: 0.3rem 0.3rem 0.6rem rgba(181, 191, 198, 0.46),
+    -0.2rem -0.2rem 0.5rem #fff;
+  background: transparent linear-gradient(100deg, #e7ecf3 0%, #eff3f6 100%) 0%
+    0% no-repeat padding-box;
+  display: block;
+  height: 40px;
+  margin-left: auto;
+  &:hover {
+    color: ${paletteJY.gray[1]};
+  }
+  &:active {
+    box-shadow: inset 0.3rem 0.3rem 0.6rem rgba(181, 191, 198, 0.46),
+      inset -0.2rem -0.2rem 0.5rem #fff;
+  }
 `;
 
 const StyledButton = styled.button`
-    ${buttonStyle}
+  ${buttonStyle}
 `;
 
 const StyledLink = styled(Link)`
-    ${buttonStyle}
+  ${buttonStyle}
 `;
 
 const Button = (props) => {
-    return props.to ? (
-        <StyledLink { ...props } cyan={props.cyan ? 1 : 0 } />
-    ) : (
-        <StyledButton {...props} />
-    )
+  return props.to ? (
+    <StyledLink {...props} cyan={props.cyan ? 1 : 0} />
+  ) : (
+    <StyledButton {...props} />
+  );
 };
 
 export default Button;

@@ -10,15 +10,24 @@ import {
   qs_project,
   qs_changeallByPid,
 } from '../../lib/api/queryProject';
+import moment from 'moment';
 import { Row, Col, Timeline } from 'antd';
 import ProjectTimeline from '../../components/project/ProjectTimeline';
-import moment from 'moment';
+import ProjectTaskTable from '../../components/project/ProjectTaskTable';
 
 const ProjectDetailContainer = () => {
   const { id } = useParams();
   const [project, setProject] = useState();
+  const [tasks, setTasks] = useState();
   const [works, setWorks] = useState();
   const [timeline, setTimeline] = useState();
+
+  //work list
+  useEffect(() => {
+    get_project(`api/projects/${id}`, qs_project, setProject);
+    get_worklistall(`api/works`, qs_workallByPid, setWorks);
+    get_changelistall(`api/project-changes`, qs_changeallByPid, setTimeline);
+  }, []);
 
   const get_worklistall = async (path, query, callback) => {
     try {
@@ -52,7 +61,8 @@ const ProjectDetailContainer = () => {
   const get_project = async (path, query, callback) => {
     const request = await api.getQueryString(path, query());
     console.log(`<<<<< ${path} >>>>>>`, request.data.data);
-    callback(request.data.data);
+    setProject(request.data.data);
+    setTasks(request.data.data.attributes.project_tasks.data);
   };
 
   const get_changelistall = async (path, query, callback) => {
@@ -103,34 +113,25 @@ const ProjectDetailContainer = () => {
     }
   };
 
-  //work list
-  useEffect(() => {
-    get_project(`api/projects/${id}`, qs_project, setProject);
-    get_worklistall(`api/works`, qs_workallByPid, setWorks);
-    get_changelistall(`api/project-changes`, qs_changeallByPid, setTimeline);
-  }, []);
+  // <-- tasks
 
-  const timeline_sample = [
-    { id: 1, color: 'green', children: '[생성: 2022-01-01]' },
-    { id: 2, color: 'green', children: '[시작: 2022-01-01]' },
-    { id: 3, color: 'red', children: '[상태: 2022-02-11] 진행중->보류' },
-    { id: 4, color: 'red', children: '[상태: 2022-02-11] 보류->진행중' },
-    { id: 5, children: '[변경: 2022-02-20] 시작일 2022-01-20->2022-01-20' },
-    { id: 6, children: '[작업: 2022-02-20] 기획/구성 완료' },
-    { id: 7, color: '#00CCFF', children: '[완료: 2022-04-20]' },
-  ];
+  // tasks -->
 
   return (
     <>
       <ProjectDetailForm />
       <div>
         <Row>
+          <h3>info</h3>
+        </Row>
+        <Row gutter={16}>
+          <Col span={16}>
+            {/* <h3>tasks</h3> */}
+            <ProjectTaskTable />
+          </Col>
           <Col span={8}>
             <h3>Time line</h3>
             {timeline ? <ProjectTimeline timeline={timeline} /> : ''}
-          </Col>
-          <Col span={16}>
-            <h3>project task info</h3>
           </Col>
         </Row>
       </div>

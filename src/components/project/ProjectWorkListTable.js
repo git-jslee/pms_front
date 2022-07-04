@@ -39,7 +39,7 @@ const ProjectWorkListTable = ({ dataSource }) => {
       dataIndex: 'worker',
     },
     {
-      title: '메모',
+      title: '메 모',
       key: 'description',
       dataIndex: 'description',
     },

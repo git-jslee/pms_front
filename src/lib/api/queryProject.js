@@ -124,7 +124,15 @@ export const qs_project = () =>
         },
         project_tasks: {
           fields: ['plan_day', 'cus_task'],
-          populate: '*',
+          // populate: '*',
+          populate: {
+            code_progress: {
+              fields: ['code'],
+            },
+            code_task: {
+              fields: ['code', 'name', 'sort', 'used'],
+            },
+          },
         },
         scode_team: {
           fields: ['name'],

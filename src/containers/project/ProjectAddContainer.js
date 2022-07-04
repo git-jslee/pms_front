@@ -95,6 +95,7 @@ const ProjectAddContainer = ({ mode, setMode }) => {
   const onSubmit = async (values) => {
     try {
       console.log('>>>>>>onSubmit>>>>>>>', values);
+      console.log('>>>>>>codebook>>>>>>>', codebook);
       let count = 0;
       setBtnDisabled(true);
       // 프로젝트 등록
@@ -127,7 +128,6 @@ const ProjectAddContainer = ({ mode, setMode }) => {
             plan_day: plan_day,
             cus_task: cus_task,
           };
-          //   console.log('>>>>>>taskArr>>>>>>>', task_data);
           const task_insert = await tbl_insert('api/project-tasks', task_data);
           count++;
           // console.log(
@@ -138,8 +138,11 @@ const ProjectAddContainer = ({ mode, setMode }) => {
       }
 
       // project_change 등등..프로젝트 등록정보, 프로젝트 상태 정보
-      const _code_state =
-        codebook[1].data.data[values.code_status].attributes.name;
+      // const _code_state =
+      //   codebook[1].data.data[values.code_status].attributes.name;
+      const _code_state = codebook[1].data.data.filter(
+        (f) => f.id === values.code_status,
+      )[0].attributes.name;
       const project_change1 = {
         project: projectId,
         type: 'init',
