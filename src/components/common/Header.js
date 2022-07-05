@@ -4,7 +4,6 @@ import Responsive from './Responsive';
 import Button from './Button';
 import { Link } from 'react-router-dom';
 import paletteJY from '../../lib/styles/palette_JY';
-import iconHeader from '../../lib/images/icon-header.svg';
 
 const HeaderBlock = styled.div`
   &::before {

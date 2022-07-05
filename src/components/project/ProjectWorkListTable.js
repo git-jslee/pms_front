@@ -2,6 +2,7 @@ import React from 'react';
 import { Table, Descriptions, Badge, Space, Divider, Button } from 'antd';
 
 const ProjectWorkListTable = ({ dataSource }) => {
+  console.log('>>>>>>>works', dataSource);
   const columns = [
     {
       title: 'id',

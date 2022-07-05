@@ -123,7 +123,13 @@ export const qs_project = () =>
           fields: ['name'],
         },
         project_tasks: {
-          fields: ['plan_day', 'cus_task'],
+          fields: [
+            'plan_day',
+            'cus_task',
+            'total_time',
+            'last_workupdate',
+            'revision',
+          ],
           // populate: '*',
           populate: {
             code_progress: {
@@ -211,6 +217,34 @@ export const qs_changeallByPid = (start, limit, pid) =>
       },
       sort: ['id:asc'],
       fields: ['type', 'change', 'date', 'description', 'createdAt'],
+      populate: {
+        users_permissions_user: {
+          fields: ['username'],
+        },
+      },
+      pagination: {
+        start: start,
+        limit: limit,
+      },
+    },
+    {
+      encodeValuesOnly: true,
+    },
+  );
+
+// 작업 등록시 total 작업시간 update
+// project-taks id 에 해당하는 works 테이블 전체 가져오기
+export const qs_worksByTaskId = (start, limit, tid) =>
+  qs.stringify(
+    {
+      filters: {
+        project_task: {
+          id: {
+            $eq: tid,
+          },
+        },
+      },
+      fields: ['working_day', 'working_time', 'revision'],
       populate: {
         users_permissions_user: {
           fields: ['username'],

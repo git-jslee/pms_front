@@ -16,10 +16,12 @@ import {
 import {
   qs_projectByAddWork,
   qs_projectNameByCid,
+  qs_worksByTaskId,
 } from '../../lib/api/queryProject';
 import customerSortDuplicate from '../../modules/common/customerSortDuplicate';
 import { Button, message } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
+import fetchAllList from '../../lib/api/fetchAllList';
 
 const ButtonBlock = styled.div`
   //
@@ -181,10 +183,28 @@ const AddWorkDrawerContainer = () => {
   };
 
   // 3. task 선택 시..
-  const taskOnChange = (taskid) => {
+  const taskOnChange = async (taskid) => {
     // let _progressid;
     if (addMode === 'project') {
       console.log('4.Task 선택', taskid);
+
+      // project-task id 에 해당하는 전체 works 가져오기
+      // work total 시간 계산
+      const request = await fetchAllList({
+        path: 'api/works',
+        qs: qs_worksByTaskId,
+        id: taskid,
+      });
+      console.log(`<<<<< ${'api/works'} >>>>>>`, request);
+      let _total_time = 0;
+      const caltotaltime =
+        request.length > 0
+          ? request.map((v) => {
+              _total_time += v.attributes.working_time;
+            })
+          : 0;
+      console.log(`<<<<< totaltime >>>>>>`, _total_time);
+
       // task 선택시 progress 값을 비교하여 높은 수치만 전달..
       const selectedTask = step.step2.filter((f) => f.id === taskid)[0]
         .attributes;
@@ -215,6 +235,7 @@ const AddWorkDrawerContainer = () => {
         progress: _progressid,
         revision: _revision,
         last_workupdate: _last_workupdate,
+        total_time: _total_time,
       });
       setStep({ ...step, step3: filter_progress });
       console.log('step3...', step);
@@ -270,6 +291,8 @@ const AddWorkDrawerContainer = () => {
           code_progress: values.code_progress,
           last_workupdate: _working_day,
           revision: values.revision,
+          total_time:
+            parseInt(values.total_time) + parseInt(values.workingTime),
         };
         const taskUpdate = await tbl_update(
           'api/project-tasks',

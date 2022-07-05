@@ -62,6 +62,7 @@ const ProjectDetailContainer = () => {
     const request = await api.getQueryString(path, query());
     console.log(`<<<<< ${path} >>>>>>`, request.data.data);
     setProject(request.data.data);
+    console.log('>>>>>>>project', request.data.data);
     setTasks(request.data.data.attributes.project_tasks.data);
   };
 
@@ -119,15 +120,13 @@ const ProjectDetailContainer = () => {
 
   return (
     <>
-      <ProjectDetailForm />
       <div>
         <Row>
-          <h3>info</h3>
+          <h1>{project ? project.attributes.name : '-'}</h1>
         </Row>
         <Row gutter={16}>
           <Col span={16}>
-            {/* <h3>tasks</h3> */}
-            <ProjectTaskTable />
+            <ProjectTaskTable tasks={tasks} />
           </Col>
           <Col span={8}>
             <h3>Time line</h3>

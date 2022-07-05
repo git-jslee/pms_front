@@ -85,6 +85,7 @@ const AddWorkDrawerForm = ({
         code_progress: '',
         revision: '',
         last_workupdate: '',
+        total_time: '',
       });
     }
     // step.2 - 작업명, 진행상태 초기화
@@ -94,6 +95,7 @@ const AddWorkDrawerForm = ({
         code_progress: '',
         revision: '',
         last_workupdate: '',
+        total_time: '',
       });
     }
     // step.3 - 진행상태 초기화
@@ -102,6 +104,7 @@ const AddWorkDrawerForm = ({
         code_progress: resetForm.progress,
         revision: resetForm.revision,
         last_workupdate: resetForm.last_workupdate,
+        total_time: resetForm.total_time,
       });
     }
   }, [resetForm]);
@@ -262,14 +265,12 @@ const AddWorkDrawerForm = ({
                       </Select>
                     </Form.Item>
                   </Col>
-                  <Col span={8}>
+                  <Col span={6}>
                     <Form.Item name="revision" label="revision count">
                       <InputNumber disabled={true} />
                     </Form.Item>
-                    {/* <span>revision count</span>
-                    <h4>0</h4> */}
                   </Col>
-                  <Col span={8}>
+                  <Col span={4}>
                     <br />
                     <Button
                       onClick={handleRevision}
@@ -278,6 +279,11 @@ const AddWorkDrawerForm = ({
                     >
                       Rev + 1
                     </Button>
+                  </Col>
+                  <Col span={4} offset={2}>
+                    <Form.Item name="total_time" label="total time">
+                      <InputNumber disabled={true} />
+                    </Form.Item>
                   </Col>
                 </Row>
               </>
