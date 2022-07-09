@@ -42,7 +42,7 @@ const ProjectSubButton = ({
         <Button onClick={() => handleOnClick('add')}>등록</Button>
         <Button onClick={() => handleOnClick('menu1')}>Count</Button>
         <Button onClick={() => handleOnClick('menu2')}>작업통계</Button>
-        <Button onClick={() => handleOnClick('menu3')}>상세조회</Button>
+        {/* <Button onClick={() => handleOnClick('menu3')}>상세조회</Button> */}
         <Button onClick={() => handleOnClick('menu4')}>투입률</Button>
 
         <div className="search">
@@ -52,7 +52,7 @@ const ProjectSubButton = ({
           />
         </div>
         {/* 작업통계, 투입률 선택시 기간별 조회 기능 활성화 */}
-        {subMenu === 'menu2' || subMenu === 'menu4' ? (
+        {subMenu === 'menu1' || subMenu === 'menu2' || subMenu === 'menu4' ? (
           <div className="inline">
             <Form onFinish={subSearchOnSubmit} form={form}>
               <Row>

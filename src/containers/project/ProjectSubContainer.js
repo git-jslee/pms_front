@@ -7,6 +7,7 @@ import { getProject, getWork, getProjectWorkList } from '../../modules/project';
 import ProjectSubButton from '../../components/project/ProjectSubButton';
 import ProjectAdvancedSearchForm from '../../components/project/ProjectAdvancedSearchForm';
 import ProjectCountForm from '../../components/project/ProjectCountForm';
+import ProjectCountForm1 from '../../components/project/ProjectCountForm1';
 import calWorkTime from '../../modules/project/calWorkTime';
 import SubWorkStatistics from '../../components/project/SubWorkStatistics';
 import ProjectInputRate from '../../components/project/ProjectInputRate';
@@ -17,6 +18,7 @@ import {
   qs_workingTime,
 } from '../../lib/api/query';
 import startEndDay from '../../modules/common/startEndDay';
+import { message, Divider } from 'antd';
 
 const ProjectSubContainer = ({ setMode }) => {
   const dispatch = useDispatch();
@@ -211,6 +213,15 @@ const ProjectSubContainer = ({ setMode }) => {
 
       setStart(start);
       setEnd(end);
+    } else if (subMenu === 'menu1') {
+      // const date = startEndDay(
+      //   moment(e.date[0]).format('YYYY-MM'),
+      //   moment(e.date[1]).format('YYYY-MM'),
+      // );
+      // const startDate = date[0];
+      // const endDate = date[1];
+      // calInputRate(startDate, endDate);
+      message.success('기능구현중...', 5);
     }
   };
 
@@ -223,7 +234,14 @@ const ProjectSubContainer = ({ setMode }) => {
         subSearchOnSubmit={subSearchOnSubmit}
       />
       {subMenu === 'menu1' ? (
-        <ProjectCountForm count={count} countFormOnclick={countFormOnclick} />
+        <>
+          {/* <ProjectCountForm count={count} countFormOnclick={countFormOnclick} /> */}
+          <Divider />
+          <ProjectCountForm1
+            count={count}
+            countFormOnclick={countFormOnclick}
+          />
+        </>
       ) : (
         ''
       )}
