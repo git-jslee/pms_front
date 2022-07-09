@@ -12,6 +12,7 @@ const ProjectListTable = ({
   // const [visible, setVisible] = useState(false);
   // const [record, setRecord] = useState();
   const navigate = useNavigate();
+  // console.log('>>>>>>>>>>>>>>>>>data', tableData);
   const columns = [
     {
       title: 'ID',
@@ -50,6 +51,12 @@ const ProjectListTable = ({
       title: '상태',
       key: 'code_status',
       dataIndex: 'code_status',
+      align: 'center',
+    },
+    {
+      title: '진행률',
+      key: 'project_progress',
+      dataIndex: 'project_progress',
       align: 'center',
     },
     {

@@ -16,7 +16,7 @@ const StyledBlock = styled.div`
   }
 `;
 
-const ProjectCountForm1 = ({ count, countFormOnclick }) => {
+const ProjectCountForm1 = ({ count, progressCount, countFormOnclick }) => {
   console.log('**count**', count);
   //0-시작전, 1-진행중, 2-보류, 3-완료, 4-대기
 
@@ -82,11 +82,31 @@ const ProjectCountForm1 = ({ count, countFormOnclick }) => {
                 />
               </Row>
               <Row>
-                <Progress type="circle" width={90} format={() => `2건`} />
-                <Progress type="circle" width={90} format={() => `3건`} />
-                <Progress type="circle" width={90} format={() => `4건`} />
-                <Progress type="circle" width={90} format={() => `5건`} />
-                <Progress type="circle" width={90} format={() => `6건`} />
+                <Progress
+                  type="circle"
+                  width={90}
+                  format={() => `${progressCount._10}`}
+                />
+                <Progress
+                  type="circle"
+                  width={90}
+                  format={() => `${progressCount._25}`}
+                />
+                <Progress
+                  type="circle"
+                  width={90}
+                  format={() => `${progressCount._50}`}
+                />
+                <Progress
+                  type="circle"
+                  width={90}
+                  format={() => `${progressCount._75}`}
+                />
+                <Progress
+                  type="circle"
+                  width={90}
+                  format={() => `${progressCount._90}`}
+                />
               </Row>
             </Col>
           </Row>

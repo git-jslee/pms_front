@@ -10,7 +10,8 @@ import * as api from '../../lib/api/api';
 import { startLoading, finishLoading } from '../../modules/loading';
 import calWorkTime from '../../modules/project/calWorkTime';
 import { weekOfMonth } from '../../modules/common/weekOfMonth';
-import { qs_projectList, qs_workListAll } from '../../lib/api/query';
+import { qs_workListAll } from '../../lib/api/query';
+import { qs_projectList } from '../../lib/api/queryProject';
 import ProjectSubContainer from './ProjectSubContainer';
 import { message } from 'antd';
 import { tbl_update, tbl_insert } from '../../modules/common/tbl_crud';
@@ -21,9 +22,13 @@ const ProjectContentContainer = () => {
   const { auth } = useSelector(({ auth }) => ({
     auth: auth.auth,
   }));
+  const { state_id } = useSelector(({ project }) => ({
+    state_id: project.mode,
+  }));
   // const [projectList, setProjectList] = useState();
   const { lists, error, loading } = useSelector(({ project, loading }) => ({
-    lists: project.list,
+    // lists: project.list,
+    lists: project.data[state_id],
     error: project.error,
     loading: loading['project/GET_PROJECT'],
   }));
@@ -44,12 +49,12 @@ const ProjectContentContainer = () => {
   // 페이지 이동 후 재 접속시.. 프로젝트 리스트 다시 가져옴...코드 수정 필요..
   useEffect(() => {
     // const params = 'projects?code_status.id=2';
-    // 1-시작전, 2-진행중, 3-보류, 4-완료, 5-대기
+    // 1-시작전, 2-진행중, 3-보류, 4-완료, 5-대기, 6-검수
     const code_status_id = 2;
     const query = qs_projectList(code_status_id);
-    dispatch(getProject(query));
-
     ////
+    // dispatch(getProject(query));
+    dispatch(getProjectList(query, code_status_id));
     calTotalWorkTime();
   }, []);
 
@@ -121,6 +126,7 @@ const ProjectContentContainer = () => {
           enddate: list.attributes.enddate,
           price: list.attributes.price,
           lastUpdate: list.attributes.last_workupdate,
+          project_progress: list.project_progress,
           elapsed: elapsed,
           elapsed_last: elapsed_last,
           totalday:

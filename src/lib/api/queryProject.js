@@ -1,6 +1,66 @@
 import qs from 'qs';
 import moment from 'moment';
 
+// 프로젝트 리스트
+// 프로젝트 > count 에서 상태정보 클릭시..시작전, 진행, 보류...
+
+export const qs_projectList = (stateId) =>
+  qs.stringify(
+    {
+      filters: {
+        code_status: {
+          id: {
+            $eq: stateId, //1-시작전, 2-진행중, 3-보류, 4-완료
+          },
+        },
+      },
+      sort: ['id:desc'],
+      // fields: ['name'],
+      populate: {
+        customer: {
+          fields: ['name'],
+        },
+        code_status: {
+          fields: ['name'],
+        },
+        code_service: {
+          fields: ['name'],
+        },
+        scode_team: {
+          fields: ['name'],
+        },
+        project_tasks: {
+          fields: [
+            'manpower',
+            'plan_day',
+            'cus_task',
+            'total_time',
+            'start_workupdate',
+            'last_workupdate',
+            'revision',
+          ],
+          populate: {
+            code_progress: {
+              fields: ['code'],
+            },
+            code_task: {
+              fields: ['code', 'name', 'sort', 'used'],
+            },
+          },
+        },
+      },
+      pagination: {
+        // page: 1,
+        // pageSize: 10,
+        start: 0,
+        limit: 100,
+      },
+    },
+    {
+      encodeValuesOnly: true,
+    },
+  );
+
 // 작업 >  작업등록(프로젝트) - 프로젝트 정보 가져오기
 export const qs_projectByAddWork = () =>
   qs.stringify(
@@ -107,7 +167,7 @@ export const qs_workListByUid = (uid, start, end) =>
   );
 
 // 프로젝트
-// Projwct id quf...project-tasks
+// Project id 별...project-tasks
 export const qs_project = () =>
   qs.stringify(
     {
@@ -124,9 +184,11 @@ export const qs_project = () =>
         },
         project_tasks: {
           fields: [
+            'manpower',
             'plan_day',
             'cus_task',
             'total_time',
+            'start_workupdate',
             'last_workupdate',
             'revision',
           ],

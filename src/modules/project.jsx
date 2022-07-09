@@ -22,6 +22,8 @@ const GET_PROJECTLIST = 'project/GET_PROJECTLIST';
 const GET_PROJECTLIST_SUCCESS = 'project/GET_PROJECTLIST_SUCCESS';
 const GET_PROJECTLIST_FAILURE = 'project/GET_PROJECTLIST_FAILURE';
 
+const CHANGE_PROJECTMODE = 'project/CHANGE_PROJECTMODE';
+
 // 프로젝트 ID
 const GET_PROJECTID = 'project/GET_PROJECTID';
 const GET_PROJECTID_SUCCESS = 'project/GET_PROJECTID_SUCCESS';
@@ -33,6 +35,7 @@ const GET_PROJECTWORK_SUCCESS = 'project/GET_PROJECTWORK_SUCCESS';
 const GET_PROJECTWORK_FAILURE = 'project/GET_PROJECTWORK_FAILURE';
 
 // 프로젝트 정보 가져오기 통합
+
 export const getProject = (query) => async (dispatch) => {
   dispatch({ type: GET_PROJECT }); //요청 시작을 알림
   dispatch(startLoading(GET_PROJECT)); //loading true
@@ -40,10 +43,69 @@ export const getProject = (query) => async (dispatch) => {
     const response = await api.getQueryString('api/projects', query);
     // const response = await api.getList(params);
     console.log('response', response);
+
+    // <--변경 2022.07.09
+    // 프로젝트 > 리스트
+    const lists = response.data.data.map((list) => {
+      // 프로젝트 진행률 계산
+      const tasks = list.attributes.project_tasks.data;
+      console.log('tasks', tasks);
+      let total_weight = 0;
+      let total_plan = 0;
+      let total_work = 0;
+      const task_progress = tasks.map((task) => {
+        let weight = 0;
+        const progress = task.attributes.code_progress.data
+          ? parseFloat(
+              task.attributes.code_progress.data.attributes.code * 0.01,
+            )
+          : 0;
+        // task 계획시간, total 작업 시간중 ..큰 값 리턴..
+        const plan_day = task.attributes.manpower * task.attributes.plan_day;
+        const total_day = task.attributes.total_time
+          ? (task.attributes.total_time / 8) * (1 / progress)
+          : 0;
+        if (plan_day === 0 && total_day === 0) {
+          weight = 1.1;
+        } else {
+          weight =
+            plan_day >= total_day
+              ? Math.round(plan_day * 100) / 100
+              : Math.round(total_day * 100) / 100;
+        }
+        total_weight += weight;
+        total_plan += plan_day;
+        total_work += total_day;
+        const returndata = { progress, weight, plan_day, total_day };
+        return returndata;
+      });
+      console.log('task_progress', task_progress);
+      console.log('total_weight', Math.round(total_weight * 10) / 10);
+      // 가중치 weight 계산
+      let _progress = 0;
+      const project_progress = task_progress.map((v) => {
+        if (v.progress > 0) {
+          _progress += v.progress * (v.weight / total_weight);
+        }
+      });
+      return {
+        ...list,
+        project_progress: Math.round(_progress * 100) / 100,
+        total_plan,
+        total_work,
+      };
+    });
+    console.log('lists', lists);
+    // 변경 -->
+
+    // <--기존방식
     dispatch({
       type: GET_PROJECT_SUCCESS,
-      payload: response.data.data,
+      // payload: response.data.data,
+      payload: lists,
     }); // 요청 성공
+    // 기존방식 -->
+
     dispatch(finishLoading(GET_PROJECT)); //loading false
   } catch (error) {
     console.log('error-getproject', error);
@@ -104,26 +166,95 @@ export const getProjectWorkList = (params) => async (dispatch) => {
   }
 };
 
-// 삭제예정 -> getProject 로 변경
-export const getProjectList = () => async (dispatch) => {
-  dispatch({ type: GET_PROJECTLIST }); // 요청 시작을 알림
-  dispatch(startLoading(GET_PROJECTLIST)); // ladding true
+// 20220709, project count container..
+// status 값 확인 추가..
+export const getProjectList = (query, sid) => async (dispatch) => {
+  dispatch({ type: GET_PROJECTLIST }); //요청 시작을 알림
+  dispatch(startLoading(GET_PROJECTLIST)); //loading true
   try {
-    const response = await api.getList('projects');
+    const response = await api.getQueryString('api/projects', query);
+    // const response = await api.getList(params);
+    console.log('response', response);
+    let payload_data;
+
+    // 프로젝트 > 리스트 > 상태 : 진행중
+    if (sid === 2) {
+      const lists = response.data.data.map((list) => {
+        // 프로젝트 진행률 계산
+        const tasks = list.attributes.project_tasks.data;
+        console.log('tasks', tasks);
+        let total_weight = 0;
+        let total_plan = 0;
+        let total_work = 0;
+        const task_progress = tasks.map((task) => {
+          let weight = 0;
+          const progress = task.attributes.code_progress.data
+            ? parseFloat(
+                task.attributes.code_progress.data.attributes.code * 0.01,
+              )
+            : 0;
+          // task 계획시간, total 작업 시간중 ..큰 값 리턴..
+          const plan_day = task.attributes.manpower * task.attributes.plan_day;
+          const total_day = task.attributes.total_time
+            ? (task.attributes.total_time / 8) * (1 / progress)
+            : 0;
+          if (plan_day === 0 && total_day === 0) {
+            weight = 1.1;
+          } else {
+            weight =
+              plan_day >= total_day
+                ? Math.round(plan_day * 100) / 100
+                : Math.round(total_day * 100) / 100;
+          }
+          total_weight += weight;
+          total_plan += plan_day;
+          total_work += total_day;
+          const returndata = { progress, weight, plan_day, total_day };
+          return returndata;
+        });
+        console.log('task_progress', task_progress);
+        console.log('total_weight', Math.round(total_weight * 10) / 10);
+        // 가중치 weight 계산
+        let _progress = 0;
+        const project_progress = task_progress.map((v) => {
+          if (v.progress > 0) {
+            _progress += v.progress * (v.weight / total_weight);
+          }
+        });
+        return {
+          ...list,
+          project_progress: Math.round(_progress * 100) / 100,
+          total_plan,
+          total_work,
+        };
+      });
+      console.log('lists', lists);
+      payload_data = lists;
+    } else {
+      payload_data = response.data.data;
+    }
+
     dispatch({
       type: GET_PROJECTLIST_SUCCESS,
-      payload: response,
+      state_id: sid,
+      payload: payload_data,
     }); // 요청 성공
-    dispatch(finishLoading(GET_PROJECTLIST)); // loading false
+    //
+    dispatch(finishLoading(GET_PROJECTLIST)); //loading false
   } catch (error) {
+    console.log('error-getproject', error);
     dispatch({
-      type: GET_PROJECTLIST_FAILURE,
+      typd: GET_PROJECTLIST_FAILURE,
       payload: error,
       error: true,
-    }); // 요청 실패
+    }); //요청 실패
     dispatch(startLoading(GET_PROJECTLIST)); // loading true
     throw error;
   }
+};
+
+export const changeProjectMode = (stateid) => (dispatch) => {
+  dispatch({ type: CHANGE_PROJECTMODE, payload: stateid }); // mode 변경
 };
 
 // export const getProjectList = createRequestThunk(GET_PROJECTLIST, api.getList);
@@ -215,14 +346,21 @@ const project = handleActions(
       werror: true,
     }),
     // 프로젝트 리스트 가져오기 성공
-    [GET_PROJECTLIST_SUCCESS]: (state, { payload }) => ({
+    [GET_PROJECTLIST_SUCCESS]: (state, { payload, state_id }) => ({
       ...state,
-      data: { list: payload.data },
+      mode: state_id,
+      data: { ...state.data, [state_id]: payload },
+      list: { ...state.list, [state_id]: 'OK' },
     }),
     // 프로젝트 리스트 가져오기 실패
     [GET_PROJECTLIST_FAILURE]: (state, { payload }) => ({
       ...state,
       error: true,
+    }),
+    // 프로젝트 모드 벼녕
+    [CHANGE_PROJECTMODE]: (state, { payload }) => ({
+      ...state,
+      mode: payload,
     }),
     // 프로젝트 ID 가져오기 성공
     [GET_PROJECTID_SUCCESS]: (state, { payload }) => ({

@@ -3,7 +3,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import * as api from '../../lib/api/api';
 import moment from 'moment';
 import { setTitle } from '../../modules/common';
-import { getProject, getWork, getProjectWorkList } from '../../modules/project';
+import {
+  getProject,
+  getProjectList,
+  getWork,
+  getProjectWorkList,
+  changeProjectMode,
+} from '../../modules/project';
 import ProjectSubButton from '../../components/project/ProjectSubButton';
 import ProjectAdvancedSearchForm from '../../components/project/ProjectAdvancedSearchForm';
 import ProjectCountForm from '../../components/project/ProjectCountForm';
@@ -13,10 +19,10 @@ import SubWorkStatistics from '../../components/project/SubWorkStatistics';
 import ProjectInputRate from '../../components/project/ProjectInputRate';
 import {
   qs_projectCount,
-  qs_projectList,
   qs_workList,
   qs_workingTime,
 } from '../../lib/api/query';
+import { qs_projectList } from '../../lib/api/queryProject';
 import startEndDay from '../../modules/common/startEndDay';
 import { message, Divider } from 'antd';
 
@@ -25,6 +31,44 @@ const ProjectSubContainer = ({ setMode }) => {
   const { wlist } = useSelector(({ project }) => ({
     wlist: project.wlist,
   }));
+
+  // 프로젝트 리스트, 진행률 정보 가져오기..
+  const [progressCount, setProgressCount] = useState({
+    _10: 0,
+    _25: 0,
+    _50: 0,
+    _75: 0,
+    _90: 0,
+  });
+  const { lists, getState } = useSelector(({ project }) => ({
+    lists: project.data[2],
+    getState: project.list,
+  }));
+
+  useEffect(() => {
+    if (!lists) return;
+    let _10 = 0;
+    let _25 = 0;
+    let _50 = 0;
+    let _75 = 0;
+    let _90 = 0;
+    lists.map((v) => {
+      const progress = v.project_progress;
+      if (progress <= 0.15) {
+        _10 += 1;
+      } else if (progress <= 0.4) {
+        _25 += 1;
+      } else if (progress <= 0.65) {
+        _50 += 1;
+      } else if (progress <= 0.8) {
+        _75 += 1;
+      } else if (progress <= 1) {
+        _90 += 1;
+      }
+    });
+    setProgressCount({ _10, _25, _50, _75, _90 });
+    console.log('>>>>>>>>>>>>progressCount', progressCount);
+  }, [lists]);
 
   // title 업데이트
   useEffect(() => {
@@ -175,8 +219,15 @@ const ProjectSubContainer = ({ setMode }) => {
 
   const countFormOnclick = (code_status_id) => {
     console.log('count Form OnClick - ', code_status_id);
-    const query = qs_projectList(code_status_id);
-    dispatch(getProject(query));
+    // store 저장 안된 데이터만 api 호출하게 변경
+    // 저장되어 있을경우 project.mode 값만 변경
+    if (code_status_id in getState) {
+      dispatch(changeProjectMode(code_status_id));
+    } else {
+      const query = qs_projectList(code_status_id);
+      // dispatch(getProject(query));
+      dispatch(getProjectList(query, code_status_id));
+    }
   };
 
   const reload = () => {
@@ -239,6 +290,7 @@ const ProjectSubContainer = ({ setMode }) => {
           <Divider />
           <ProjectCountForm1
             count={count}
+            progressCount={progressCount}
             countFormOnclick={countFormOnclick}
           />
         </>
