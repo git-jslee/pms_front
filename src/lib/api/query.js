@@ -163,15 +163,16 @@ export const qs_projectByPid = () =>
   );
 
 // 프로젝트 카운트
-export const qs_projectCount = (codeid) =>
+export const qs_projectCount = (sid, qsFilter) =>
   qs.stringify(
     {
       filters: {
         code_status: {
           id: {
-            $eq: codeid, //1-시작전, 2-진행중, 3-보류, 4-완료, 5-대기
+            $eq: sid, //1-시작전, 2-진행중, 3-보류, 4-완료, 5-대기
           },
         },
+        ...qsFilter,
       },
       fields: ['name'],
       // populate: ['categories'],

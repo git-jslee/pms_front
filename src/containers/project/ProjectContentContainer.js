@@ -22,15 +22,15 @@ const ProjectContentContainer = () => {
   const { auth } = useSelector(({ auth }) => ({
     auth: auth.auth,
   }));
-  const { state_id } = useSelector(({ project }) => ({
-    state_id: project.mode,
+  const { project_status } = useSelector(({ project }) => ({
+    project_status: project.status,
   }));
   // const [projectList, setProjectList] = useState();
   const { lists, error, loading } = useSelector(({ project, loading }) => ({
     // lists: project.list,
-    lists: project.data[state_id],
+    lists: project.data ? project.data[project_status.id] : null,
     error: project.error,
-    loading: loading['project/GET_PROJECT'],
+    loading: loading['project/GET_PROJECTLIST'],
   }));
   const [btnDisabled, setBtnDisabled] = useState(false);
   const [visible, setVisible] = useState(false);
@@ -92,8 +92,9 @@ const ProjectContentContainer = () => {
   const [tableData, setTableData] = useState([]);
   useEffect(() => {
     if (lists) {
-      // console.log('**list**', lists);
       const tableList = lists.map((list, index) => {
+        // const _progress = list.project_progress;
+        // if (project_status.progress === 10 && _progress >= 0.2) return;
         const elapsed = moment().diff(
           moment(list.attributes.startdate),
           'days',
@@ -102,7 +103,7 @@ const ProjectContentContainer = () => {
           moment(list.attributes.last_workupdate),
           'days',
         );
-        const _totalworktime = totalWorkTime.filter((v) => v.id === list.id)[0];
+        // const _totalworktime = totalWorkTime.filter((v) => v.id === list.id)[0];
         // console.log('**worktime**', index, _totalworktime);
         const array = {
           key: list.id,
@@ -127,19 +128,32 @@ const ProjectContentContainer = () => {
           price: list.attributes.price,
           lastUpdate: list.attributes.last_workupdate,
           project_progress: list.project_progress,
+          progressRate: list.progressRate,
           elapsed: elapsed,
           elapsed_last: elapsed_last,
-          totalday:
-            _totalworktime !== undefined
-              ? Math.round(_totalworktime.worktime / 8)
-              : '',
-          action: 'View',
+          total_plan: list.total_plan,
+          total_work: list.total_work,
+          // totalday:
+          //   _totalworktime !== undefined
+          //     ? Math.round(_totalworktime.worktime / 8)
+          //     : '',
+          // action: 'View',
         };
         return array;
       });
-      setTableData(tableList);
+      if (!project_status.progress) {
+        setTableData(tableList);
+      } else if (project_status.id === 2 && project_status.progress) {
+        const filterlist = tableList.filter((v) => {
+          // console.log('**progressRate**', v);
+          // console.log('**project_status.progress**', project_status.progress);
+          return v.progressRate === project_status.progress;
+        });
+        // console.log('>>>>>>>>>>>>>>>>filterlist', filterlist);
+        setTableData(filterlist);
+      }
     }
-  }, [lists, totalWorkTime]);
+  }, [lists, project_status]);
 
   // console.log('tableList', tableData);
 

@@ -87,10 +87,10 @@ const ProjectListTable = ({
     },
     {
       title: '투입(일)',
-      key: 'totalday',
-      dataIndex: 'totalday',
-      align: 'center',
-      sorter: (a, b) => a.totalday - b.totalday,
+      key: 'total_work',
+      dataIndex: 'total_work',
+      align: 'right',
+      sorter: (a, b) => a.total_work - b.total_work,
     },
     // {
     //   title: 'Action',

@@ -4,7 +4,7 @@ import moment from 'moment';
 // 프로젝트 리스트
 // 프로젝트 > count 에서 상태정보 클릭시..시작전, 진행, 보류...
 
-export const qs_projectList = (stateId) =>
+export const qs_projectList = (stateId, qsFilter) =>
   qs.stringify(
     {
       filters: {
@@ -13,6 +13,7 @@ export const qs_projectList = (stateId) =>
             $eq: stateId, //1-시작전, 2-진행중, 3-보류, 4-완료
           },
         },
+        ...qsFilter,
       },
       sort: ['id:desc'],
       // fields: ['name'],

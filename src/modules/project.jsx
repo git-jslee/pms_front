@@ -22,7 +22,8 @@ const GET_PROJECTLIST = 'project/GET_PROJECTLIST';
 const GET_PROJECTLIST_SUCCESS = 'project/GET_PROJECTLIST_SUCCESS';
 const GET_PROJECTLIST_FAILURE = 'project/GET_PROJECTLIST_FAILURE';
 
-const CHANGE_PROJECTMODE = 'project/CHANGE_PROJECTMODE';
+const CHANGE_PROJECTSTATUS = 'project/CHANGE_PROJECTSTATUS';
+const CHANGE_PROJECTPROGRESS = 'project/CHANGE_PROJECTPROGRESS';
 
 // 프로젝트 ID
 const GET_PROJECTID = 'project/GET_PROJECTID';
@@ -182,7 +183,7 @@ export const getProjectList = (query, sid) => async (dispatch) => {
       const lists = response.data.data.map((list) => {
         // 프로젝트 진행률 계산
         const tasks = list.attributes.project_tasks.data;
-        console.log('tasks', tasks);
+        // console.log('tasks', tasks);
         let total_weight = 0;
         let total_plan = 0;
         let total_work = 0;
@@ -212,8 +213,8 @@ export const getProjectList = (query, sid) => async (dispatch) => {
           const returndata = { progress, weight, plan_day, total_day };
           return returndata;
         });
-        console.log('task_progress', task_progress);
-        console.log('total_weight', Math.round(total_weight * 10) / 10);
+        // console.log('task_progress', task_progress);
+        // console.log('total_weight', Math.round(total_weight * 10) / 10);
         // 가중치 weight 계산
         let _progress = 0;
         const project_progress = task_progress.map((v) => {
@@ -221,9 +222,25 @@ export const getProjectList = (query, sid) => async (dispatch) => {
             _progress += v.progress * (v.weight / total_weight);
           }
         });
+        const progressRate = () => {
+          let returnRate = 0;
+          if (_progress <= 0.15) {
+            returnRate = 10;
+          } else if (_progress <= 0.4) {
+            returnRate = 25;
+          } else if (_progress <= 0.65) {
+            returnRate = 50;
+          } else if (_progress <= 0.8) {
+            returnRate = 75;
+          } else if (_progress <= 1) {
+            returnRate = 90;
+          }
+          return returnRate;
+        };
         return {
           ...list,
           project_progress: Math.round(_progress * 100) / 100,
+          progressRate: progressRate(),
           total_plan,
           total_work,
         };
@@ -253,8 +270,14 @@ export const getProjectList = (query, sid) => async (dispatch) => {
   }
 };
 
-export const changeProjectMode = (stateid) => (dispatch) => {
-  dispatch({ type: CHANGE_PROJECTMODE, payload: stateid }); // mode 변경
+//
+export const changeProjectStatus = (stateid) => (dispatch) => {
+  dispatch({ type: CHANGE_PROJECTSTATUS, payload: stateid }); // status 변경
+};
+
+// 진행중 프로젝트 10~90% 해당 버튼 클릭시
+export const changeProjectProgress = (progress) => (dispatch) => {
+  dispatch({ type: CHANGE_PROJECTPROGRESS, payload: progress });
 };
 
 // export const getProjectList = createRequestThunk(GET_PROJECTLIST, api.getList);
@@ -306,9 +329,9 @@ export const getProjectWork = (query) => async (dispatch) => {
 };
 
 const initialState = {
-  data: '',
-  list: null,
-  wlist: null,
+  data: null,
+  getdata: null,
+  status: { id: null, progress: null },
   error: null,
   werror: null,
 };
@@ -348,19 +371,24 @@ const project = handleActions(
     // 프로젝트 리스트 가져오기 성공
     [GET_PROJECTLIST_SUCCESS]: (state, { payload, state_id }) => ({
       ...state,
-      mode: state_id,
+      status: { id: state_id, progress: null },
       data: { ...state.data, [state_id]: payload },
-      list: { ...state.list, [state_id]: 'OK' },
+      getdata: { ...state.getdata, [state_id]: 'OK' },
     }),
     // 프로젝트 리스트 가져오기 실패
     [GET_PROJECTLIST_FAILURE]: (state, { payload }) => ({
       ...state,
       error: true,
     }),
-    // 프로젝트 모드 벼녕
-    [CHANGE_PROJECTMODE]: (state, { payload }) => ({
+    // 프로젝트 status 변경
+    [CHANGE_PROJECTSTATUS]: (state, { payload }) => ({
       ...state,
-      mode: payload,
+      status: { id: payload, progress: null },
+    }),
+    // 프로젝트 모드 변경
+    [CHANGE_PROJECTPROGRESS]: (state, { payload }) => ({
+      ...state,
+      status: { id: 2, progress: payload }, // status 진행중으로 변경
     }),
     // 프로젝트 ID 가져오기 성공
     [GET_PROJECTID_SUCCESS]: (state, { payload }) => ({

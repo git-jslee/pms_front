@@ -8,11 +8,13 @@ import {
   getProjectList,
   getWork,
   getProjectWorkList,
-  changeProjectMode,
+  changeProjectStatus,
+  changeProjectProgress,
 } from '../../modules/project';
 import ProjectSubButton from '../../components/project/ProjectSubButton';
 import ProjectAdvancedSearchForm from '../../components/project/ProjectAdvancedSearchForm';
 import ProjectCountForm from '../../components/project/ProjectCountForm';
+import ProjectCountForm2 from '../../components/project/ProjectCountForm2';
 import ProjectCountForm1 from '../../components/project/ProjectCountForm1';
 import calWorkTime from '../../modules/project/calWorkTime';
 import SubWorkStatistics from '../../components/project/SubWorkStatistics';
@@ -28,9 +30,10 @@ import { message, Divider } from 'antd';
 
 const ProjectSubContainer = ({ setMode }) => {
   const dispatch = useDispatch();
-  const { wlist } = useSelector(({ project }) => ({
-    wlist: project.wlist,
-  }));
+  const [qsFilter, setQsFilter] = useState();
+  // const { wlist } = useSelector(({ project }) => ({
+  //   wlist: project.wlist,
+  // }));
 
   // 프로젝트 리스트, 진행률 정보 가져오기..
   const [progressCount, setProgressCount] = useState({
@@ -41,8 +44,8 @@ const ProjectSubContainer = ({ setMode }) => {
     _90: 0,
   });
   const { lists, getState } = useSelector(({ project }) => ({
-    lists: project.data[2],
-    getState: project.list,
+    lists: project.data ? project.data[2] : null,
+    getState: project.getdata,
   }));
 
   useEffect(() => {
@@ -53,21 +56,21 @@ const ProjectSubContainer = ({ setMode }) => {
     let _75 = 0;
     let _90 = 0;
     lists.map((v) => {
-      const progress = v.project_progress;
-      if (progress <= 0.15) {
+      const progress = v.progressRate;
+      if (progress === 10) {
         _10 += 1;
-      } else if (progress <= 0.4) {
+      } else if (progress === 25) {
         _25 += 1;
-      } else if (progress <= 0.65) {
+      } else if (progress === 50) {
         _50 += 1;
-      } else if (progress <= 0.8) {
+      } else if (progress === 75) {
         _75 += 1;
-      } else if (progress <= 1) {
+      } else if (progress === 90) {
         _90 += 1;
       }
     });
     setProgressCount({ _10, _25, _50, _75, _90 });
-    console.log('>>>>>>>>>>>>progressCount', progressCount);
+    // console.log('>>>>>>>>>>>>progressCount', progressCount);
   }, [lists]);
 
   // title 업데이트
@@ -107,8 +110,8 @@ const ProjectSubContainer = ({ setMode }) => {
 
   useEffect(() => {
     const query = [];
-    for (let i = 1; i <= 5; i++) {
-      query.push(qs_projectCount(i));
+    for (let i = 1; i <= 6; i++) {
+      query.push(qs_projectCount(i, qsFilter));
     }
     console.log('**query**', query);
     api
@@ -126,7 +129,7 @@ const ProjectSubContainer = ({ setMode }) => {
       .catch((error) => {
         console.log('error', error);
       });
-  }, []);
+  }, [qsFilter]);
 
   // 작업통계 정보 가져오기
   // const start = useRef(moment().subtract(7, 'days').format('YYYY-MM-DD'));
@@ -159,12 +162,28 @@ const ProjectSubContainer = ({ setMode }) => {
   // 프로젝트ID 별 카운트
   // [{id:100, name:스케치미디어 홈페이지, worktime:10},{id:101, name:화영 홈페이지, worktime:10}]
   const [worktime, setWorktime] = useState([]);
-  useEffect(() => {
-    if (!wlist) return;
-    const result = calWorkTime(wlist);
-    // console.log('--calworktime--', result);
-    setWorktime(result);
-  }, [wlist]);
+  // useEffect(() => {
+  //   if (!wlist) return;
+  //   const result = calWorkTime(wlist);
+  //   // console.log('--calworktime--', result);
+  //   setWorktime(result);
+  // }, [wlist]);
+
+  // qs filter 설정
+  const qs_filter = (value) => {
+    if (value === '매출-전체') {
+      // const filter = { contract: { $eq: true } };
+      setQsFilter('');
+    } else if (value === '매출') {
+      const filter = { contracted: { $eq: true } };
+      setQsFilter(filter);
+    } else if (value === '비매출') {
+      const filter = { contracted: { $eq: false } };
+      setQsFilter(filter);
+    }
+  };
+
+  console.log('>>>>>>>>>>>>qs_filter>>>>>>>>>>>', qsFilter);
 
   // 투입률 계산, menu4 클릭
   const calInputRate = async (startDate, endDate) => {
@@ -222,12 +241,17 @@ const ProjectSubContainer = ({ setMode }) => {
     // store 저장 안된 데이터만 api 호출하게 변경
     // 저장되어 있을경우 project.mode 값만 변경
     if (code_status_id in getState) {
-      dispatch(changeProjectMode(code_status_id));
+      dispatch(changeProjectStatus(code_status_id));
     } else {
-      const query = qs_projectList(code_status_id);
+      const query = qs_projectList(code_status_id, qsFilter);
       // dispatch(getProject(query));
       dispatch(getProjectList(query, code_status_id));
     }
+  };
+
+  const progressButtonOnclick = (value) => {
+    const code_status_id = 2;
+    dispatch(changeProjectProgress(value));
   };
 
   const reload = () => {
@@ -287,11 +311,13 @@ const ProjectSubContainer = ({ setMode }) => {
       {subMenu === 'menu1' ? (
         <>
           {/* <ProjectCountForm count={count} countFormOnclick={countFormOnclick} /> */}
-          <Divider />
-          <ProjectCountForm1
+          {/* <Divider /> */}
+          <ProjectCountForm2
             count={count}
             progressCount={progressCount}
             countFormOnclick={countFormOnclick}
+            progressButtonOnclick={progressButtonOnclick}
+            qs_filter={qs_filter}
           />
         </>
       ) : (
