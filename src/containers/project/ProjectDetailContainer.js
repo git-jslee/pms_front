@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import * as api from '../../lib/api/api';
 // import apiQueryAll from '../../lib/api/apiQueryAll';
 import fetchAllList from '../../lib/api/fetchAllList';
@@ -11,11 +11,13 @@ import {
   qs_changeallByPid,
 } from '../../lib/api/queryProject';
 import moment from 'moment';
-import { Row, Col, Timeline } from 'antd';
+import { Row, Col, Timeline, Button } from 'antd';
+import { LeftSquareTwoTone } from '@ant-design/icons';
 import ProjectTimeline from '../../components/project/ProjectTimeline';
 import ProjectTaskTable from '../../components/project/ProjectTaskTable';
 
 const ProjectDetailContainer = () => {
+  const naviagte = useNavigate();
   const { id } = useParams();
   const [project, setProject] = useState();
   const [tasks, setTasks] = useState();
@@ -122,6 +124,10 @@ const ProjectDetailContainer = () => {
     <>
       <div>
         <Row>
+          <LeftSquareTwoTone
+            onClick={() => naviagte(-1)}
+            style={{ fontSize: '30px', color: '#08c' }}
+          />
           <h1>{project ? project.attributes.name : '-'}</h1>
         </Row>
         <Row gutter={16}>

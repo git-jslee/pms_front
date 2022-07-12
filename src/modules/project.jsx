@@ -25,6 +25,8 @@ const GET_PROJECTLIST_FAILURE = 'project/GET_PROJECTLIST_FAILURE';
 const CHANGE_PROJECTSTATUS = 'project/CHANGE_PROJECTSTATUS';
 const CHANGE_PROJECTPROGRESS = 'project/CHANGE_PROJECTPROGRESS';
 
+const INIT_PROJECTSTORAGE = 'project/INIT_PROJECTSTORAGE';
+
 // 프로젝트 ID
 const GET_PROJECTID = 'project/GET_PROJECTID';
 const GET_PROJECTID_SUCCESS = 'project/GET_PROJECTID_SUCCESS';
@@ -196,24 +198,31 @@ export const getProjectList = (query, sid) => async (dispatch) => {
             : 0;
           // task 계획시간, total 작업 시간중 ..큰 값 리턴..
           const plan_day = task.attributes.manpower * task.attributes.plan_day;
-          const total_day = task.attributes.total_time
-            ? (task.attributes.total_time / 8) * (1 / progress)
+          const task_totaltime = task.attributes.total_time;
+          const estimatedTotalday = task_totaltime
+            ? (task_totaltime / 8) * (1 / progress)
             : 0;
-          if (plan_day === 0 && total_day === 0) {
+
+          if (plan_day === 0 && estimatedTotalday === 0) {
             weight = 1.1;
           } else {
             weight =
-              plan_day >= total_day
+              plan_day >= estimatedTotalday
                 ? Math.round(plan_day * 100) / 100
-                : Math.round(total_day * 100) / 100;
+                : Math.round(estimatedTotalday * 100) / 100;
           }
           total_weight += weight;
           total_plan += plan_day;
-          total_work += total_day;
-          const returndata = { progress, weight, plan_day, total_day };
+          total_work += task_totaltime / 8;
+          const returndata = {
+            progress,
+            weight,
+            // plan_day,
+            // total_work: Math.round(total_work * 10) / 10,
+          };
           return returndata;
         });
-        // console.log('task_progress', task_progress);
+        console.log('task_progress', task_progress);
         // console.log('total_weight', Math.round(total_weight * 10) / 10);
         // 가중치 weight 계산
         let _progress = 0;
@@ -239,10 +248,10 @@ export const getProjectList = (query, sid) => async (dispatch) => {
         };
         return {
           ...list,
-          project_progress: Math.round(_progress * 100) / 100,
+          project_progress: Math.round(_progress * 100),
           progressRate: progressRate(),
           total_plan,
-          total_work,
+          total_work: Math.round(total_work * 10) / 10,
         };
       });
       console.log('lists', lists);
@@ -278,6 +287,11 @@ export const changeProjectStatus = (stateid) => (dispatch) => {
 // 진행중 프로젝트 10~90% 해당 버튼 클릭시
 export const changeProjectProgress = (progress) => (dispatch) => {
   dispatch({ type: CHANGE_PROJECTPROGRESS, payload: progress });
+};
+
+// 프로젝트 storage 초기화
+export const initProjectStorage = () => (dispatch) => {
+  dispatch({ type: INIT_PROJECTSTORAGE });
 };
 
 // export const getProjectList = createRequestThunk(GET_PROJECTLIST, api.getList);
@@ -389,6 +403,10 @@ const project = handleActions(
     [CHANGE_PROJECTPROGRESS]: (state, { payload }) => ({
       ...state,
       status: { id: 2, progress: payload }, // status 진행중으로 변경
+    }),
+    // 프로젝트 초기화
+    [INIT_PROJECTSTORAGE]: (state) => ({
+      ...initialState, // status 진행중으로 변경
     }),
     // 프로젝트 ID 가져오기 성공
     [GET_PROJECTID_SUCCESS]: (state, { payload }) => ({

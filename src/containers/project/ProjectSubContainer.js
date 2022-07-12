@@ -10,6 +10,7 @@ import {
   getProjectWorkList,
   changeProjectStatus,
   changeProjectProgress,
+  initProjectStorage,
 } from '../../modules/project';
 import ProjectSubButton from '../../components/project/ProjectSubButton';
 import ProjectAdvancedSearchForm from '../../components/project/ProjectAdvancedSearchForm';
@@ -81,6 +82,12 @@ const ProjectSubContainer = ({ setMode }) => {
     };
   }, [dispatch]);
 
+  useEffect(() => {
+    return () => {
+      dispatch(initProjectStorage());
+    };
+  }, []);
+
   // sub메뉴 버튼 클릭시 동작 구현
   const [subMenu, setSubMenu] = useState('menu1');
 
@@ -131,6 +138,18 @@ const ProjectSubContainer = ({ setMode }) => {
       });
   }, [qsFilter]);
 
+  // 프로젝트 리스트 가져오기
+  useEffect(() => {
+    // const params = 'projects?code_status.id=2';
+    // 1-시작전, 2-진행중, 3-보류, 4-완료, 5-대기, 6-검수
+    const code_status_id = 2;
+    const query = qs_projectList(code_status_id, qsFilter);
+    ////
+    // dispatch(getProject(query));
+    dispatch(getProjectList(query, code_status_id));
+    // calTotalWorkTime();
+  }, [qsFilter]);
+
   // 작업통계 정보 가져오기
   // const start = useRef(moment().subtract(7, 'days').format('YYYY-MM-DD'));
   const [start, setStart] = useState(
@@ -170,16 +189,35 @@ const ProjectSubContainer = ({ setMode }) => {
   // }, [wlist]);
 
   // qs filter 설정
+  const [selectedBt, setSelectedBt] = useState(['bt0', 'bt0']);
   const qs_filter = (value) => {
+    const code_status_id = 2;
+    const query = qs_projectList(code_status_id, qsFilter);
     if (value === '매출-전체') {
-      // const filter = { contract: { $eq: true } };
+      if (selectedBt[0] === 'bt0') return;
+      setSelectedBt(['bt0', selectedBt[1]]);
       setQsFilter('');
+      // 리덕스 프로젝트 초기화..
+      dispatch(initProjectStorage());
+      dispatch(getProjectList(query, code_status_id));
     } else if (value === '매출') {
+      if (selectedBt[0] === 'bt1') return;
       const filter = { contracted: { $eq: true } };
+      setSelectedBt(['bt1', selectedBt[1]]);
       setQsFilter(filter);
+      // 리덕스 프로젝트 초기화..
+      dispatch(initProjectStorage());
+      dispatch(getProjectList(query, code_status_id));
     } else if (value === '비매출') {
+      if (selectedBt[0] === 'bt2') return;
       const filter = { contracted: { $eq: false } };
+      setSelectedBt(['bt2', selectedBt[1]]);
       setQsFilter(filter);
+      // 리덕스 프로젝트 초기화..
+      dispatch(initProjectStorage());
+      dispatch(getProjectList(query, code_status_id));
+    } else {
+      message.success('기능 구현 예정...', 3);
     }
   };
 
@@ -318,6 +356,7 @@ const ProjectSubContainer = ({ setMode }) => {
             countFormOnclick={countFormOnclick}
             progressButtonOnclick={progressButtonOnclick}
             qs_filter={qs_filter}
+            selectedBt={selectedBt}
           />
         </>
       ) : (

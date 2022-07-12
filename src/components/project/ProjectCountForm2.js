@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import paletteJY from '../../lib/styles/palette_JY';
 import { Button, Space, Row, Col } from 'antd';
 import Progress from '../common/Progress';
+import $ from 'jquery';
 
 const StyledBlock = styled.div`
   display: flex;
@@ -33,6 +34,32 @@ const CountGridBlock = styled.article`
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 30px 82px;
+  & > div:nth-child(3) {
+    grid-area: 1 / 3 / 2 / 6;
+  }
+  & > div[name='대  기'] p,
+  & > div[name='진  행'] p {
+    color: cornflowerblue;
+  }
+  & > div[type='square']:not(:last-child)::after,
+  & > div:nth-child(n + 6):nth-child(-n + 7)::after {
+    display: block;
+    content: '';
+    width: 12px;
+    height: 24px;
+    background: url(images/icon-arrow-r.svg) no-repeat center / contain;
+    position: absolute;
+    top: 50%;
+    right: -48px;
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+  & > div:nth-child(6)::after {
+    background-image: url(images/icon-arrow-lr.svg) !important;
+    width: 42px !important;
+    height: 22px !important;
+    right: -60px !important;
+  }
 `;
 
 const ProjectCountForm2 = ({
@@ -41,6 +68,7 @@ const ProjectCountForm2 = ({
   countFormOnclick,
   progressButtonOnclick,
   qs_filter,
+  selectedBt,
 }) => {
   // console.log('**count**', count);
   //0-시작전, 1-진행중, 2-보류, 3-완료, 4-대기
@@ -50,16 +78,68 @@ const ProjectCountForm2 = ({
       <StyledBlock>
         <ButtonSectionBlock>
           <ButtonArticle>
-            <Button onClick={() => qs_filter('매출-전체')}>전 체</Button>
-            <Button onClick={() => qs_filter('매출')}>매 출</Button>
-            <Button onClick={() => qs_filter('비매출')}>비매출</Button>
+            <Button
+              type={selectedBt[0] === 'bt0' ? 'primary' : ''}
+              onClick={() => qs_filter('매출-전체')}
+            >
+              전 체
+            </Button>
+            <Button
+              type={selectedBt[0] === 'bt1' ? 'primary' : ''}
+              onClick={() => qs_filter('매출')}
+            >
+              매 출
+            </Button>
+            <Button
+              type={selectedBt[0] === 'bt2' ? 'primary' : ''}
+              onClick={() => qs_filter('비매출')}
+            >
+              비매출
+            </Button>
+            <Button></Button>
+            {selectedBt[0] === 'bt1' ? (
+              <>
+                <Button type="primary" onClick={() => qs_filter('계약-전체')}>
+                  전 체
+                </Button>
+                <Button onClick={() => qs_filter('계약')}>계 약</Button>
+                <Button onClick={() => qs_filter('예정')}>예 정</Button>
+              </>
+            ) : (
+              ''
+            )}
           </ButtonArticle>
           <ButtonArticle>
-            <Button onClick={() => qs_filter('사업-전체')}>전 체</Button>
-            <Button>디자인</Button>
-            <Button>영 상</Button>
-            <Button>I C T</Button>
-            <Button>R&D</Button>
+            <Button
+              type={selectedBt[1] === 'bt0' ? 'primary' : ''}
+              onClick={() => qs_filter('사업-전체')}
+            >
+              전 체
+            </Button>
+            <Button
+              type={selectedBt[1] === 'bt1' ? 'primary' : ''}
+              onClick={() => qs_filter('디자인')}
+            >
+              디자인
+            </Button>
+            <Button
+              type={selectedBt[1] === 'bt2' ? 'primary' : ''}
+              onClick={() => qs_filter('영상')}
+            >
+              영 상
+            </Button>
+            <Button
+              type={selectedBt[1] === 'bt3' ? 'primary' : ''}
+              onClick={() => qs_filter('ICT')}
+            >
+              I C T
+            </Button>
+            <Button
+              type={selectedBt[1] === 'bt4' ? 'primary' : ''}
+              onClick={() => qs_filter('R&D')}
+            >
+              R&D
+            </Button>
           </ButtonArticle>
         </ButtonSectionBlock>
         <CountSectionBlock>
@@ -77,8 +157,8 @@ const ProjectCountForm2 = ({
               count={`${count[4] ? count[4].count : 0}`}
               onClick={() => countFormOnclick(5)}
             />
-            <Progress type="circle" name=".." />
-            <Progress type="circle" name=".." />
+            {/* <Progress type="circle" name=".." />
+            <Progress type="circle" name=".." /> */}
             <Progress type="circle" name="사업계획" count="0" />
             <Progress
               type="circle"
@@ -140,5 +220,11 @@ const ProjectCountForm2 = ({
     </>
   );
 };
-
+// $(function () {
+//   $('section:first-child li, section:last-child article > div').click(
+//     function () {
+//       $(this).addClass('on').siblings().removeClass('on');
+//     },
+//   );
+// });
 export default ProjectCountForm2;

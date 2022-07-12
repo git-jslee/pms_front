@@ -57,13 +57,32 @@ const ProjectListTable = ({
       title: '진행률',
       key: 'project_progress',
       dataIndex: 'project_progress',
-      align: 'center',
+      align: 'right',
     },
     {
-      title: '시작일',
-      key: 'startdate',
-      dataIndex: 'startdate',
+      title: '계획(일)',
+      key: 'total_plan',
+      dataIndex: 'total_plan',
       align: 'right',
+    },
+    {
+      title: '작업(일)',
+      key: 'total_work',
+      dataIndex: 'total_work',
+      align: 'right',
+      sorter: (a, b) => a.total_work - b.total_work,
+    },
+    // {
+    //   title: '시작일',
+    //   key: 'startdate',
+    //   dataIndex: 'startdate',
+    //   align: 'right',
+    // },
+    {
+      title: '최근작업일',
+      key: 'lastUpdate',
+      dataIndex: 'lastUpdate',
+      align: 'center',
     },
     {
       title: '(start)',
@@ -72,12 +91,6 @@ const ProjectListTable = ({
       align: 'right',
       sorter: (a, b) => a.elapsed - b.elapsed,
     },
-    // {
-    //   title: '최근작업일',
-    //   key: 'lastUpdate',
-    //   dataIndex: 'lastUpdate',
-    //   align: 'center',
-    // },
     {
       title: '(update)',
       key: 'elapsed_last',
@@ -85,29 +98,6 @@ const ProjectListTable = ({
       align: 'right',
       sorter: (a, b) => a.elapsed_last - b.elapsed_last,
     },
-    {
-      title: '투입(일)',
-      key: 'total_work',
-      dataIndex: 'total_work',
-      align: 'right',
-      sorter: (a, b) => a.total_work - b.total_work,
-    },
-    // {
-    //   title: 'Action',
-    //   key: 'action',
-    //   align: 'center',
-    //   render: (text, record) => (
-    //     <Space size="middle">
-    //       <Button
-    //         onClick={() => {
-    //           onClick(record.key);
-    //         }}
-    //       >
-    //         View
-    //       </Button>
-    //     </Space>
-    //   ),
-    // },
   ];
 
   const onClick1 = (id) => {
@@ -147,12 +137,7 @@ const ProjectListTable = ({
                   contentStyle={{ backgroundColor: '#f0f5ff' }}
                   extra={
                     <>
-                      <Button onClick={() => onClick1(record.id)}>
-                        상세조회-old
-                      </Button>
-                      <Button onClick={() => onClick(record.id)}>
-                        상세조회
-                      </Button>
+                      <Button onClick={() => onClick(record.id)}>Info</Button>
                       <Button
                         type="primary"
                         disabled={record.code_status === '완료'}

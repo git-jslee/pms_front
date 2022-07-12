@@ -16,7 +16,7 @@ import ProjectViewPage from './pages/ProjectViewPage';
 import CustomerPage from './pages/CustomerPage';
 import WorkPage from './pages/WorkPage';
 import AntdPage from './pages/Antd';
-import ProjectView from './pages/ProjectView';
+// import ProjectView from './pages/ProjectView';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import AddPorjectPage from './pages/AddPorjectPage';
@@ -49,7 +49,7 @@ function App() {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/project" element={<ProjectPage />} />
           <Route path="project/:id" element={<ProjectDetailPage />} />
-          <Route path="/projects/:id" element={<ProjectViewPage />} />
+          {/* <Route path="/projects/:id" element={<ProjectViewPage />} /> */}
 
           <Route path="/addproject/" element={<AddPorjectPage />} />
           <Route path="/customer" element={<CustomerPage />} />

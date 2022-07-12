@@ -11,6 +11,10 @@ const StyledProgress = styled.div`
     0% no-repeat padding-box;
   box-shadow: 5px 5px 12px rgb(181 191 198 / 46%),
     -4px -4px 5px rgb(255 255 255 / 52%);
+  &.on {
+    box-shadow: inset 5px 5px 10px rgb(181 191 198 / 46%),
+      inset -4px -4px 1px rgb(255 255 255 / 52%);
+  }
   p {
     color: ${paletteJY.gray[2]};
     font-size: 18px;
@@ -65,19 +69,19 @@ const StyledProgress = styled.div`
           bottom: 0;
           left: 0;
           &[data-perc='10%'] {
-            height: 11px;
+            height: 10%;
           }
           &[data-perc='25%'] {
-            height: 28px;
+            height: 25%;
           }
           &[data-perc='50%'] {
-            height: 55px;
+            height: 50%;
           }
           &[data-perc='75%'] {
-            height: 82px;
+            height: 75%;
           }
           &[data-perc='90%'] {
-            height: 99px;
+            height: 90%;
           }
         }
       }

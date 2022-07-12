@@ -47,16 +47,16 @@ const ProjectContentContainer = () => {
 
   // 컴포넌트가 처음 렌더링 될 때 프로젝트 전체 리스트 정보 가져옴
   // 페이지 이동 후 재 접속시.. 프로젝트 리스트 다시 가져옴...코드 수정 필요..
-  useEffect(() => {
-    // const params = 'projects?code_status.id=2';
-    // 1-시작전, 2-진행중, 3-보류, 4-완료, 5-대기, 6-검수
-    const code_status_id = 2;
-    const query = qs_projectList(code_status_id);
-    ////
-    // dispatch(getProject(query));
-    dispatch(getProjectList(query, code_status_id));
-    calTotalWorkTime();
-  }, []);
+  // useEffect(() => {
+  //   // const params = 'projects?code_status.id=2';
+  //   // 1-시작전, 2-진행중, 3-보류, 4-완료, 5-대기, 6-검수
+  //   const code_status_id = 2;
+  //   const query = qs_projectList(code_status_id);
+  //   ////
+  //   // dispatch(getProject(query));
+  //   dispatch(getProjectList(query, code_status_id));
+  //   calTotalWorkTime();
+  // }, []);
 
   const calTotalWorkTime = async () => {
     const result = [];
