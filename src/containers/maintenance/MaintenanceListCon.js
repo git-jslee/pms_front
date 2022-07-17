@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import styled from 'styled-components';
 import MaintenanceListForm from '../../components/maintenance/MaintenanceListForm';
 import InfoMainDrawerForm from '../../components/maintenance/InfoMainDrawerForm';
 import { Alert } from 'antd';
@@ -9,6 +10,11 @@ import {
   qs_mainHistoryByMid,
   qs_mainHistoryAllByMid,
 } from '../../lib/api/query';
+
+const Base = styled.div`
+  width: 100%;
+  padding-top: 10px;
+`;
 
 const MaintenanceListCon = () => {
   const { lists, loading } = useSelector(({ apiGetList, loading }) => ({
@@ -139,7 +145,7 @@ const MaintenanceListCon = () => {
   };
 
   return (
-    <>
+    <Base>
       <MaintenanceListForm
         lists={lists}
         loading={loading}
@@ -157,7 +163,7 @@ const MaintenanceListCon = () => {
       ) : (
         ''
       )}
-    </>
+    </Base>
   );
 };
 

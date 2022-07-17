@@ -13,23 +13,8 @@ import {
 
 const { RangePicker } = DatePicker;
 
-const SearchFormBlock = styled.div`
-  /* position: relative; */
-  /* display: inline; */
-  /* box-shadow: 0 0 8px rgba(0, 0, 0, 0.025);
-  margin-top: 10px;
-  padding: 2rem;
-  width: 1400px;
-  height: 100%;
-  background: white;
-  border-radius: 2px; */
-  h1 {
-    /* position: relative; */
-  }
-  .search {
-    margin-left: 20px;
-    display: inline;
-  }
+const Base = styled.div`
+  width: 70%;
 `;
 
 const SalesAdvancedSearchForm = ({
@@ -84,7 +69,7 @@ const SalesAdvancedSearchForm = ({
 
   return (
     <>
-      <SearchFormBlock>
+      <Base>
         <Form
           // {...layout}
           labelCol={{
@@ -197,7 +182,7 @@ const SalesAdvancedSearchForm = ({
             </Col>
           </Row>
         </Form>
-      </SearchFormBlock>
+      </Base>
     </>
   );
 };

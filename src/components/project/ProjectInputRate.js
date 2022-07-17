@@ -24,6 +24,7 @@ ChartJS.register(
 
 const ChartBlock = styled.div`
   /* height: 500px; */
+  /* width: 95%; */
 `;
 
 const options = {

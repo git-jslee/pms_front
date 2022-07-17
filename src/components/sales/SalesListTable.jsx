@@ -1,11 +1,16 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
 import { Table, Tag, Space, Button, Popconfirm } from 'antd';
 import {
   InfoCircleOutlined,
   CopyOutlined,
   MenuFoldOutlined,
 } from '@ant-design/icons';
+
+const Base = styled.div`
+  width: 100%;
+`;
 
 const SalesListTable = ({ tableData, addSalesOnClick, infoSalesOnClick }) => {
   const navigate = useNavigate();
@@ -129,11 +134,13 @@ const SalesListTable = ({ tableData, addSalesOnClick, infoSalesOnClick }) => {
 
   return (
     <>
-      <Table
-        columns={columns}
-        dataSource={tableData}
-        pagination={{ pageSize: 20 }}
-      />
+      <Base>
+        <Table
+          columns={columns}
+          dataSource={tableData}
+          pagination={{ pageSize: 20 }}
+        />
+      </Base>
     </>
   );
 };

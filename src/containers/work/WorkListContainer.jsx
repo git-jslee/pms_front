@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import styled from 'styled-components';
 import * as api from '../../lib/api/api';
 import WorkListTable from '../../components/work/WorkListTable';
 import MainWorkListTable from '../../components/work/MainWorkListTable';
@@ -12,6 +13,10 @@ import moment from 'moment';
 import WorkDrawerContainer from './WorkDrawerContainer';
 import { message } from 'antd';
 import { qs_workListByUid } from '../../lib/api/queryProject';
+
+const Base = styled.div`
+  width: 100%;
+`;
 
 const WorkListContainer = () => {
   const [workList, setWorkList] = useState([]);
@@ -126,7 +131,7 @@ const WorkListContainer = () => {
   };
 
   return (
-    <>
+    <Base>
       {workList && mainWorkList && code_tasks && selectedUserId ? (
         <WorkListTable
           lists={newList}
@@ -146,7 +151,7 @@ const WorkListContainer = () => {
       ) : (
         ''
       )}
-    </>
+    </Base>
   );
 };
 

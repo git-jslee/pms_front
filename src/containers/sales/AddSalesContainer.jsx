@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import styled from 'styled-components';
 import AddSalesPerformanceForm from '../../components/sales/AddSalesPerformanceForm';
 // import tbl_insert from '../../modules/tbl_insert';
 import { tbl_insert } from '../../modules/common/tbl_crud';
@@ -8,6 +9,10 @@ import 'moment-timezone';
 // import 'moment/locale/ko-kr';
 import { useNavigate } from 'react-router-dom';
 import AutoComplete from '../../components/common/AutoComplete';
+
+const Base = styled.div`
+  width: 80%;
+`;
 
 const AddSalesContainer = () => {
   const navigate = useNavigate();
@@ -168,26 +173,28 @@ const AddSalesContainer = () => {
     <>
       {probability && division && team && customer ? (
         <>
-          <AutoComplete lists={customer} />
-          <AddSalesPerformanceForm
-            probability={probability}
-            division={division}
-            item={item}
-            team={team}
-            customer={customer}
-            onChangeDivision={onChangeDivision}
-            onSubmit={onSubmit}
-            divisionId={divisionId}
-            calResult={calResult}
-            onChangeRadio={onChangeRadio}
-            salesValueOnchange={salesValueOnchange}
-            profitMarginOnchange={profitMarginOnchange}
-            radioValue={radioValue}
-            profitMarginValue={profitMarginValue}
-            checked={checked}
-            onChangeSwitch={onChangeSwitch}
-            btnDisabled={btnDisabled}
-          />
+          <Base>
+            <AutoComplete lists={customer} />
+            <AddSalesPerformanceForm
+              probability={probability}
+              division={division}
+              item={item}
+              team={team}
+              customer={customer}
+              onChangeDivision={onChangeDivision}
+              onSubmit={onSubmit}
+              divisionId={divisionId}
+              calResult={calResult}
+              onChangeRadio={onChangeRadio}
+              salesValueOnchange={salesValueOnchange}
+              profitMarginOnchange={profitMarginOnchange}
+              radioValue={radioValue}
+              profitMarginValue={profitMarginValue}
+              checked={checked}
+              onChangeSwitch={onChangeSwitch}
+              btnDisabled={btnDisabled}
+            />
+          </Base>
         </>
       ) : (
         <h1>로딩중</h1>

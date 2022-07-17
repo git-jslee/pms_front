@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
 import * as api from '../../lib/api/api';
 import {
   qs_scrapeReview,
@@ -11,6 +12,10 @@ import {
   columns_review,
   columns_check,
 } from '../../components/scrape/formData';
+
+const Base = styled.div`
+  width: 100%;
+`;
 
 const ScrapeListContainer = () => {
   const [mode, setMode] = useState('review');
@@ -111,7 +116,7 @@ const ScrapeListContainer = () => {
   console.log('>>>>>>>>', dataSource());
 
   return (
-    <>
+    <Base>
       <ScrapeSubMenu changeMode={changeMode} />
       {mode === 'review' ? (
         <ScrapeListTable
@@ -126,7 +131,7 @@ const ScrapeListContainer = () => {
           dataSource={dataSource()}
         />
       )}
-    </>
+    </Base>
   );
 };
 

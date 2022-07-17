@@ -23,6 +23,10 @@ import { Button, message } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import fetchAllList from '../../lib/api/fetchAllList';
 
+const Base = styled.div`
+  width: 100%;
+`;
+
 const ButtonBlock = styled.div`
   //
 `;
@@ -408,7 +412,7 @@ const AddWorkDrawerContainer = () => {
   };
 
   return (
-    <>
+    <Base>
       <ButtonBlock>
         <Button onClick={onClickAddWork} icon={<PlusOutlined />}>
           작업등록
@@ -436,7 +440,7 @@ const AddWorkDrawerContainer = () => {
         revEnable={revEnable}
         handleRevision={handleRevision}
       />
-    </>
+    </Base>
   );
 };
 

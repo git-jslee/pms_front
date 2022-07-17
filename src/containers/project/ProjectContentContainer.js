@@ -105,6 +105,8 @@ const ProjectContentContainer = () => {
         );
         // const _totalworktime = totalWorkTime.filter((v) => v.id === list.id)[0];
         // console.log('**worktime**', index, _totalworktime);
+        const remaining_day =
+          Math.round((list.total_plan - list.total_work) * 10) / 10;
         const array = {
           key: list.id,
           id: list.id,
@@ -125,7 +127,7 @@ const ProjectContentContainer = () => {
           plan_enddate: list.attributes.plan_enddate,
           startdate: list.attributes.startdate,
           enddate: list.attributes.enddate,
-          price: list.attributes.price,
+          price: list.attributes.price.toLocaleString('ko-KR'),
           lastUpdate: list.attributes.last_workupdate,
           project_progress: list.project_progress,
           progressRate: list.progressRate,
@@ -133,6 +135,7 @@ const ProjectContentContainer = () => {
           elapsed_last: elapsed_last,
           total_plan: list.total_plan,
           total_work: list.total_work,
+          remaining_day: remaining_day > 0 ? remaining_day : 0,
           // totalday:
           //   _totalworktime !== undefined
           //     ? Math.round(_totalworktime.worktime / 8)

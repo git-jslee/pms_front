@@ -5,6 +5,10 @@ import { Button } from 'antd';
 import Unity, { UnityContext } from 'react-unity-webgl';
 import { setWebglName } from '../../modules/common';
 
+const Base = styled.div`
+  width: 100%;
+`;
+
 const SubMenuBlock = styled.div`
   display: inline;
   .search {
@@ -102,7 +106,7 @@ const WebGlComponent = () => {
   console.log('>>webglname', webglName);
 
   return (
-    <>
+    <Base>
       <SubMenuBlock>
         <Button onClick={test1}>CREA</Button>
         <Button onClick={test2}>CREA2</Button>
@@ -128,7 +132,7 @@ const WebGlComponent = () => {
           ''
         )}
       </WebGlBlock>
-    </>
+    </Base>
   );
 };
 

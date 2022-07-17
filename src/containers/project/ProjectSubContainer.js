@@ -31,7 +31,10 @@ import { message, Divider } from 'antd';
 
 const ProjectSubContainer = ({ setMode }) => {
   const dispatch = useDispatch();
-  const [qsFilter, setQsFilter] = useState();
+  // const [qsFilter, setQsFilter] = useState([{}]);
+  const [filter1, setFilter1] = useState([{}]);
+  const [filter2, setFilter2] = useState([{}]);
+  const [sumFilter, setSumFilter] = useState([{}]);
   // const { wlist } = useSelector(({ project }) => ({
   //   wlist: project.wlist,
   // }));
@@ -118,7 +121,7 @@ const ProjectSubContainer = ({ setMode }) => {
   useEffect(() => {
     const query = [];
     for (let i = 1; i <= 6; i++) {
-      query.push(qs_projectCount(i, qsFilter));
+      query.push(qs_projectCount(i, sumFilter));
     }
     console.log('**query**', query);
     api
@@ -136,19 +139,19 @@ const ProjectSubContainer = ({ setMode }) => {
       .catch((error) => {
         console.log('error', error);
       });
-  }, [qsFilter]);
+  }, [sumFilter]);
 
   // 프로젝트 리스트 가져오기
   useEffect(() => {
     // const params = 'projects?code_status.id=2';
     // 1-시작전, 2-진행중, 3-보류, 4-완료, 5-대기, 6-검수
     const code_status_id = 2;
-    const query = qs_projectList(code_status_id, qsFilter);
+    const query = qs_projectList(code_status_id, sumFilter);
     ////
     // dispatch(getProject(query));
     dispatch(getProjectList(query, code_status_id));
     // calTotalWorkTime();
-  }, [qsFilter]);
+  }, [sumFilter]);
 
   // 작업통계 정보 가져오기
   // const start = useRef(moment().subtract(7, 'days').format('YYYY-MM-DD'));
@@ -189,30 +192,116 @@ const ProjectSubContainer = ({ setMode }) => {
   // }, [wlist]);
 
   // qs filter 설정
-  const [selectedBt, setSelectedBt] = useState(['bt0', 'bt0']);
+  const [selectedBt, setSelectedBt] = useState(['bt0', 'bt0', 'bt0']);
   const qs_filter = (value) => {
     const code_status_id = 2;
-    const query = qs_projectList(code_status_id, qsFilter);
+    const query = qs_projectList(code_status_id, sumFilter);
     if (value === '매출-전체') {
       if (selectedBt[0] === 'bt0') return;
-      setSelectedBt(['bt0', selectedBt[1]]);
-      setQsFilter('');
+      setSelectedBt(['bt0', selectedBt[1], selectedBt[2]]);
+      setFilter1([{}]);
+      setSumFilter([...filter2]);
+      // setQsFilter([{}]);
       // 리덕스 프로젝트 초기화..
       dispatch(initProjectStorage());
       dispatch(getProjectList(query, code_status_id));
     } else if (value === '매출') {
       if (selectedBt[0] === 'bt1') return;
-      const filter = { contracted: { $eq: true } };
-      setSelectedBt(['bt1', selectedBt[1]]);
-      setQsFilter(filter);
+      const filter = [{ price: { $ne: 0 } }];
+      setSelectedBt(['bt1', selectedBt[1], 'bt0']);
+      setFilter1(filter);
+      setSumFilter([...filter2, ...filter]);
+      // setQsFilter(filter);
       // 리덕스 프로젝트 초기화..
       dispatch(initProjectStorage());
       dispatch(getProjectList(query, code_status_id));
     } else if (value === '비매출') {
       if (selectedBt[0] === 'bt2') return;
-      const filter = { contracted: { $eq: false } };
-      setSelectedBt(['bt2', selectedBt[1]]);
-      setQsFilter(filter);
+      const filter = [{ price: { $eq: 0 } }];
+      setSelectedBt(['bt2', selectedBt[1], 'bt0']);
+      setFilter1(filter);
+      setSumFilter([...filter2, ...filter]);
+      // setQsFilter(filter);
+      // 리덕스 프로젝트 초기화..
+      dispatch(initProjectStorage());
+      dispatch(getProjectList(query, code_status_id));
+    } else if (value === '계약-전체') {
+      if (selectedBt[2] === 'bt0') return;
+      const filter = [{ price: { $ne: 0 } }];
+      setSelectedBt(['bt1', selectedBt[1], 'bt0']);
+      setFilter1(filter);
+      setSumFilter([...filter2, ...filter]);
+      // setQsFilter(filter);
+      // 리덕스 프로젝트 초기화..
+      dispatch(initProjectStorage());
+      dispatch(getProjectList(query, code_status_id));
+    } else if (value === '계약') {
+      if (selectedBt[2] === 'bt1') return;
+      const filter = [{ price: { $ne: 0 } }, { contracted: { $eq: true } }];
+      setSelectedBt(['bt1', selectedBt[1], 'bt1']);
+      setFilter1(filter);
+      setSumFilter([...filter2, ...filter]);
+      // setQsFilter(filter);
+      // 리덕스 프로젝트 초기화..
+      dispatch(initProjectStorage());
+      dispatch(getProjectList(query, code_status_id));
+    } else if (value === '예정') {
+      if (selectedBt[2] === 'bt2') return;
+      const filter = [{ price: { $ne: 0 } }, { contracted: { $eq: false } }];
+      setSelectedBt(['bt1', selectedBt[1], 'bt2']);
+      setFilter1(filter);
+      setSumFilter([...filter2, ...filter]);
+      // setQsFilter(filter);
+      // 리덕스 프로젝트 초기화..
+      dispatch(initProjectStorage());
+      dispatch(getProjectList(query, code_status_id));
+    } else if (value === '사업-전체') {
+      if (selectedBt[1] === 'bt0') return;
+      // const filter = [{}];
+      setSelectedBt([selectedBt[0], 'bt0', selectedBt[2]]);
+      setFilter2([{}]);
+      setSumFilter([...filter1]);
+      // setQsFilter(filter);
+      // 리덕스 프로젝트 초기화..
+      dispatch(initProjectStorage());
+      dispatch(getProjectList(query, code_status_id));
+    } else if (value === '디자인') {
+      if (selectedBt[1] === 'bt1') return;
+      const filter = [{ scode_team: { id: { $eq: 1 } } }];
+      setSelectedBt([selectedBt[0], 'bt1', selectedBt[2]]);
+      setFilter2(filter);
+      setSumFilter([...filter1, ...filter]);
+      // setQsFilter(filter);
+      // 리덕스 프로젝트 초기화..
+      dispatch(initProjectStorage());
+      dispatch(getProjectList(query, code_status_id));
+    } else if (value === '영상') {
+      if (selectedBt[1] === 'bt2') return;
+      const filter = [{ scode_team: { id: { $eq: 5 } } }];
+      setSelectedBt([selectedBt[0], 'bt2', selectedBt[2]]);
+      setFilter2(filter);
+      setSumFilter([...filter1, ...filter]);
+      // setQsFilter(filter);
+      // 리덕스 프로젝트 초기화..
+      dispatch(initProjectStorage());
+      dispatch(getProjectList(query, code_status_id));
+    } else if (value === 'ICT') {
+      if (selectedBt[1] === 'bt3') return;
+      const filter = [{ scode_team: { id: { $eq: 2 } } }];
+      setSelectedBt([selectedBt[0], 'bt3', selectedBt[2]]);
+      setFilter2(filter);
+      setSumFilter([...filter1, ...filter]);
+      // setQsFilter(filter);
+      // 리덕스 프로젝트 초기화..
+      dispatch(initProjectStorage());
+      dispatch(getProjectList(query, code_status_id));
+    } else if (value === 'R&D') {
+      if (selectedBt[1] === 'bt4') return;
+      const filter = [{ scode_team: { id: { $eq: 6 } } }];
+      setSelectedBt([selectedBt[0], 'bt4', selectedBt[2]]);
+      setFilter2(filter);
+      setSumFilter([...filter1, ...filter]);
+      // setQsFilter(filter);
       // 리덕스 프로젝트 초기화..
       dispatch(initProjectStorage());
       dispatch(getProjectList(query, code_status_id));
@@ -221,7 +310,7 @@ const ProjectSubContainer = ({ setMode }) => {
     }
   };
 
-  console.log('>>>>>>>>>>>>qs_filter>>>>>>>>>>>', qsFilter);
+  console.log('>>>>>>>>>>>>qs_filter>>>>>>>>>>>', sumFilter);
 
   // 투입률 계산, menu4 클릭
   const calInputRate = async (startDate, endDate) => {
@@ -281,7 +370,7 @@ const ProjectSubContainer = ({ setMode }) => {
     if (code_status_id in getState) {
       dispatch(changeProjectStatus(code_status_id));
     } else {
-      const query = qs_projectList(code_status_id, qsFilter);
+      const query = qs_projectList(code_status_id, sumFilter);
       // dispatch(getProject(query));
       dispatch(getProjectList(query, code_status_id));
     }

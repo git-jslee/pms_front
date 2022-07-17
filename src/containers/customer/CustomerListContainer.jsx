@@ -1,8 +1,13 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import styled from 'styled-components';
 import { getCustomerlist } from '../../modules/customerList';
 import CustomerLIstTable from '../../components/customer/CustomerLIstTable';
 import AutoComplete from '../../components/common/AutoComplete';
+
+const Base = styled.div`
+  width: 100%;
+`;
 
 const CustomerListContainer = () => {
   const dispatch = useDispatch();
@@ -28,14 +33,14 @@ const CustomerListContainer = () => {
   }, [status]);
 
   return (
-    <>
+    <Base>
       <AutoComplete lists={data} />
       {status ? (
         <CustomerLIstTable lists={data} />
       ) : (
         <h1>로객리스트 로딩중..</h1>
       )}
-    </>
+    </Base>
   );
 };
 

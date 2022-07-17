@@ -8,6 +8,7 @@ const { RangePicker } = DatePicker;
 
 const SubMenuBlock = styled.div`
   display: inline;
+  width: 100%;
   .search {
     margin-left: 20px;
     margin-right: 60px;

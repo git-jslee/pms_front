@@ -1,9 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import styled from 'styled-components';
 import { Table, Space, Row, Col } from 'antd';
 import moment from 'moment';
 
 const { Column, ColumnGroup } = Table;
+
+const Base = styled.div`
+  width: 100%;
+`;
 
 const SalesStatisticsTable = ({ sumValue, totalMonth, onClick }) => {
   console.log('==totalMonth==', totalMonth);
@@ -173,169 +178,171 @@ const SalesStatisticsTable = ({ sumValue, totalMonth, onClick }) => {
 
   return (
     <>
-      <Row>
-        <Col span={6} offset={0}>
-          <Table
-            pagination={false}
-            // columns={columns}
-            dataSource={data_pm}
-            // scroll={{ x: 800 }}
-            size="small"
-            // table OnClick 이벤트 처리
-            onRow={(record, rowIndex) => {
-              return {
-                onClick: () => {
-                  // console.log('table click event', record);
-                  onClick(record);
-                },
-              };
-            }}
-          >
-            <Column
-              title="확률"
-              width={55}
-              dataIndex="probibility"
-              key="probibility"
-              align="right"
-            />
+      <Base>
+        <Row>
+          <Col span={6} offset={0}>
+            <Table
+              pagination={false}
+              // columns={columns}
+              dataSource={data_pm}
+              // scroll={{ x: 800 }}
+              size="small"
+              // table OnClick 이벤트 처리
+              onRow={(record, rowIndex) => {
+                return {
+                  onClick: () => {
+                    // console.log('table click event', record);
+                    onClick(record);
+                  },
+                };
+              }}
+            >
+              <Column
+                title="확률"
+                width={55}
+                dataIndex="probibility"
+                key="probibility"
+                align="right"
+              />
 
-            <ColumnGroup
-              title={`전월-${moment(totalMonth[0][0]).format('MM')}월`}
+              <ColumnGroup
+                title={`전월-${moment(totalMonth[0][0]).format('MM')}월`}
+              >
+                <Column
+                  title="실제매출액"
+                  width={100}
+                  dataIndex="pm_sales"
+                  key="pm_sales"
+                  align="right"
+                />
+                <Column
+                  title="실제매출이익"
+                  width={100}
+                  dataIndex="pm_profit"
+                  key="pm_profit"
+                  align="right"
+                />
+              </ColumnGroup>
+            </Table>
+          </Col>
+          <Col span={8} offset={0}>
+            <Table
+              pagination={false}
+              dataSource={data_cm}
+              size="small"
+              // table OnClick 이벤트 처리
+              onRow={(record, rowIndex) => {
+                return {
+                  onClick: () => {
+                    onClick(record);
+                  },
+                };
+              }}
             >
-              <Column
-                title="실제매출액"
-                width={100}
-                dataIndex="pm_sales"
-                key="pm_sales"
-                align="right"
-              />
-              <Column
-                title="실제매출이익"
-                width={100}
-                dataIndex="pm_profit"
-                key="pm_profit"
-                align="right"
-              />
-            </ColumnGroup>
-          </Table>
-        </Col>
-        <Col span={8} offset={0}>
-          <Table
-            pagination={false}
-            dataSource={data_cm}
-            size="small"
-            // table OnClick 이벤트 처리
-            onRow={(record, rowIndex) => {
-              return {
-                onClick: () => {
-                  onClick(record);
-                },
-              };
-            }}
-          >
-            <ColumnGroup
-              title={`당월-${moment(totalMonth[1][0]).format('MM')}월`}
+              <ColumnGroup
+                title={`당월-${moment(totalMonth[1][0]).format('MM')}월`}
+              >
+                <Column
+                  title="예상매출액"
+                  width={100}
+                  dataIndex="cm_salesProjection"
+                  key="cm_salesProjection"
+                  align="right"
+                />
+                <Column
+                  title="예상매출이익"
+                  width={100}
+                  dataIndex="cm_profitProjection"
+                  key="cm_profitProjection"
+                  align="right"
+                />
+                <Column
+                  title="실제매출액"
+                  width={100}
+                  dataIndex="cm_sales"
+                  key="cm_sales"
+                  align="right"
+                />
+                <Column
+                  title="실제매출이익"
+                  width={100}
+                  dataIndex="cm_profit"
+                  key="cm_profit"
+                  align="right"
+                />
+              </ColumnGroup>
+            </Table>
+          </Col>
+          <Col span={5} offset={0}>
+            <Table
+              pagination={false}
+              dataSource={data_nm}
+              size="small"
+              // table OnClick 이벤트 처리
+              onRow={(record, rowIndex) => {
+                return {
+                  onClick: () => {
+                    onClick(record);
+                  },
+                };
+              }}
             >
-              <Column
-                title="예상매출액"
-                width={100}
-                dataIndex="cm_salesProjection"
-                key="cm_salesProjection"
-                align="right"
-              />
-              <Column
-                title="예상매출이익"
-                width={100}
-                dataIndex="cm_profitProjection"
-                key="cm_profitProjection"
-                align="right"
-              />
-              <Column
-                title="실제매출액"
-                width={100}
-                dataIndex="cm_sales"
-                key="cm_sales"
-                align="right"
-              />
-              <Column
-                title="실제매출이익"
-                width={100}
-                dataIndex="cm_profit"
-                key="cm_profit"
-                align="right"
-              />
-            </ColumnGroup>
-          </Table>
-        </Col>
-        <Col span={5} offset={0}>
-          <Table
-            pagination={false}
-            dataSource={data_nm}
-            size="small"
-            // table OnClick 이벤트 처리
-            onRow={(record, rowIndex) => {
-              return {
-                onClick: () => {
-                  onClick(record);
-                },
-              };
-            }}
-          >
-            <ColumnGroup
-              title={`익월-${moment(totalMonth[2][0]).format('MM')}월`}
+              <ColumnGroup
+                title={`익월-${moment(totalMonth[2][0]).format('MM')}월`}
+              >
+                <Column
+                  title="예상매출액"
+                  width={100}
+                  dataIndex="nm_salesProjection"
+                  key="nm_salesProjection"
+                  align="right"
+                />
+                <Column
+                  title="예상매출이익"
+                  width={100}
+                  dataIndex="nm_profitProjection"
+                  key="nm_profitProjection"
+                  align="right"
+                />
+              </ColumnGroup>
+            </Table>
+          </Col>
+          <Col span={5} offset={0}>
+            <Table
+              pagination={false}
+              dataSource={data_nnm}
+              size="small"
+              // table OnClick 이벤트 처리
+              onRow={(record, rowIndex) => {
+                return {
+                  onClick: () => {
+                    onClick(record);
+                  },
+                };
+              }}
             >
-              <Column
-                title="예상매출액"
-                width={100}
-                dataIndex="nm_salesProjection"
-                key="nm_salesProjection"
-                align="right"
-              />
-              <Column
-                title="예상매출이익"
-                width={100}
-                dataIndex="nm_profitProjection"
-                key="nm_profitProjection"
-                align="right"
-              />
-            </ColumnGroup>
-          </Table>
-        </Col>
-        <Col span={5} offset={0}>
-          <Table
-            pagination={false}
-            dataSource={data_nnm}
-            size="small"
-            // table OnClick 이벤트 처리
-            onRow={(record, rowIndex) => {
-              return {
-                onClick: () => {
-                  onClick(record);
-                },
-              };
-            }}
-          >
-            <ColumnGroup
-              title={`익익월-${moment(totalMonth[3][0]).format('MM')}월`}
-            >
-              <Column
-                title="예상매출액"
-                width={100}
-                dataIndex="nnm_salesProjection"
-                key="nnm_salesProjection"
-                align="right"
-              />
-              <Column
-                title="예상매출이익"
-                width={100}
-                dataIndex="nnm_profitProjection"
-                key="nnm_profitProjection"
-                align="right"
-              />
-            </ColumnGroup>
-          </Table>
-        </Col>
-      </Row>
+              <ColumnGroup
+                title={`익익월-${moment(totalMonth[3][0]).format('MM')}월`}
+              >
+                <Column
+                  title="예상매출액"
+                  width={100}
+                  dataIndex="nnm_salesProjection"
+                  key="nnm_salesProjection"
+                  align="right"
+                />
+                <Column
+                  title="예상매출이익"
+                  width={100}
+                  dataIndex="nnm_profitProjection"
+                  key="nnm_profitProjection"
+                  align="right"
+                />
+              </ColumnGroup>
+            </Table>
+          </Col>
+        </Row>
+      </Base>
     </>
   );
 };

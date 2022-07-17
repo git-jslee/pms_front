@@ -28,13 +28,6 @@ i {
   font-style: normal;
 }
 
-.header {
-  margin: 3px;
-  /* padding-top: 64px; */
-  width: 1800px;
-  margin: 3px auto;
-}
-
 .header a {
   margin: 5px;
   font-size: medium;

@@ -5,9 +5,9 @@ import { FaChartPie, FaEdit, FaBuilding } from 'react-icons/fa';
 import { BsBarChartLineFill } from 'react-icons/bs';
 import { IoPersonSharp } from 'react-icons/io5';
 
-const SiteHeader = () => {
+const Navigation = () => {
   return (
-    <div className="header">
+    <>
       <Link to="/">
         <i>
           <AiFillHome />
@@ -58,8 +58,8 @@ const SiteHeader = () => {
       <Link to="/powerbi">
         <span>P o w e r B I</span>
       </Link>
-    </div>
+    </>
   );
 };
 
-export default SiteHeader;
+export default Navigation;

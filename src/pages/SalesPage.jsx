@@ -1,5 +1,8 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
+import DefaultLayout from '../components/Layout/DefaultLayout';
+
+//
 import HeaderContainer from '../containers/common/HeaderContainer';
 import SiteHeader from '../components/SiteHeader';
 import SalesListContainer from '../containers/sales/SalesListContainer';
@@ -17,14 +20,20 @@ const SalesPage = () => {
 
   return (
     <>
-      <HeaderContainer title="매출현황" />
+      {/* <HeaderContainer title="매출현황" />
       <SiteHeader />
       <SalesCodebookContainer />
       <FormTemplate>
         <SalesSubContainer />
         <hr />
         <SalesListContainer />
-      </FormTemplate>
+      </FormTemplate> */}
+      <DefaultLayout title="매출현황">
+        <SalesCodebookContainer />
+        <SalesSubContainer />
+        <hr />
+        <SalesListContainer />
+      </DefaultLayout>
     </>
   );
 };

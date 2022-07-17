@@ -1,20 +1,24 @@
 import React from 'react';
+import DefaultLayout from '../components/Layout/DefaultLayout';
+//
 import HeaderContainer from '../containers/common/HeaderContainer';
 import SiteHeader from '../components/SiteHeader';
 import FormTemplate from '../components/common/FormTemplate';
 import AddSalesContainer from '../containers/sales/AddSalesContainer';
-import SalesCodebookContainer from '../containers/common/SalesCodebookContainer';
 
 const AddSalesPage = () => {
   return (
     <>
-      <HeaderContainer />
+      {/* <HeaderContainer />
       <SiteHeader />
       <FormTemplate>
         <h1>매출현황 등록</h1>
-        {/* <SalesCodebookContainer /> */}
         <AddSalesContainer />
-      </FormTemplate>
+      </FormTemplate> */}
+      <DefaultLayout>
+        <h1>매출현황 등록</h1>
+        <AddSalesContainer />
+      </DefaultLayout>
     </>
   );
 };

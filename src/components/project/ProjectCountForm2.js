@@ -99,11 +99,24 @@ const ProjectCountForm2 = ({
             <Button></Button>
             {selectedBt[0] === 'bt1' ? (
               <>
-                <Button type="primary" onClick={() => qs_filter('계약-전체')}>
+                <Button
+                  type={selectedBt[2] === 'bt0' ? 'primary' : ''}
+                  onClick={() => qs_filter('계약-전체')}
+                >
                   전 체
                 </Button>
-                <Button onClick={() => qs_filter('계약')}>계 약</Button>
-                <Button onClick={() => qs_filter('예정')}>예 정</Button>
+                <Button
+                  type={selectedBt[2] === 'bt1' ? 'primary' : ''}
+                  onClick={() => qs_filter('계약')}
+                >
+                  계 약
+                </Button>
+                <Button
+                  type={selectedBt[2] === 'bt2' ? 'primary' : ''}
+                  onClick={() => qs_filter('예정')}
+                >
+                  예 정
+                </Button>
               </>
             ) : (
               ''
@@ -175,8 +188,8 @@ const ProjectCountForm2 = ({
             <Progress
               type="circle"
               name="검  수"
-              count={`${count[6] ? count[6].count : 0}`}
-              onClick={() => countFormOnclick(7)}
+              count={`${count[5] ? count[5].count : 0}`}
+              onClick={() => countFormOnclick(6)}
             />
             <Progress
               type="circle"

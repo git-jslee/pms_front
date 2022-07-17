@@ -1,8 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import styled from 'styled-components';
 import WorkFilterForm from '../../components/work/WorkFilterForm';
 import { apiUserList } from '../../lib/api/api';
 import { set_worker } from '../../modules/work';
+
+const Base = styled.div`
+  width: 100%;
+`;
 
 const WorkFilterContainer = () => {
   const dispatch = useDispatch();
@@ -37,7 +42,7 @@ const WorkFilterContainer = () => {
   };
 
   return (
-    <>
+    <Base>
       {userList ? (
         <WorkFilterForm
           userList={userList}
@@ -47,7 +52,7 @@ const WorkFilterContainer = () => {
       ) : (
         <div>로그인하세요</div>
       )}
-    </>
+    </Base>
   );
 };
 

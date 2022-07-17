@@ -8,12 +8,16 @@ export const qs_projectList = (stateId, qsFilter) =>
   qs.stringify(
     {
       filters: {
-        code_status: {
-          id: {
-            $eq: stateId, //1-시작전, 2-진행중, 3-보류, 4-완료
+        $and: [
+          {
+            code_status: {
+              id: {
+                $eq: stateId, //1-시작전, 2-진행중, 3-보류, 4-완료
+              },
+            },
           },
-        },
-        ...qsFilter,
+          ...qsFilter,
+        ],
       },
       sort: ['id:desc'],
       // fields: ['name'],

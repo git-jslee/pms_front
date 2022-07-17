@@ -20,11 +20,11 @@ const ProjectListTable = ({
       key: 'id',
       sorter: (a, b) => a.id - b.id,
     },
-    {
-      title: '계약',
-      dataIndex: 'contracted',
-      key: 'contracted',
-    },
+    // {
+    //   title: '계약',
+    //   dataIndex: 'contracted',
+    //   key: 'contracted',
+    // },
     {
       title: '고객사',
       dataIndex: 'customer',
@@ -72,6 +72,13 @@ const ProjectListTable = ({
       align: 'right',
       sorter: (a, b) => a.total_work - b.total_work,
     },
+    {
+      title: '잔여(일)',
+      key: 'remaining_day',
+      dataIndex: 'remaining_day',
+      align: 'right',
+      sorter: (a, b) => a.remaining_day - b.remaining_day,
+    },
     // {
     //   title: '시작일',
     //   key: 'startdate',
@@ -84,19 +91,25 @@ const ProjectListTable = ({
       dataIndex: 'lastUpdate',
       align: 'center',
     },
+    // {
+    //   title: '(start)',
+    //   key: 'elapsed',
+    //   dataIndex: 'elapsed',
+    //   align: 'right',
+    //   sorter: (a, b) => a.elapsed - b.elapsed,
+    // },
     {
-      title: '(start)',
-      key: 'elapsed',
-      dataIndex: 'elapsed',
-      align: 'right',
-      sorter: (a, b) => a.elapsed - b.elapsed,
-    },
-    {
-      title: '(update)',
+      title: '(last)',
       key: 'elapsed_last',
       dataIndex: 'elapsed_last',
       align: 'right',
       sorter: (a, b) => a.elapsed_last - b.elapsed_last,
+    },
+    {
+      title: '금액',
+      key: 'price',
+      dataIndex: 'price',
+      align: 'right',
     },
   ];
 

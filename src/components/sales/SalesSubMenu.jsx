@@ -16,13 +16,14 @@ import calStartEndDayFromMonth from '../../modules/common/calStartEndDayFromMont
 
 const { RangePicker } = DatePicker;
 
-const SubMenuBlock = styled.div`
+const Base = styled.div`
   /* position: relative; */
   display: inline;
+  width: 100%;
   /* box-shadow: 0 0 8px rgba(0, 0, 0, 0.025);
   margin-top: 10px;
   padding: 2rem;
-  width: 1400px;
+  width: 100%;
   height: 100%;
   background: white;
   border-radius: 2px; */
@@ -90,7 +91,7 @@ const SalesSubMenu = ({
 
   return (
     <>
-      <SubMenuBlock>
+      <Base>
         <Link to="/addsales">
           <Button>등록</Button>
         </Link>
@@ -115,7 +116,7 @@ const SalesSubMenu = ({
             style={{ fontSize: '24px', color: '#08c', marginLeft: '10px' }}
           />
         </div>
-      </SubMenuBlock>
+      </Base>
     </>
   );
 };
