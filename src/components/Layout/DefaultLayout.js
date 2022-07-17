@@ -61,6 +61,8 @@ const ContentsBlock = styled.div`
   border-radius: 2px;
 `;
 
+const FooterBlock = styled.footer``;
+
 const DefaultLayout = (props) => {
   return (
     <Base>
@@ -71,6 +73,7 @@ const DefaultLayout = (props) => {
         </NavigationBlock>
         <ContentsBlock>{props.children}</ContentsBlock>
       </ContainerBlock>
+      <FooterBlock>{/* footer 추가 */}</FooterBlock>
     </Base>
   );
 };

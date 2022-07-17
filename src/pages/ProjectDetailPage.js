@@ -4,15 +4,19 @@ import SiteHeader from '../components/SiteHeader';
 import FormTemplate from '../components/common/FormTemplate';
 import { Row, Col } from 'antd';
 import ProjectDetailContainer from '../containers/project/ProjectDetailContainer';
+import DefaultLayout from '../components/Layout/DefaultLayout';
 
 const ProjectDetailPage = () => {
   return (
     <>
-      <HeaderContainer />
+      {/* <HeaderContainer />
       <SiteHeader />
       <FormTemplate>
         <ProjectDetailContainer />
-      </FormTemplate>
+      </FormTemplate> */}
+      <DefaultLayout>
+        <ProjectDetailContainer />
+      </DefaultLayout>
     </>
   );
 };

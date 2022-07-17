@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
 import * as api from '../../lib/api/api';
 // import apiQueryAll from '../../lib/api/apiQueryAll';
 import fetchAllList from '../../lib/api/fetchAllList';
@@ -15,6 +16,10 @@ import { Row, Col, Timeline, Button } from 'antd';
 import { LeftSquareTwoTone } from '@ant-design/icons';
 import ProjectTimeline from '../../components/project/ProjectTimeline';
 import ProjectTaskTable from '../../components/project/ProjectTaskTable';
+
+const Base = styled.div`
+  width: 100%;
+`;
 
 const ProjectDetailContainer = () => {
   const naviagte = useNavigate();
@@ -121,7 +126,7 @@ const ProjectDetailContainer = () => {
   // tasks -->
 
   return (
-    <>
+    <Base>
       <div>
         <Row>
           <LeftSquareTwoTone
@@ -141,7 +146,7 @@ const ProjectDetailContainer = () => {
         </Row>
       </div>
       <ProjectWorkListTable dataSource={works} />
-    </>
+    </Base>
   );
 };
 

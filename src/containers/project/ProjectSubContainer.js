@@ -34,7 +34,7 @@ const ProjectSubContainer = ({ setMode }) => {
   // const [qsFilter, setQsFilter] = useState([{}]);
   const [filter1, setFilter1] = useState([{}]);
   const [filter2, setFilter2] = useState([{}]);
-  const [sumFilter, setSumFilter] = useState([{}]);
+  const [sumFilter, setSumFilter] = useState([{ price: { $ne: 0 } }]);
   // const { wlist } = useSelector(({ project }) => ({
   //   wlist: project.wlist,
   // }));
@@ -192,7 +192,7 @@ const ProjectSubContainer = ({ setMode }) => {
   // }, [wlist]);
 
   // qs filter 설정
-  const [selectedBt, setSelectedBt] = useState(['bt0', 'bt0', 'bt0']);
+  const [selectedBt, setSelectedBt] = useState(['bt1', 'bt0', 'bt0']);
   const qs_filter = (value) => {
     const code_status_id = 2;
     const query = qs_projectList(code_status_id, sumFilter);
