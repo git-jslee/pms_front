@@ -40,7 +40,7 @@ export const qs_projectList = (stateId, qsFilter) =>
             'plan_day',
             'cus_task',
             'total_time',
-            'start_workupdate',
+            'startdate',
             'last_workupdate',
             'revision',
           ],
@@ -73,7 +73,14 @@ export const qs_projectByAddWork = () =>
       fields: ['name'],
       populate: {
         project_tasks: {
-          fields: ['plan_day', 'cus_task', 'revision', 'last_workupdate'],
+          fields: [
+            'manpower',
+            'plan_day',
+            'cus_task',
+            'revision',
+            'startdate',
+            'last_workupdate',
+          ],
           populate: {
             code_task: {
               fields: ['code', 'name', 'sort'],
@@ -193,7 +200,7 @@ export const qs_project = () =>
             'plan_day',
             'cus_task',
             'total_time',
-            'start_workupdate',
+            'startdate',
             'last_workupdate',
             'revision',
           ],

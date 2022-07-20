@@ -16,11 +16,14 @@ const ContainerBlock = styled.div`
 const NavigationBlock = styled.div`
   width: 166px;
   flex-shrink: 0;
-  box-shadow: 5px 5px 10px rgb(181 191 198 / 46%),
-    -5px -9px 8px rgb(255 255 255 / 52%);
+  box-shadow: 5px 5px 10px rgba(181 191 198 / 46%),
+    -5px -9px 8px rgba(255 255 255 / 52%);
   border-radius: 10px;
   padding-top: 20px;
-  height: fit-content;
+  height: 77vh;
+  position: sticky;
+  top: 183px;
+  left: 0;
   a {
     display: block;
     border-radius: 4px;
@@ -31,8 +34,8 @@ const NavigationBlock = styled.div`
     font-size: medium;
     padding: 10px 12px;
     &:hover {
-      box-shadow: inset 3px 3px 2px rgb(181 191 198 / 46%),
-        inset -3px -3px 2px rgb(255 255 255 / 52%);
+      box-shadow: inset 3px 3px 2px rgba(181 191 198 / 46%),
+        inset -3px -3px 2px rgba(255 255 255 / 52%);
     }
     i {
     }

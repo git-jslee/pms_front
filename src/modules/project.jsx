@@ -27,6 +27,8 @@ const CHANGE_PROJECTPROGRESS = 'project/CHANGE_PROJECTPROGRESS';
 
 const INIT_PROJECTSTORAGE = 'project/INIT_PROJECTSTORAGE';
 
+const UPDATE_BACKLOG = 'project/UPDATE_BACKLOG';
+
 // 프로젝트 ID
 const GET_PROJECTID = 'project/GET_PROJECTID';
 const GET_PROJECTID_SUCCESS = 'project/GET_PROJECTID_SUCCESS';
@@ -294,6 +296,11 @@ export const initProjectStorage = () => (dispatch) => {
   dispatch({ type: INIT_PROJECTSTORAGE });
 };
 
+// 프로젝트 수주잔량 업데이트
+export const updateBacklog = (value) => (dispatch) => {
+  dispatch({ type: UPDATE_BACKLOG, payload: value });
+};
+
 // export const getProjectList = createRequestThunk(GET_PROJECTLIST, api.getList);
 // console.log('getProjectList', getProjectList());
 
@@ -346,6 +353,7 @@ const initialState = {
   data: null,
   getdata: null,
   status: { id: null, progress: null },
+  backlog: null,
   error: null,
   werror: null,
 };
@@ -407,6 +415,12 @@ const project = handleActions(
     // 프로젝트 초기화
     [INIT_PROJECTSTORAGE]: (state) => ({
       ...initialState, // status 진행중으로 변경
+    }),
+    // 프로젝트 수주잔량 업데이트
+
+    [UPDATE_BACKLOG]: (state, { payload }) => ({
+      ...state,
+      backlog: payload,
     }),
     // 프로젝트 ID 가져오기 성공
     [GET_PROJECTID_SUCCESS]: (state, { payload }) => ({

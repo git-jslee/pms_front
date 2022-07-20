@@ -7,6 +7,7 @@ import * as api from '../../lib/api/api';
 import apiQueryAll from '../../lib/api/apiQueryAll';
 import { qs_customer_all, qs_tasksBySid } from '../../lib/api/query';
 import { message } from 'antd';
+import moment from 'moment';
 
 const ProjectAddContainer = ({ mode, setMode }) => {
   const { auth } = useSelector(({ auth }) => ({
@@ -93,6 +94,123 @@ const ProjectAddContainer = ({ mode, setMode }) => {
   };
 
   const onSubmit = async (values) => {
+    try {
+      console.log('>>>>>>onSubmit>>>>>>>', values);
+      let count = 0;
+      setBtnDisabled(true);
+
+      // project_task 형식 [{23:[2,3,'2022-07-17', 'cus']},{24:[1,5,'2022-07-21]}]
+      let project_tasks = {};
+      let plan_startdate = '';
+      const plan_enddate = moment(values.plan_enddate).format('YYYY-MM-DD');
+      for (let k in values) {
+        if (k.indexOf('_k_') === 0) {
+          console.log('>>key>>>', k);
+          const newkey = k.replace('_k_', '').split('__');
+          // console.log('>>newkey>>>', newkey);
+          if (newkey[1] === 'start') {
+            //날짜 type 변경 및 custom task 추가
+            const date = moment(values[k]).format('YYYY-MM-DD');
+            if (plan_startdate === '') plan_startdate = date;
+            if (plan_startdate !== '') {
+              plan_startdate = moment(plan_startdate).isAfter(date)
+                ? date
+                : plan_startdate;
+            }
+
+            project_tasks = {
+              ...project_tasks,
+              [newkey[0]]: {
+                ...project_tasks[newkey[0]],
+                [newkey[1]]: date,
+                custask: newkey[2],
+              },
+            };
+          } else {
+            project_tasks = {
+              ...project_tasks,
+              [newkey[0]]: {
+                ...project_tasks[newkey[0]],
+                [newkey[1]]: values[k],
+              },
+            };
+          }
+        }
+      }
+      console.log('>>key>>>', project_tasks);
+      console.log('>>plan start date>>>', plan_startdate);
+
+      // 프로젝트 등록
+      const project_data = {
+        code_service: values.code_service,
+        code_status: values.code_status,
+        contracted: values.contracted,
+        customer: values.customer,
+        description: values.description,
+        name: values.name,
+        plan_startdate,
+        plan_enddate,
+        price: values.price,
+        scode_team: values.scode_team,
+      };
+      const pjt_insert = await tbl_insert('api/projects', project_data);
+      console.log('>>>>> project data', project_data);
+      console.log('>>>>> 1. project_insert 성공', pjt_insert);
+      message.success('프로젝트 등록 성공', 3);
+      //프로젝트 task 등록
+      // project task 값 추출 - 키에서 '__' 포함 키 배열로 변경
+      const projectId = pjt_insert.data.data.id;
+
+      for (let key in project_tasks) {
+        console.log('>>>>>>task key>>>>>>>', key);
+        const task = project_tasks[key];
+        console.log('>>>>>>task value>>>>>>>', task);
+
+        //   newTasks.push([taskid, v]);
+        const task_data = {
+          project: projectId,
+          code_task: parseInt(key),
+          manpower: Math.round(task.mp * 10) / 10,
+          plan_day: Math.round(task.planday),
+          cus_task: task.custask,
+          plan_startdate: task.start,
+        };
+        const task_insert = await tbl_insert('api/project-tasks', task_data);
+        console.log('>>>>>>task_data>>>>>>>', task_data);
+        count++;
+      }
+      // project_change 등등..프로젝트 등록정보, 프로젝트 상태 정보
+      // const _code_state =
+      //   codebook[1].data.data[values.code_status].attributes.name;
+      const _code_state = codebook[1].data.data.filter(
+        (f) => f.id === values.code_status,
+      )[0].attributes.name;
+      const project_change1 = {
+        project: projectId,
+        type: 'init',
+        change: '프로젝트 생성',
+        users_permissions_user: auth.user.id,
+      };
+      const project_change2 = {
+        project: projectId,
+        type: 'code_status',
+        change: `init -> ${_code_state}`,
+        users_permissions_user: auth.user.id,
+      };
+      const insert1 = await tbl_insert('api/project-changes', project_change1);
+      const insert2 = await tbl_insert('api/project-changes', project_change2);
+
+      // 완료메시지
+      message.success(`프로젝트 task ${count}건 등록`, 3);
+    } catch (error) {
+      message.error(`등록 실패 - 관리자에게 문의 바랍니다.`, 3);
+      console.error(error);
+    }
+    setBtnDisabled(false);
+    setMode('view');
+  };
+
+  const onSubmit1 = async (values) => {
     try {
       console.log('>>>>>>onSubmit>>>>>>>', values);
       console.log('>>>>>>codebook>>>>>>>', codebook);

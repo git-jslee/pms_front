@@ -291,8 +291,10 @@ const AddWorkDrawerContainer = () => {
         console.log('2.project update 결과', pjtUpdate);
 
         // 4. project task - 작업시간, revision update
+        // 작업시작일 추가필요..startdate..
         const task_data = {
           code_progress: values.code_progress,
+          // startdate:'',
           last_workupdate: _working_day,
           revision: values.revision,
           total_time:

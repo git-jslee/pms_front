@@ -32,7 +32,7 @@ import { message, Divider } from 'antd';
 const ProjectSubContainer = ({ setMode }) => {
   const dispatch = useDispatch();
   // const [qsFilter, setQsFilter] = useState([{}]);
-  const [filter1, setFilter1] = useState([{}]);
+  const [filter1, setFilter1] = useState([{ price: { $ne: 0 } }]);
   const [filter2, setFilter2] = useState([{}]);
   const [sumFilter, setSumFilter] = useState([{ price: { $ne: 0 } }]);
   // const { wlist } = useSelector(({ project }) => ({
@@ -47,9 +47,10 @@ const ProjectSubContainer = ({ setMode }) => {
     _75: 0,
     _90: 0,
   });
-  const { lists, getState } = useSelector(({ project }) => ({
+  const { lists, getState, backlog } = useSelector(({ project }) => ({
     lists: project.data ? project.data[2] : null,
     getState: project.getdata,
+    backlog: project.backlog,
   }));
 
   useEffect(() => {
@@ -441,6 +442,7 @@ const ProjectSubContainer = ({ setMode }) => {
           {/* <Divider /> */}
           <ProjectCountForm2
             count={count}
+            backlog={backlog}
             progressCount={progressCount}
             countFormOnclick={countFormOnclick}
             progressButtonOnclick={progressButtonOnclick}

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
 import {
   Button,
   Drawer,
@@ -15,6 +16,15 @@ import {
 } from 'antd';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import Loading from '../../modules/common/Loding';
+
+const TaskFormTemplate = styled.div`
+  display: flex;
+  .form1 .form2 {
+    div {
+      display: inline-block;
+    }
+  }
+`;
 
 const ProjectAddForm = (props) => {
   const [tasks, setTasks] = useState();
@@ -183,24 +193,54 @@ const ProjectAddForm = (props) => {
           <Row gitter={16}>
             {tasks ? (
               tasks.map((list, index) => {
-                const newName =
-                  list.attributes.code === 'custom'
-                    ? `__${list.id}_c_${list.attributes.name}`
-                    : `__${list.id}`;
+                // const newName =
+                //   list.attributes.code === 'custom'
+                //     ? `_k_${list.id}__${list.attributes.name}`
+                //     : `_k_${list.id}`;
+                const _custom =
+                  list.attributes.code === 'custom' ? list.attributes.name : '';
                 return (
-                  <Col key={list.id} span={6} style={{ padding: '5px 10px' }}>
-                    <Form.Item
-                      name={newName}
-                      label={list.attributes.name}
-                      rules={[
-                        {
-                          required: true,
-                        },
-                      ]}
-                    >
-                      <InputNumber addonAfter="일" />
-                    </Form.Item>
-                    <MinusCircleOutlined onClick={() => remove(list.id)} />
+                  <Col key={list.id} span={12} style={{ padding: '5px 10px' }}>
+                    <div>
+                      <span>{list.attributes.name}</span>
+                      <MinusCircleOutlined onClick={() => remove(list.id)} />
+                    </div>
+                    <TaskFormTemplate>
+                      <Form.Item
+                        name={`_k_${list.id}__mp__${_custom}`}
+                        // label={list.attributes.name}
+                        rules={[
+                          {
+                            required: true,
+                          },
+                        ]}
+                        className="form1"
+                      >
+                        <InputNumber placeholder="인" />
+                      </Form.Item>
+                      <Form.Item
+                        name={`_k_${list.id}__planday__${_custom}`}
+                        rules={[
+                          {
+                            required: true,
+                          },
+                        ]}
+                        className="form2"
+                      >
+                        <InputNumber placeholder="일" />
+                      </Form.Item>
+                      <Form.Item
+                        name={`_k_${list.id}__start__${_custom}`}
+                        rules={[
+                          {
+                            required: true,
+                          },
+                        ]}
+                        className="form3"
+                      >
+                        <DatePicker placeholder="계획(시작일)" />
+                      </Form.Item>
+                    </TaskFormTemplate>
                   </Col>
                 );
               })
@@ -245,7 +285,7 @@ const ProjectAddForm = (props) => {
             <Col span={12}></Col>
           </Row>
           <Row gutter={16}>
-            <Col span={6}>
+            {/* <Col span={6}>
               <Form.Item
                 label="계획(시작)"
                 name="plan_startdate"
@@ -253,7 +293,7 @@ const ProjectAddForm = (props) => {
               >
                 <DatePicker />
               </Form.Item>
-            </Col>
+            </Col> */}
             <Col span={6}>
               <Form.Item
                 label="계획(종료)"
@@ -263,7 +303,7 @@ const ProjectAddForm = (props) => {
                 <DatePicker />
               </Form.Item>
             </Col>
-            <Col span={6}>
+            {/* <Col span={6}>
               <Form.Item
                 label="시작일"
                 name="startdate"
@@ -276,7 +316,7 @@ const ProjectAddForm = (props) => {
               <Form.Item label="종료일" name="enddate">
                 <DatePicker />
               </Form.Item>
-            </Col>
+            </Col> */}
           </Row>
           <Row gutter={16}></Row>
           <Row gutter={16}>
@@ -285,7 +325,7 @@ const ProjectAddForm = (props) => {
               <Form.Item
                 label="프로젝트 금액"
                 name="price"
-                rules={[{ required: true }]}
+                // rules={[{ required: true }]}
               >
                 <InputNumber addonAfter="￦" />
               </Form.Item>

@@ -8,7 +8,7 @@ const ProjectTaskTable = ({ tasks }) => {
         return {
           key: task.id,
           no: index + 1,
-          task: task.attributes.code_task.cus_task
+          task: task.attributes.cus_task
             ? task.attributes.code_task.cus_task
             : task.attributes.code_task.data.attributes.name,
           plan_day: task.attributes.plan_day,

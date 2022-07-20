@@ -7,8 +7,11 @@ import { RedoOutlined } from '@ant-design/icons';
 const { RangePicker } = DatePicker;
 
 const SubMenuBlock = styled.div`
-  display: inline;
   width: 100%;
+  box-shadow: 20px 20px 20px rgb(181 191 198 / 46%),
+    -20px -20px 30px rgb(255 255 255 / 52%);
+  margin-bottom: 22px;
+  border-radius: 6px;
   .search {
     margin-left: 20px;
     margin-right: 60px;

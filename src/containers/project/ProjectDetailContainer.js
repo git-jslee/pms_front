@@ -70,7 +70,14 @@ const ProjectDetailContainer = () => {
     console.log(`<<<<< ${path} >>>>>>`, request.data.data);
     setProject(request.data.data);
     console.log('>>>>>>>project', request.data.data);
-    setTasks(request.data.data.attributes.project_tasks.data);
+    const tasks = request.data.data.attributes.project_tasks.data;
+    const sortTasks = tasks.sort((a, b) => {
+      return (
+        a.attributes.code_task.data.attributes.sort -
+        b.attributes.code_task.data.attributes.sort
+      );
+    });
+    setTasks(sortTasks);
   };
 
   const get_changelistall = async (path, query, callback) => {

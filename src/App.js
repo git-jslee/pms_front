@@ -7,16 +7,13 @@ import PrivateRoute from './components/common/PrivateRoute';
 import PublicRoute from './components/common/PublicRoute';
 
 //page import
-import SiteHeader from './components/SiteHeader';
-import MainPage from './pages/MainPage';
 import ProjectPage from './pages/ProjectPage';
 import ProjectDetailPage from './pages/ProjectDetailPage';
 import ProjectViewPage from './pages/ProjectViewPage';
 //수정중 --
 import CustomerPage from './pages/CustomerPage';
 import WorkPage from './pages/WorkPage';
-import AntdPage from './pages/Antd';
-// import ProjectView from './pages/ProjectView';
+
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import AddPorjectPage from './pages/AddPorjectPage';

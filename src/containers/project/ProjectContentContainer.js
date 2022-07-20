@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getProjectList, getProject } from '../../modules/project';
+import {
+  getProjectList,
+  getProject,
+  updateBacklog,
+} from '../../modules/project';
 import moment from 'moment';
 // import { getProjectList } from '../../modules/projectList';
 import ProjectListTable from '../../components/project/ProjectListTable';
@@ -91,6 +95,7 @@ const ProjectContentContainer = () => {
 
   const [tableData, setTableData] = useState([]);
   useEffect(() => {
+    let backlog = 0;
     if (lists) {
       const tableList = lists.map((list, index) => {
         // const _progress = list.project_progress;
@@ -107,6 +112,7 @@ const ProjectContentContainer = () => {
         // console.log('**worktime**', index, _totalworktime);
         const remaining_day =
           Math.round((list.total_plan - list.total_work) * 10) / 10;
+        backlog += remaining_day > 0 ? remaining_day : 0;
         const array = {
           key: list.id,
           id: list.id,
@@ -144,6 +150,10 @@ const ProjectContentContainer = () => {
         };
         return array;
       });
+      // 수주잔량
+      if (project_status.id === 2) {
+        dispatch(updateBacklog(Math.round(backlog)));
+      }
       if (!project_status.progress) {
         setTableData(tableList);
       } else if (project_status.id === 2 && project_status.progress) {

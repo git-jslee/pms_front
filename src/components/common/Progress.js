@@ -89,10 +89,12 @@ const StyledProgress = styled.div`
 `;
 
 const Progress = (props) => {
+  const unit = props.unit === null ? '건' : '일';
   return (
     <StyledProgress {...props}>
       <p>
-        <strong>{props.count}</strong>건
+        <strong>{props.count}</strong>
+        {props.unit === undefined ? '건' : props.unit}
       </p>
       <h3>{props.name}</h3>
       {props.type === 'square' ? (

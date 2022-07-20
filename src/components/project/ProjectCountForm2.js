@@ -64,6 +64,7 @@ const CountGridBlock = styled.article`
 
 const ProjectCountForm2 = ({
   count,
+  backlog,
   progressCount,
   countFormOnclick,
   progressButtonOnclick,
@@ -157,7 +158,7 @@ const ProjectCountForm2 = ({
         </ButtonSectionBlock>
         <CountSectionBlock>
           <CountGridBlock>
-            <Progress type="circle" name="지원사업" count="0" />
+            <Progress type="circle" name="예정사업" count="0" />
             <Progress
               type="circle"
               name="보  류"
@@ -172,7 +173,7 @@ const ProjectCountForm2 = ({
             />
             {/* <Progress type="circle" name=".." />
             <Progress type="circle" name=".." /> */}
-            <Progress type="circle" name="사업계획" count="0" />
+            <Progress type="circle" name="수주잔량" count={backlog} unit="D" />
             <Progress
               type="circle"
               name="시작전"
