@@ -40,6 +40,7 @@ export const qs_projectList = (stateId, qsFilter) =>
             'plan_day',
             'cus_task',
             'total_time',
+            'other_totaltime',
             'startdate',
             'last_workupdate',
             'revision',
@@ -70,7 +71,7 @@ export const qs_projectList = (stateId, qsFilter) =>
 export const qs_projectByAddWork = () =>
   qs.stringify(
     {
-      fields: ['name'],
+      fields: ['name', 'last_workupdate'],
       populate: {
         project_tasks: {
           fields: [
@@ -150,17 +151,25 @@ export const qs_workListByUid = (uid, start, end) =>
       populate: {
         fields: ['working_day', 'working_time'],
         project: {
-          // populate: '*',
-          populate: ['code_service'],
           fields: ['name'],
+          // populate: '*',
+          // populate: ['code_service', 'customer'],
+          populate: {
+            code_service: {
+              fields: ['code', 'name'],
+            },
+            customer: {
+              fields: ['name', 'name_eng'],
+            },
+          },
         },
         project_task: {
           populate: ['code_task'],
           fields: ['plan_day', 'cus_task'],
         },
-        customer: {
-          fields: ['name'],
-        },
+        // customer: {
+        //   fields: ['name'],
+        // },
         users_permissions_user: {
           fields: ['username'],
         },
@@ -200,6 +209,8 @@ export const qs_project = () =>
             'plan_day',
             'cus_task',
             'total_time',
+            'other_totaltime',
+            'plan_startdate',
             'startdate',
             'last_workupdate',
             'revision',
@@ -252,7 +263,7 @@ export const qs_workallByPid = (start, limit, pid) =>
       sort: ['working_day:desc'],
       // fields: ['name'],
       populate: {
-        fields: ['working_day', 'working_time', 'description'],
+        fields: ['working_day', 'working_time', 'other_time', 'description'],
         project: {
           fields: ['name'],
         },
@@ -318,7 +329,7 @@ export const qs_worksByTaskId = (start, limit, tid) =>
           },
         },
       },
-      fields: ['working_day', 'working_time', 'revision'],
+      fields: ['working_day', 'working_time', 'other_time', 'revision'],
       populate: {
         users_permissions_user: {
           fields: ['username'],

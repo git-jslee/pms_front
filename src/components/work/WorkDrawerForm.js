@@ -87,11 +87,14 @@ const WorkDrawerForm = ({
           <Descriptions.Item label="작업일" span={2}>
             {initialValues.working_day_str}
           </Descriptions.Item>
-          <Descriptions.Item label="작업시간" span={2}>
-            {initialValues.working_time}
-          </Descriptions.Item>
           <Descriptions.Item label="작업자" span={2}>
             {initialValues.user}
+          </Descriptions.Item>
+          <Descriptions.Item label="작업시간" span={2} offset={2}>
+            {initialValues.working_time}
+          </Descriptions.Item>
+          <Descriptions.Item label="이동/기타" span={2}>
+            {initialValues.other_time}
           </Descriptions.Item>
           <Descriptions.Item label="진행률" span={2}>
             {initialValues.progress}
@@ -116,27 +119,25 @@ const WorkDrawerForm = ({
             >
               <Row gutter={16}>
                 {/* onsubmit - work id, type(프로젝트/유지보수) data 전달용 */}
-                <Col span={7}>
+                <Col span={4}>
                   <Form.Item name="id">
                     <Input disabled />
                   </Form.Item>
                 </Col>
-                <Col span={7}>
+                <Col span={4}>
                   <Form.Item name="type">
                     <Input disabled />
                   </Form.Item>
                 </Col>
-                <Col span={10}>
+                <Col span={8}>
                   <Form.Item name="title">
                     <Input disabled />
                   </Form.Item>
                 </Col>
-              </Row>
-              <Row gutter={16}>
-                <Col span={7}>
+                <Col span={8}>
                   <Form.Item
                     name="task"
-                    label="Task"
+                    // label="Task"
                     rules={[{ required: true }]}
                   >
                     <Select disabled>
@@ -152,6 +153,8 @@ const WorkDrawerForm = ({
                     </Select>
                   </Form.Item>
                 </Col>
+              </Row>
+              <Row gutter={16}>
                 <Col span={7}>
                   <Form.Item
                     name="working_day"
@@ -165,6 +168,15 @@ const WorkDrawerForm = ({
                   <Form.Item
                     name="working_time"
                     label="작업시간"
+                    rules={[{ required: true }]}
+                  >
+                    <InputNumber />
+                  </Form.Item>
+                </Col>
+                <Col span={5}>
+                  <Form.Item
+                    name="other_time"
+                    label="이동/기타"
                     rules={[{ required: true }]}
                   >
                     <InputNumber />

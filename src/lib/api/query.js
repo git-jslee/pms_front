@@ -516,7 +516,7 @@ export const qs_workById = (id) =>
           $eq: id,
         },
       },
-      fields: ['working_day', 'working_time', 'description'],
+      fields: ['working_day', 'working_time', 'other_time', 'description'],
       populate: {
         project: {
           fields: ['name'],

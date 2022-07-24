@@ -95,6 +95,7 @@ const ProjectContentContainer = () => {
 
   const [tableData, setTableData] = useState([]);
   useEffect(() => {
+    const baseprice = 400000; //기준금액
     let backlog = 0;
     if (lists) {
       const tableList = lists.map((list, index) => {
@@ -113,6 +114,16 @@ const ProjectContentContainer = () => {
         const remaining_day =
           Math.round((list.total_plan - list.total_work) * 10) / 10;
         backlog += remaining_day > 0 ? remaining_day : 0;
+        const _base_day =
+          list.attributes.price !== 0
+            ? (list.attributes.price / baseprice).toFixed(0)
+            : 0;
+        const _over_day =
+          _base_day === 0
+            ? '-'
+            : _base_day - list.total_plan >= 0
+            ? '-'
+            : list.total_plan - _base_day;
         const array = {
           key: list.id,
           id: list.id,
@@ -141,6 +152,8 @@ const ProjectContentContainer = () => {
           elapsed_last: elapsed_last,
           total_plan: list.total_plan,
           total_work: list.total_work,
+          base_day: _base_day === 0 ? '-' : _base_day,
+          over_day: _over_day,
           remaining_day: remaining_day > 0 ? remaining_day : 0,
           // totalday:
           //   _totalworktime !== undefined

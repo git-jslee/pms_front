@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import moment from 'moment';
 import styled from 'styled-components';
 // import 'moment-timezone';
@@ -54,6 +54,7 @@ const AddWorkDrawerContainer = () => {
   const { auth } = useSelector(({ auth }) => ({
     auth: auth.auth,
   }));
+  const pjt_lastworkupdate = useRef('');
 
   // drowser
   const onClickAddWork = () => {
@@ -147,7 +148,10 @@ const AddWorkDrawerContainer = () => {
         qs_projectByAddWork(),
       );
       const projectTasks = request.data.data.attributes.project_tasks.data;
-      // console.log('**test', request);
+      pjt_lastworkupdate.current = request.data.data.attributes.last_workupdate
+        ? request.data.data.attributes.last_workupdate
+        : '';
+      console.log('**pjt_lastworkupdate>>', pjt_lastworkupdate.current);
       const sortTasks = projectTasks.sort((a, b) => {
         return (
           a.attributes.code_task.data.attributes.sort -
@@ -201,13 +205,15 @@ const AddWorkDrawerContainer = () => {
       });
       console.log(`<<<<< ${'api/works'} >>>>>>`, request);
       let _total_time = 0;
+      let _other_totaltime = 0;
       const caltotaltime =
         request.length > 0
           ? request.map((v) => {
               _total_time += v.attributes.working_time;
+              _other_totaltime += v.attributes.other_time;
             })
           : 0;
-      console.log(`<<<<< totaltime >>>>>>`, _total_time);
+      console.log(`<<<<< other_totaltime >>>>>>`, _other_totaltime);
 
       // task 선택시 progress 값을 비교하여 높은 수치만 전달..
       const selectedTask = step.step2.filter((f) => f.id === taskid)[0]
@@ -230,6 +236,9 @@ const AddWorkDrawerContainer = () => {
       const _last_workupdate = selectedTask.last_workupdate
         ? moment(selectedTask.last_workupdate).format('YYYY-MM-DD').toString()
         : '';
+      const _startdate = selectedTask.startdate
+        ? moment(selectedTask.startdate).format('YYYY-MM-DD').toString()
+        : '';
       const _taskname = selectedTask.cus_task
         ? selectedTask.cus_task
         : selectedTask.code_task.data.attributes.name;
@@ -239,7 +248,9 @@ const AddWorkDrawerContainer = () => {
         progress: _progressid,
         revision: _revision,
         last_workupdate: _last_workupdate,
+        startdate: _startdate,
         total_time: _total_time,
+        other_totaltime: _other_totaltime,
       });
       setStep({ ...step, step3: filter_progress });
       console.log('step3...', step);
@@ -264,11 +275,12 @@ const AddWorkDrawerContainer = () => {
 
         // 2. work table insert
         const work_data = {
-          customer: values.customer,
+          // customer: values.customer,
           project: values.project,
           project_task: values.project_task,
           working_day: _working_day,
-          working_time: parseInt(values.workingTime),
+          working_time: Math.round(values.workingTime * 10) / 10,
+          other_time: Math.round(values.otherTime * 10) / 10,
           code_progress: values.code_progress,
           users_permissions_user: auth.user.id,
           revision: values.revision,
@@ -280,26 +292,47 @@ const AddWorkDrawerContainer = () => {
 
         // 3. 프로젝트 작업등록 시간 업데이트
         // last_workupdate 시 기존 date 값과 비교 기능 추가 필요
-        const pjt_data = {
-          last_workupdate: _working_day,
-        };
-        const pjtUpdate = await tbl_update(
-          'api/projects',
-          values.project,
-          pjt_data,
-        );
-        console.log('2.project update 결과', pjtUpdate);
+        // moment('2022-06-01').isAfter('2022-07-01)   //false
+        const flag = moment(_working_day).isBefore(pjt_lastworkupdate.current);
+        // console.log('>>>pjt_lastworkupdte>>>', pjt_lastworkupdate.current);
+        // console.log('>>>_working_day>>>', _working_day);
+        // console.log('>>>flag>>>', flag);
+        if (!flag) {
+          const pjt_data = {
+            last_workupdate: !flag ? _working_day : pjt_lastworkupdate.current,
+          };
+          // console.log('>>>pjt_data>>>', pjt_data);
+          const pjtUpdate = await tbl_update(
+            'api/projects',
+            values.project,
+            pjt_data,
+          );
+          console.log('2.project update 결과', pjtUpdate);
+        }
 
         // 4. project task - 작업시간, revision update
         // 작업시작일 추가필요..startdate..
+        // console.log('>>>startdate>>>', values.startdate);
+        // console.log('>>>last work update>>>', values.last_workupdate);
+        const check_lastwork = moment(_working_day).isBefore(
+          values.last_workupdate,
+        );
+        const check_startdate = moment(_working_day).isAfter(values.startdate);
         const task_data = {
           code_progress: values.code_progress,
-          // startdate:'',
-          last_workupdate: _working_day,
+          last_workupdate: !check_lastwork
+            ? _working_day
+            : values.last_workupdate,
           revision: values.revision,
           total_time:
             parseInt(values.total_time) + parseInt(values.workingTime),
+          other_totaltime:
+            parseInt(values.other_totaltime) + parseInt(values.otherTime),
         };
+        if (!check_startdate) {
+          task_data.startdate = _working_day;
+        }
+        // console.log('>>>task_data>>>', task_data);
         const taskUpdate = await tbl_update(
           'api/project-tasks',
           values.project_task,
@@ -342,7 +375,8 @@ const AddWorkDrawerContainer = () => {
           title: values.title,
           code_ma_support: values.code_ma_support,
           working_day: _working_day,
-          working_time: parseInt(values.workingTime),
+          working_time: Math.round(values.workingTime * 10) / 10,
+          other_time: Math.round(values.otherTime * 10) / 10,
           users_permissions_user: auth.user.id,
           description: values.description,
         };

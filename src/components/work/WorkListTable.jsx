@@ -90,7 +90,8 @@ const WorkListTable = ({ lists, code_tasks, drawerOnClick }) => {
       const array = {
         key: list.id,
         type: '프로젝트',
-        customer: wlist.customer.data.attributes.name,
+        // customer: wlist.customer.data.attributes.name,
+        customer: wlist.project.data.attributes.customer.data.attributes.name,
         title: wlist.project.data.attributes.name,
         service:
           wlist.project.data.attributes.code_service.data.attributes.name,

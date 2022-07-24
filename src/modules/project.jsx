@@ -200,7 +200,9 @@ export const getProjectList = (query, sid) => async (dispatch) => {
             : 0;
           // task 계획시간, total 작업 시간중 ..큰 값 리턴..
           const plan_day = task.attributes.manpower * task.attributes.plan_day;
-          const task_totaltime = task.attributes.total_time;
+          // const task_totaltime = task.attributes.total_time;
+          const task_totaltime =
+            task.attributes.total_time + task.attributes.other_totaltime;
           const estimatedTotalday = task_totaltime
             ? (task_totaltime / 8) * (1 / progress)
             : 0;

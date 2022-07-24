@@ -35,6 +35,11 @@ const ProjectWorkListTable = ({ dataSource }) => {
       dataIndex: 'workingTime',
     },
     {
+      title: '이동/기타',
+      key: 'otherTime',
+      dataIndex: 'otherTime',
+    },
+    {
       title: '작업자',
       key: 'worker',
       dataIndex: 'worker',

@@ -60,9 +60,21 @@ const ProjectListTable = ({
       align: 'right',
     },
     {
+      title: '기준(일)',
+      key: 'base_day',
+      dataIndex: 'base_day',
+      align: 'right',
+    },
+    {
       title: '계획(일)',
       key: 'total_plan',
       dataIndex: 'total_plan',
+      align: 'right',
+    },
+    {
+      title: '초과(일)',
+      key: 'over_day',
+      dataIndex: 'over_day',
       align: 'right',
     },
     {
@@ -85,12 +97,12 @@ const ProjectListTable = ({
     //   dataIndex: 'startdate',
     //   align: 'right',
     // },
-    {
-      title: '최근작업일',
-      key: 'lastUpdate',
-      dataIndex: 'lastUpdate',
-      align: 'center',
-    },
+    // {
+    //   title: '최근작업일',
+    //   key: 'lastUpdate',
+    //   dataIndex: 'lastUpdate',
+    //   align: 'center',
+    // },
     // {
     //   title: '(start)',
     //   key: 'elapsed',

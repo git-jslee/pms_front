@@ -26,6 +26,7 @@ import SalesViewPage from './pages/SalesViewPage';
 import MaintenancePage from './pages/MaintenancePage';
 import WebglPage from './pages/WebglPage';
 import ScrapePage from './pages/ScrapePage';
+import PowerbiPage from './pages/PowerbiPage';
 import ErrorPage from './pages/ErrorPage';
 
 function App() {
@@ -59,6 +60,7 @@ function App() {
           <Route path="/maintenance" element={<MaintenancePage />} />
           <Route path="/webgl" element={<WebglPage />} />
           <Route path="/scrape" element={<ScrapePage />} />
+          <Route path="/powerbi" element={<PowerbiPage />} />
           <Route path="/*" element={<ErrorPage />} />
         </Route>
       </Routes>

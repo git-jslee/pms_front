@@ -85,7 +85,10 @@ const AddWorkDrawerForm = ({
         code_progress: '',
         revision: '',
         last_workupdate: '',
+        startdate: '',
         total_time: '',
+        other_totaltime: '',
+        otherTime: 0,
       });
     }
     // step.2 - 작업명, 진행상태 초기화
@@ -95,7 +98,10 @@ const AddWorkDrawerForm = ({
         code_progress: '',
         revision: '',
         last_workupdate: '',
+        startdate: '',
         total_time: '',
+        other_totaltime: '',
+        otherTime: 0,
       });
     }
     // step.3 - 진행상태 초기화
@@ -104,7 +110,10 @@ const AddWorkDrawerForm = ({
         code_progress: resetForm.progress,
         revision: resetForm.revision,
         last_workupdate: resetForm.last_workupdate,
+        startdate: resetForm.startdate,
         total_time: resetForm.total_time,
+        other_totaltime: resetForm.other_totaltime,
+        otherTime: 0,
       });
     }
   }, [resetForm]);
@@ -230,15 +239,19 @@ const AddWorkDrawerForm = ({
                       <DatePicker format={'YYYY-MM-DD'} />
                     </Form.Item>
                   </Col>
-                  <Col span={6}>
-                    <Form.Item label="last work update" name="last_workupdate">
-                      <Input disabled={true} />
-                    </Form.Item>
-                  </Col>
                   <Col span={4}>
                     <Form.Item
                       label="작업시간"
                       name="workingTime"
+                      rules={[{ required: true }]}
+                    >
+                      <InputNumber />
+                    </Form.Item>
+                  </Col>
+                  <Col span={4}>
+                    <Form.Item
+                      label="이동/기타"
+                      name="otherTime"
                       rules={[{ required: true }]}
                     >
                       <InputNumber />
@@ -280,9 +293,26 @@ const AddWorkDrawerForm = ({
                       Rev + 1
                     </Button>
                   </Col>
-                  <Col span={4} offset={2}>
-                    <Form.Item name="total_time" label="total time">
+                </Row>
+                <Row gutter={16}>
+                  <Col span={4}>
+                    <Form.Item name="total_time" label="시간(작업)">
                       <InputNumber disabled={true} />
+                    </Form.Item>
+                  </Col>
+                  <Col span={4}>
+                    <Form.Item name="other_totaltime" label="시간(이동)">
+                      <InputNumber disabled={true} />
+                    </Form.Item>
+                  </Col>
+                  <Col span={6}>
+                    <Form.Item label="start date" name="startdate">
+                      <Input disabled={true} />
+                    </Form.Item>
+                  </Col>
+                  <Col span={6}>
+                    <Form.Item label="last work update" name="last_workupdate">
+                      <Input disabled={true} />
                     </Form.Item>
                   </Col>
                 </Row>
@@ -374,10 +404,19 @@ const AddWorkDrawerForm = ({
                       <DatePicker format={'YYYY-MM-DD'} />
                     </Form.Item>
                   </Col>
-                  <Col span={12}>
+                  <Col span={6}>
                     <Form.Item
                       label="작업시간"
                       name="workingTime"
+                      rules={[{ required: true }]}
+                    >
+                      <InputNumber />
+                    </Form.Item>
+                  </Col>
+                  <Col span={6}>
+                    <Form.Item
+                      label="이동/기타"
+                      name="otherTime"
                       rules={[{ required: true }]}
                     >
                       <InputNumber />

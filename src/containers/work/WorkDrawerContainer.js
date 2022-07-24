@@ -30,7 +30,7 @@ const WorkDrawerContainer = ({
       const req_code = await api.getQueryString('api/code-progresses', '');
       const req_tasks = await api.getQueryString(`api/projects/${pid}`, query);
       const new_tasks = req_tasks.data.data.attributes.project_tasks.data;
-      //   console.log('**code progress**', new_tasks);
+      // console.log('**code progress**', new_tasks);
       setProgress(req_code.data.data);
       setTasks(new_tasks);
       setEditmode(true);
@@ -48,12 +48,15 @@ const WorkDrawerContainer = ({
       const update_data = {
         working_day: moment(e.working_day).format('YYYY-MM-DD').toString(),
         working_time: e.working_time,
+        other_time: e.other_time,
         // code_progress: e.code_progress,
         // project_task: e.task,
         description: e.description,
       };
       const request = await tbl_update('api/works', e.id, update_data);
       console.log('***프로젝트 작업수정 결과 ***', request);
+
+      // 추가 필요 - 수정시 project task total_time, other_totaltime update 필요.
     } else if (e.type === '유지보수') {
       //
       console.log('***유지보수 작업수정***', e);

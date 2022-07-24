@@ -93,7 +93,7 @@ const WorkListContainer = () => {
     const workinfo = request.data.data[0].attributes;
     const value = {
       type: '프로젝트',
-      customer: workinfo.customer.data.attributes.name,
+      // customer: workinfo.customer.data.attributes.name,
       id: request.data.data[0].id,
       pid: workinfo.project.data.id,
       title: workinfo.project.data.attributes.name,
@@ -106,6 +106,7 @@ const WorkListContainer = () => {
       working_day: moment(workinfo.working_day),
       working_day_str: workinfo.working_day,
       working_time: workinfo.working_time,
+      other_time: workinfo.other_time,
       code_progress: workinfo.code_progress.data.id,
       revision: workinfo.revision ? workinfo.revision : 0,
       progress: workinfo.code_progress.data.attributes.code,

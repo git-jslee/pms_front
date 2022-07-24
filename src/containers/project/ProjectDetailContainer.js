@@ -54,6 +54,7 @@ const ProjectDetailContainer = () => {
           revision: list.revision ? list.revision : 0,
           workingDay: list.working_day,
           workingTime: list.working_time,
+          otherTime: list.other_time,
           worker: list.users_permissions_user.data.attributes.username,
           description: list.description,
         };
@@ -143,10 +144,10 @@ const ProjectDetailContainer = () => {
           <h1>{project ? project.attributes.name : '-'}</h1>
         </Row>
         <Row gutter={16}>
-          <Col span={16}>
+          <Col span={18}>
             <ProjectTaskTable tasks={tasks} />
           </Col>
-          <Col span={8}>
+          <Col span={6}>
             <h3>Time line</h3>
             {timeline ? <ProjectTimeline timeline={timeline} /> : ''}
           </Col>
