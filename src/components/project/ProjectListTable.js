@@ -12,7 +12,7 @@ const ProjectListTable = ({
   // const [visible, setVisible] = useState(false);
   // const [record, setRecord] = useState();
   const navigate = useNavigate();
-  // console.log('>>>>>>>>>>>>>>>>>data', tableData);
+  console.log('>>>>>>>>>>>>>>>>>data', tableData);
   const columns = [
     {
       title: 'ID',
@@ -47,36 +47,54 @@ const ProjectListTable = ({
       dataIndex: 'team',
       align: 'center',
     },
-    {
-      title: '상태',
-      key: 'code_status',
-      dataIndex: 'code_status',
-      align: 'center',
-    },
+    // {
+    //   title: '상태',
+    //   key: 'code_status',
+    //   dataIndex: 'code_status',
+    //   align: 'center',
+    // },
     {
       title: '진행률',
       key: 'project_progress',
       dataIndex: 'project_progress',
-      align: 'right',
+      align: 'center',
     },
     {
-      title: '기준(일)',
-      key: 'base_day',
-      dataIndex: 'base_day',
-      align: 'right',
+      title: '시작',
+      key: 'startdate',
+      dataIndex: 'startdate',
+      align: 'center',
     },
+    {
+      title: '종료(계획)',
+      key: 'plan_enddate',
+      dataIndex: 'plan_enddate',
+      align: 'center',
+    },
+    {
+      title: '최근작업일',
+      key: 'lastUpdate',
+      dataIndex: 'lastUpdate',
+      align: 'center',
+    },
+    // {
+    //   title: '기준(일)',
+    //   key: 'base_day',
+    //   dataIndex: 'base_day',
+    //   align: 'right',
+    // },
     {
       title: '계획(일)',
       key: 'total_plan',
       dataIndex: 'total_plan',
       align: 'right',
     },
-    {
-      title: '초과(일)',
-      key: 'over_day',
-      dataIndex: 'over_day',
-      align: 'right',
-    },
+    // {
+    //   title: '초과(일)',
+    //   key: 'over_day',
+    //   dataIndex: 'over_day',
+    //   align: 'right',
+    // },
     {
       title: '작업(일)',
       key: 'total_work',
@@ -98,25 +116,19 @@ const ProjectListTable = ({
     //   align: 'right',
     // },
     // {
-    //   title: '최근작업일',
-    //   key: 'lastUpdate',
-    //   dataIndex: 'lastUpdate',
-    //   align: 'center',
-    // },
-    // {
     //   title: '(start)',
     //   key: 'elapsed',
     //   dataIndex: 'elapsed',
     //   align: 'right',
     //   sorter: (a, b) => a.elapsed - b.elapsed,
     // },
-    {
-      title: '(last)',
-      key: 'elapsed_last',
-      dataIndex: 'elapsed_last',
-      align: 'right',
-      sorter: (a, b) => a.elapsed_last - b.elapsed_last,
-    },
+    // {
+    //   title: '(last)',
+    //   key: 'elapsed_last',
+    //   dataIndex: 'elapsed_last',
+    //   align: 'right',
+    //   sorter: (a, b) => a.elapsed_last - b.elapsed_last,
+    // },
     {
       title: '금액',
       key: 'price',
@@ -173,24 +185,30 @@ const ProjectListTable = ({
                     </>
                   }
                 >
+                  <Descriptions.Item label="계약여부">
+                    {`${record.contracted}`}
+                  </Descriptions.Item>
                   <Descriptions.Item label="계획(시작/종료)">
                     {`${record.plan_startdate} / ${record.plan_enddate}`}
                   </Descriptions.Item>
                   <Descriptions.Item label="Start Date">
                     {` ${record.startdate} / (${record.elapsed}일 경과)`}
                   </Descriptions.Item>
-                  <Descriptions.Item label="계약여부">
-                    {record.contracted}
+                  <Descriptions.Item label="상태">
+                    {record.code_status}
                   </Descriptions.Item>
-                  <Descriptions.Item label="실행(시작/종료)">
+                  {/* <Descriptions.Item label="실행(시작/종료)">
                     {`${record.startdate} / ${record.enddate}`}
+                  </Descriptions.Item> */}
+                  <Descriptions.Item label="일정계획">
+                    {`기준-${record.base_day}일 / 초과-${record.over_day}일`}
                   </Descriptions.Item>
-                  <Descriptions.Item label="Update Date">
+                  <Descriptions.Item label="최근작업일">
                     {`${record.lastUpdate} / (${record.elapsed_last}일 경과)`}
                   </Descriptions.Item>
-                  <Descriptions.Item label="금액">
+                  {/* <Descriptions.Item label="금액">
                     {record.price}
-                  </Descriptions.Item>
+                  </Descriptions.Item> */}
                   <Descriptions.Item label="비 고" span={3}>
                     {record.description}
                   </Descriptions.Item>

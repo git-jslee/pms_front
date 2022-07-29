@@ -27,6 +27,22 @@ const buttonStyle = css`
     box-shadow: inset 0.3rem 0.3rem 0.6rem rgba(181, 191, 198, 0.46),
       inset -0.2rem -0.2rem 0.5rem #fff;
   }
+  // sub menu button 선택시
+  ${(props) =>
+    props.type === 'primary' &&
+    css`
+      /* box-shadow: inset 2px 2px 5px rgb(181 191 198 / 46%),
+        inset -5px -3px 0px rgb(255 255 255 / 52%); */
+      span {
+        display: block;
+        width: 86px;
+        height: 29px;
+        margin: 0 auto;
+        border-radius: 4px;
+        background-color: ${paletteJY.blue};
+        color: #fff;
+      }
+    `}
 `;
 
 const StyledButton = styled.button`

@@ -40,8 +40,8 @@ const WhiteBox = styled.div`
   }
 
   /* box-shadow: 20px 20px 30px #1e3e4b3a; */
-  box-shadow: 20px 20px 30px rgb(181 191 198 / 46%),
-    -20px -20px 30px rgb(255 255 255 / 52%);
+  box-shadow: 20px 20px 30px rgba(181 191 198 / 46%),
+    -20px -20px 30px rgba(255 255 255 / 52%);
   border-radius: 40px;
   padding: 45px 40px 50px;
   width: 550px;

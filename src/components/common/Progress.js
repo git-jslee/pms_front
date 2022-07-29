@@ -4,54 +4,59 @@ import paletteJY from '../../lib/styles/palette_JY';
 
 const StyledProgress = styled.div`
   cursor: pointer;
+  color: ${paletteJY.gray[1]};
+
   position: relative;
-  width: 150px;
-  height: 150px;
+  border-radius: 10px;
+  width: 210px;
+  height: 120px;
   background: transparent linear-gradient(135deg, #e7ecf3 0%, #eff3f6 100%) 0%
     0% no-repeat padding-box;
-  box-shadow: 5px 5px 12px rgb(181 191 198 / 46%),
-    -4px -4px 5px rgb(255 255 255 / 52%);
+  box-shadow: 5px 5px 12px rgba(181 191 198 / 46%),
+    -4px -4px 5px rgba(255 255 255 / 52%);
   &.on {
-    box-shadow: inset 5px 5px 10px rgb(181 191 198 / 46%),
-      inset -4px -4px 1px rgb(255 255 255 / 52%);
+    box-shadow: inset 5px 5px 10px rgba(181 191 198 / 46%),
+      inset -4px -4px 1px rgba(255 255 255 / 52%);
   }
   p {
-    color: ${paletteJY.gray[2]};
     font-size: 18px;
     line-height: 1;
-    margin-bottom: 14px;
     strong {
       font-size: 24px;
       font-weight: normal;
+      color: ${paletteJY.gray[2]};
     }
   }
   h3 {
     font-size: 16px;
+    margin: 42px 0 0 auto;
+    text-align: right;
     color: ${paletteJY.gray[1]};
-    margin-bottom: 0;
   }
 
   ${(props) =>
     props.type === 'circle' &&
     css`
-      border-radius: 50%;
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
+      padding: 20px;
     `}
 
   ${(props) =>
     props.type === 'square' &&
     css`
-      border-radius: 10px;
-      padding: 20px;
+      padding: 16px 30px;
+      height: 50px;
       position: relative;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
       p {
-        margin-bottom: 68px;
-        color: cornflowerblue;
+        color: ${paletteJY.gray[2]};
+        margin: 0;
       }
-      .progress {
+      h3 {
+        margin: 0;
+      }
+      /* .progress {
         width: 12px;
         height: 110px;
         border-radius: 6px;
@@ -63,8 +68,7 @@ const StyledProgress = styled.div`
         i {
           display: block;
           width: 100%;
-          background-color: cornflowerblue;
-          /* background-color: ${paletteJY.gray[2]}; */
+          background-color: ${paletteJY.blue};
           position: absolute;
           bottom: 0;
           left: 0;
@@ -84,7 +88,7 @@ const StyledProgress = styled.div`
             height: 90%;
           }
         }
-      }
+      } */
     `}
 `;
 
@@ -97,13 +101,11 @@ const Progress = (props) => {
         {props.unit === undefined ? '건' : props.unit}
       </p>
       <h3>{props.name}</h3>
-      {props.type === 'square' ? (
-        <div className="progress">
-          <i data-perc={props.name}></i>
-        </div>
+      {/* {props.type === 'square' ? (
+        <div className="progress">{ <i data-perc={props.name}></i>}</div>
       ) : (
         <></>
-      )}
+      )} */}
     </StyledProgress>
   );
 };

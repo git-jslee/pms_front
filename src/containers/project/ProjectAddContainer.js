@@ -101,7 +101,8 @@ const ProjectAddContainer = ({ mode, setMode }) => {
 
       // project_task 형식 [{23:[2,3,'2022-07-17', 'cus']},{24:[1,5,'2022-07-21]}]
       let project_tasks = {};
-      let plan_startdate = '';
+      // 220725-프로젝트  테이블 plan start date update 기능 삭제..tasks 에서 plan start 정보 가져오기
+      // let plan_startdate = '';
       const plan_enddate = moment(values.plan_enddate).format('YYYY-MM-DD');
       for (let k in values) {
         if (k.indexOf('_k_') === 0) {
@@ -111,12 +112,12 @@ const ProjectAddContainer = ({ mode, setMode }) => {
           if (newkey[1] === 'start') {
             //날짜 type 변경 및 custom task 추가
             const date = moment(values[k]).format('YYYY-MM-DD');
-            if (plan_startdate === '') plan_startdate = date;
-            if (plan_startdate !== '') {
-              plan_startdate = moment(plan_startdate).isAfter(date)
-                ? date
-                : plan_startdate;
-            }
+            // if (plan_startdate === '') plan_startdate = date;
+            // if (plan_startdate !== '') {
+            //   plan_startdate = moment(plan_startdate).isAfter(date)
+            //     ? date
+            //     : plan_startdate;
+            // }
 
             project_tasks = {
               ...project_tasks,
@@ -138,7 +139,7 @@ const ProjectAddContainer = ({ mode, setMode }) => {
         }
       }
       console.log('>>key>>>', project_tasks);
-      console.log('>>plan start date>>>', plan_startdate);
+      // console.log('>>plan start date>>>', plan_startdate);
 
       // 프로젝트 등록
       const project_data = {
@@ -148,7 +149,7 @@ const ProjectAddContainer = ({ mode, setMode }) => {
         customer: values.customer,
         description: values.description,
         name: values.name,
-        plan_startdate,
+        // plan_startdate,
         plan_enddate,
         price: values.price,
         scode_team: values.scode_team,

@@ -38,6 +38,8 @@ const ProjectSubContainer = ({ setMode }) => {
   // const { wlist } = useSelector(({ project }) => ({
   //   wlist: project.wlist,
   // }));
+  // sub button 상태
+  const [buttonState, setButtonState] = useState('btn1');
 
   // 프로젝트 리스트, 진행률 정보 가져오기..
   const [progressCount, setProgressCount] = useState({
@@ -435,6 +437,7 @@ const ProjectSubContainer = ({ setMode }) => {
         reload={reload}
         subMenu={subMenu}
         subSearchOnSubmit={subSearchOnSubmit}
+        buttonState={buttonState}
       />
       {subMenu === 'menu1' ? (
         <>

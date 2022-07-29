@@ -7,6 +7,9 @@ import $ from 'jquery';
 const StateArea = styled.div`
   display: flex;
   background-color: ${paletteJY.gray[0]};
+  /* background-color: red; */
+  box-shadow: 5px 5px 12px rgba(181 191 198 / 46%),
+    -4px -4px 5px rgba(255 255 255 / 52%);
   section:first-child {
     display: flex;
     padding: 23px;
@@ -28,7 +31,7 @@ const StateArea = styled.div`
           margin-bottom: 10px;
           border-radius: 4px;
           &.on {
-            box-shadow: inset 2px 2px 4px rgb(181 191 198 / 46%),
+            box-shadow: inset 2px 2px 4px rgba(181 191 198 / 46%),
               inset -4px -2px 5px #fff;
           }
         }
@@ -49,11 +52,11 @@ const StateArea = styled.div`
         background: transparent
           linear-gradient(135deg, #e7ecf3 0%, #eff3f6 100%) 0% 0% no-repeat
           padding-box;
-        box-shadow: 5px 5px 12px rgb(181 191 198 / 46%),
-          -4px -4px 5px rgb(255 255 255 / 52%);
+        box-shadow: 5px 5px 12px rgba(181 191 198 / 46%),
+          -4px -4px 5px rgba(255 255 255 / 52%);
         &.on {
-          box-shadow: inset 5px 5px 10px rgb(181 191 198 / 46%),
-            inset -4px -4px 1px rgb(255 255 255 / 52%);
+          box-shadow: inset 5px 5px 10px rgba(181 191 198 / 46%),
+            inset -4px -4px 1px rgba(255 255 255 / 52%);
         }
         &.circle {
           border-radius: 50%;
@@ -81,7 +84,7 @@ const StateArea = styled.div`
             i {
               display: block;
               width: 100%;
-              background-color: cornflowerblue;
+              background-color: ${paletteJY.blue};
               /* background-color: ${paletteJY.gray[2]}; */
               position: absolute;
               bottom: 0;
@@ -139,7 +142,7 @@ const StateArea = styled.div`
         }
         &.line {
           p {
-            color: cornflowerblue;
+            color: ${paletteJY.blue};
           }
         }
       }

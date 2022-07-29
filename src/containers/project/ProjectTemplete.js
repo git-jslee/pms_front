@@ -20,7 +20,7 @@ const ProjectTemplete = () => {
       ) : (
         ''
       )}
-      <hr />
+      {/* <hr /> */}
       <ProjectContentContainer />
     </Base>
   );

@@ -13,7 +13,9 @@ const ProjectTaskTable = ({ tasks }) => {
             : task.attributes.code_task.data.attributes.name,
           manpower: task.attributes.manpower,
           plan_day: task.attributes.plan_day,
-          man_plan: task.attributes.manpower * task.attributes.plan_day,
+          man_plan: (
+            task.attributes.manpower * task.attributes.plan_day
+          ).toFixed(1),
           total_day: task.attributes.total_time
             ? (
                 (task.attributes.total_time + task.attributes.other_totaltime) /

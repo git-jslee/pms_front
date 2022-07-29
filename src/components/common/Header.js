@@ -34,8 +34,8 @@ const Wrapper = styled(Responsive)`
   height: 110px;
   border-radius: 10px;
   padding: 0 40px;
-  box-shadow: 10px 10px 20px rgb(181 191 198 / 46%),
-    -10px -10px 20px rgb(255 255 255 / 52%);
+  box-shadow: 10px 10px 20px rgba(181 191 198 / 46%),
+    -10px -10px 20px rgba(255 255 255 / 52%);
 
   display: flex;
   align-items: center;

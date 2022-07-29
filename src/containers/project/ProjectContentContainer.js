@@ -101,10 +101,7 @@ const ProjectContentContainer = () => {
       const tableList = lists.map((list, index) => {
         // const _progress = list.project_progress;
         // if (project_status.progress === 10 && _progress >= 0.2) return;
-        const elapsed = moment().diff(
-          moment(list.attributes.startdate),
-          'days',
-        );
+        const elapsed = moment().diff(moment(list.startdate), 'days');
         const elapsed_last = moment().diff(
           moment(list.attributes.last_workupdate),
           'days',
@@ -142,7 +139,10 @@ const ProjectContentContainer = () => {
           code_status: list.attributes.code_status.data.attributes.name,
           plan_startdate: list.attributes.plan_startdate,
           plan_enddate: list.attributes.plan_enddate,
-          startdate: list.attributes.startdate,
+          // startdate: `${moment(list.startdate).format(
+          //   'YY-MM-DD',
+          // )}(${elapsed}D)`,
+          startdate: list.startdate,
           enddate: list.attributes.enddate,
           price: list.attributes.price.toLocaleString('ko-KR'),
           lastUpdate: list.attributes.last_workupdate,
@@ -150,7 +150,8 @@ const ProjectContentContainer = () => {
           progressRate: list.progressRate,
           elapsed: elapsed,
           elapsed_last: elapsed_last,
-          total_plan: list.total_plan,
+          // total_plan: list.total_plan.toFixed(0),
+          total_plan: list.total_plan ? list.total_plan.toFixed(0) : '-',
           total_work: list.total_work,
           base_day: _base_day === 0 ? '-' : _base_day,
           over_day: _over_day,

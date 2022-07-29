@@ -3,6 +3,7 @@ import { createAction, handleActions } from 'redux-actions';
 import * as api from '../lib/api/api';
 import { startLoading, finishLoading } from './loading';
 import createRequestThunk from '../lib/api/createRequestThunk';
+import moment from 'moment';
 
 // 프로젝트 리스트
 const GET_PROJECT = 'project/GET_PROJECT';
@@ -191,6 +192,7 @@ export const getProjectList = (query, sid) => async (dispatch) => {
         let total_weight = 0;
         let total_plan = 0;
         let total_work = 0;
+        let startdate = '9999-01-01';
         const task_progress = tasks.map((task) => {
           let weight = 0;
           const progress = task.attributes.code_progress.data
@@ -198,6 +200,12 @@ export const getProjectList = (query, sid) => async (dispatch) => {
                 task.attributes.code_progress.data.attributes.code * 0.01,
               )
             : 0;
+          // task 중 시작일 기준 최근값 리턴
+          console.log('>>>', task.attributes.startdate);
+          if (moment(startdate).isAfter(task.attributes.startdate)) {
+            console.log(`--${startdate}-->${task.attributes.startdate}`);
+            startdate = task.attributes.startdate;
+          }
           // task 계획시간, total 작업 시간중 ..큰 값 리턴..
           const plan_day = task.attributes.manpower * task.attributes.plan_day;
           // const task_totaltime = task.attributes.total_time;
@@ -250,8 +258,10 @@ export const getProjectList = (query, sid) => async (dispatch) => {
           }
           return returnRate;
         };
+
         return {
           ...list,
+          startdate: startdate === '9999-01-01' ? '-' : startdate,
           project_progress: Math.round(_progress * 100),
           progressRate: progressRate(),
           total_plan,
