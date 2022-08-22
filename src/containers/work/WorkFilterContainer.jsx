@@ -24,7 +24,11 @@ const WorkFilterContainer = () => {
   useEffect(() => {
     apiUserList()
       .then((result) => {
-        setUserList(result.data);
+        const user_sort = result.data.sort((a, b) => {
+          return a.username < b.username ? -1 : a.username > b.username ? 1 : 0;
+        });
+        console.log('>>>user result>>>', user_sort);
+        setUserList(user_sort);
       })
       .catch((error) => {
         console.error('에러발생', error);

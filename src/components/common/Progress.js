@@ -12,7 +12,7 @@ const StyledProgress = styled.div`
   height: 120px;
   background: transparent linear-gradient(135deg, #e7ecf3 0%, #eff3f6 100%) 0%
     0% no-repeat padding-box;
-  box-shadow: 5px 5px 12px rgba(181 191 198 / 46%),
+  box-shadow: 5px 5px 5px rgba(181 191 198 / 46%),
     -4px -4px 5px rgba(255 255 255 / 52%);
   &.on {
     box-shadow: inset 5px 5px 10px rgba(181 191 198 / 46%),

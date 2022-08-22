@@ -1,15 +1,16 @@
 import React from 'react';
 import styled from 'styled-components';
 import paletteJY from '../../lib/styles/palette_JY';
-import { Button, Space, Row, Col } from 'antd';
+import { Space, Row, Col } from 'antd';
 import Progress from '../common/Progress';
+import Button1 from '../common/Button1';
 
 const StyledBlock = styled.div`
   display: flex;
   background-color: ${paletteJY.gray[0]};
   /* background-color: white; */
-  box-shadow: 5px 5px 12px rgba(181 191 198 / 46%),
-    -4px -4px 5px rgba(255 255 255 / 52%);
+  box-shadow: 10px 10px 12px rgba(181 191 198 / 46%),
+    -12px -11px 11px rgba(255 255 255 / 52%);
   border-radius: 6px;
   margin-bottom: 22px;
 `;
@@ -46,8 +47,8 @@ const ButtonArticle = styled.article`
     &:focus {
       background-color: ${paletteJY.gray[0]};
       color: ${paletteJY.gray[2]};
-      box-shadow: inset 2px 2px 2px rgb(181 191 198 / 46%),
-        inset -3px -3px 1px rgb(255 255 255 / 52%);
+      box-shadow: inset 2px 2px 2px rgba(181 191 198 / 46%),
+        inset -3px -3px 1px rgba(255 255 255 / 52%);
     }
     span {
       display: inline-block;
@@ -147,6 +148,7 @@ const CountGridBlock = styled.article`
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     gap: 53px 43px;
+    position: relative;
     & > div:nth-child(3) {
       grid-area: 1 / 3 / 2 / 6;
     }
@@ -156,6 +158,53 @@ const CountGridBlock = styled.article`
         color: ${paletteJY.blue};
       }
       color: ${paletteJY.blue};
+    }
+    & > div[name='진  행'] {
+      &::after {
+        display: block;
+        content: '';
+        width: 17px;
+        height: 16px;
+        background: url(images/icon-arrow-d.svg) no-repeat center / contain;
+        position: absolute;
+        bottom: -27px;
+        left: 50%;
+        transform: translateX(-50%);
+        pointer-events: none;
+        z-index: 1;
+      }
+    }
+    & > div[name='검  수'] {
+      &:not(:last-child)::after {
+        display: block;
+        content: '';
+        width: 16px;
+        height: 17px;
+        background: url(images/icon-arrow-rr.svg) no-repeat center / contain;
+        position: absolute;
+        top: 50%;
+        right: -30px;
+        transform: translateY(-50%);
+        pointer-events: none;
+        z-index: 1;
+        filter: drop-shadow(0 0 4px ${paletteJY.gray[5]});
+      }
+    }
+    .on {
+      box-shadow: inset 4px 4px 3px rgba(181 191 198 / 46%),
+        inset -4px -4px 1px rgba(255 255 255 / 52%);
+    }
+    &::before {
+      display: block;
+      content: '';
+      width: 247px;
+      height: 159px;
+      background: #fff;
+      position: absolute;
+      border-top-left-radius: 18px;
+      border-top-right-radius: 18px;
+      top: 158px;
+      left: 488px;
     }
     /* & > div[type='square']:not(:last-child)::after,
     & > div:nth-child(n + 6):nth-child(-n + 7)::after {
@@ -183,10 +232,26 @@ const CountGridBlock = styled.article`
     padding: 15px 11px;
     background-color: #fff;
     border-radius: 17px;
+    box-shadow: 5px 5px 5px rgba(181 191 198 / 46%);
     div[type='square'] {
       width: 236px;
       border-radius: 0;
       box-shadow: none;
+      position: relative;
+      &:not(:last-child)::after {
+        display: block;
+        content: '';
+        width: 16px;
+        height: 17px;
+        background: url(images/icon-arrow-rr.svg) no-repeat center / contain;
+        position: absolute;
+        top: 50%;
+        right: -9px;
+        transform: translateY(-50%);
+        pointer-events: none;
+        z-index: 1;
+        filter: drop-shadow(0 0 4px ${paletteJY.gray[5]});
+      }
       &:first-child {
         border-top-left-radius: 10px;
         border-end-start-radius: 10px;
@@ -238,47 +303,47 @@ const ProjectCountForm2 = ({
         <ButtonSectionBlock>
           <ButtonArticle>
             <div className="bTop">
-              <Button
+              <Button1
                 type={selectedBt[0] === 'bt0' ? 'primary' : ''}
                 onClick={() => qs_filter('매출-전체')}
               >
                 <span>전 체</span>
-              </Button>
-              <Button
+              </Button1>
+              <Button1
                 type={selectedBt[0] === 'bt1' ? 'primary' : ''}
                 onClick={() => qs_filter('매출')}
               >
                 <span>매 출</span>
-              </Button>
-              <Button
+              </Button1>
+              <Button1
                 className="line"
                 type={selectedBt[0] === 'bt2' ? 'primary' : ''}
                 onClick={() => qs_filter('비매출')}
               >
                 <span>비 매 출</span>
-              </Button>
+              </Button1>
             </div>
             <div className="bBot">
               {selectedBt[0] === 'bt1' ? (
                 <>
-                  <Button
+                  <Button1
                     type={selectedBt[2] === 'bt0' ? 'primary' : ''}
                     onClick={() => qs_filter('계약-전체')}
                   >
                     <span>전 체</span>
-                  </Button>
-                  <Button
+                  </Button1>
+                  <Button1
                     type={selectedBt[2] === 'bt1' ? 'primary' : ''}
                     onClick={() => qs_filter('계약')}
                   >
                     <span>계 약</span>
-                  </Button>
-                  <Button
+                  </Button1>
+                  <Button1
                     type={selectedBt[2] === 'bt2' ? 'primary' : ''}
                     onClick={() => qs_filter('예정')}
                   >
                     <span>예 정</span>
-                  </Button>
+                  </Button1>
                 </>
               ) : (
                 ''
@@ -416,6 +481,7 @@ const ProjectCountForm2 = ({
                 name="진  행"
                 count={`${count[1] ? count[1].count : 0}`}
                 onClick={() => countFormOnclick(2)}
+                className="on"
               />
               <Progress
                 type="circle"

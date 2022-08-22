@@ -9,12 +9,12 @@ const HeaderBlock = styled.div`
   &::before {
     display: block;
     content: '';
-    width: 100%;
-    height: 110px;
+    width: 101%;
+    height: 156px;
     background: ${paletteJY.gray[0]};
     position: fixed;
-    top: -40px;
-    left: 0;
+    top: -48px;
+    left: 20px;
     z-index: -1;
   }
   position: fixed;
@@ -34,8 +34,8 @@ const Wrapper = styled(Responsive)`
   height: 110px;
   border-radius: 10px;
   padding: 0 40px;
-  box-shadow: 10px 10px 20px rgba(181 191 198 / 46%),
-    -10px -10px 20px rgba(255 255 255 / 52%);
+  box-shadow: 10px 10px 12px rgba(181 191 198 / 46%),
+    -12px -11px 11px rgba(255 255 255 / 52%);
 
   display: flex;
   align-items: center;

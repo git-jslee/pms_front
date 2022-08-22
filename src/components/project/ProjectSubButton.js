@@ -38,8 +38,8 @@ const SubMenuBlock = styled.div`
       align-items: center;
       justify-content: center;
       &:hover {
-        box-shadow: inset 2px 2px 5px rgb(181 191 198 / 46%),
-          inset -5px -3px 0px rgb(255 255 255 / 52%);
+        box-shadow: inset 2px 2px 5px rgba(181 191 198 / 46%),
+          inset -5px -3px 0px rgba(255 255 255 / 52%);
       }
 
       /* span {
@@ -71,8 +71,8 @@ const SubMenuBlock = styled.div`
       margin-right: 16px;
     }
     .ant-picker {
-      box-shadow: inset 2px 2px 3px rgb(181 191 198 / 46%),
-        inset -5px -3px 0px rgb(255 255 255 / 52%);
+      box-shadow: inset 2px 2px 3px rgba(181 191 198 / 46%),
+        inset -5px -3px 0px rgba(255 255 255 / 52%);
       border: 0;
     }
     .ant-picker-range .ant-picker-active-bar {
@@ -144,7 +144,7 @@ const ProjectSubButton = ({
             type={subMenu === 'menu1' ? 'primary' : ''}
             // className="on"
           >
-            <span>Count</span>
+            <span>현황</span>
           </Button>
           <Button
             onClick={() => handleOnClick('menu2')}

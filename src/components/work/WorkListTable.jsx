@@ -76,6 +76,7 @@ const WorkListTable = ({ lists, code_tasks, drawerOnClick }) => {
   console.log('^^^^^^1.lists^^^^^^^', lists);
   const tableList = lists.map((list, index) => {
     const wlist = list.attributes;
+    console.log('^^^^^^wlist^^^^^^^', wlist);
     // console.log('2-1.list_name', list.project_task.code_task);
     // task ID 에서 code_tasks 활용하여 task name 추출
     // const taskName = code_tasks.filter(
@@ -95,7 +96,10 @@ const WorkListTable = ({ lists, code_tasks, drawerOnClick }) => {
         title: wlist.project.data.attributes.name,
         service:
           wlist.project.data.attributes.code_service.data.attributes.name,
-        task: wlist.project_task.data.attributes.code_task.data.attributes.name,
+        // task: wlist.project_task.data.attributes.code_task.data.attributes.name,
+        task: wlist.project_task.data
+          ? wlist.project_task.data.attributes.code_task.data.attributes.name
+          : '',
         progress: wlist.code_progress.data.code,
         revision: wlist.revision ? wlist.revision : 0,
         user: wlist.users_permissions_user.data.attributes.username,

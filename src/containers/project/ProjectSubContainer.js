@@ -338,30 +338,42 @@ const ProjectSubContainer = ({ setMode }) => {
       const work_week = moment(list.attributes.working_day).format('YY-wo');
       const work_time = list.attributes.working_time;
 
-      const team = list.attributes.code_pj_team.data.id;
+      // const team = list.attributes.code_pj_team.data.id;
+      const team = list.attributes.code_pj_team.data.attributes.abbr;
       // console.log('****week****', work_week);
       //{ 22-01-3rd:{1:32, 2:20, 3:10, 4:2}, 22-01-4rd:{1:32, 2:20, 3:10, 4:2}, }
 
       if (Object.keys(returnData).includes(work_week)) {
         // console.log('======= return Data =======', returnData[work_week]);
         // console.log('======= return Data =======', returnData[work_week][team]);
-        if (returnData[work_week][team] >= 1) {
+        if (returnData[work_week][team]['time'] >= 1) {
           // team 에 해당하는 키 있을때
+          console.log(
+            '11&&&&&',
+            returnData[work_week][team]['time'] + work_time,
+          );
           returnData[work_week] = {
             ...returnData[work_week],
-            [team]: returnData[work_week][team] + work_time,
+            [team]: {
+              time: returnData[work_week][team]['time'] + work_time,
+              mp: 99,
+            },
           };
         } else {
           // team 에 해당하는 키 없을때
+          console.log('22&&&&&', work_time);
           returnData[work_week] = {
             ...returnData[work_week],
-            [team]: work_time,
+            [team]: { time: work_time, mp: 99 },
           };
         }
       } else {
-        returnData[work_week] = { [team]: work_time };
+        returnData[work_week] = { [team]: { time: work_time, mp: 99 } };
       }
     });
+    // 주차별 투입가능 이원 추가 적용
+    // { 22-01-3rd:{1:32, 2:20, 3:10, 4:2}, 22-01-4rd:{1:32, 2:20, 3:10, 4:2}, }->
+    // { 22-01-3rd:{'DE':{time: 32, mp:3}, 'VE':{time:20, mp:3}, 'RD':{time:10, mp:2}}
     setInputRate(returnData);
     console.log('********return Data********', returnData);
   };

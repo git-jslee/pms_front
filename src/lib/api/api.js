@@ -234,7 +234,8 @@ export const apiWorkList = (id) =>
 // 사용자 리스트
 export const apiUserList = () =>
   axios.get(
-    `${API_URL}/api/users?filters[worker][$eq]=true&sort[0]=username%3Adesc`,
+    // `${API_URL}/api/users?filters[worker][$eq]=true&sort[0]=username%3Adesc`,
+    `${API_URL}/api/users?filters[worker][$eq][0]=true&filters[blocked][$eq][1]=false&sort[0]=username%3Adesc`,
   );
 
 // Project 별 work..

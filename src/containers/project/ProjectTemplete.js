@@ -21,7 +21,8 @@ const ProjectTemplete = () => {
         ''
       )}
       {/* <hr /> */}
-      <ProjectContentContainer />
+      {mode === 'view' ? <ProjectContentContainer /> : ''}
+      {mode === 'detail' ? '' : ''}
     </Base>
   );
 };

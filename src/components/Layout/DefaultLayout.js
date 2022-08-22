@@ -32,7 +32,7 @@ const NavigationBlock = styled.div`
     margin: 0 auto 20px;
     color: ${paletteJY.gray[2]};
     font-size: medium;
-    padding: 10px 12px;
+    padding: 10px 2px;
     &:hover {
       box-shadow: inset 3px 3px 2px rgba(181 191 198 / 46%),
         inset -3px -3px 2px rgba(255 255 255 / 52%);
@@ -42,7 +42,7 @@ const NavigationBlock = styled.div`
     span {
       display: inline-block;
       text-align: justify;
-      width: 79px;
+      width: 98px;
       line-height: 2px;
       margin-left: 12px;
       &::after {

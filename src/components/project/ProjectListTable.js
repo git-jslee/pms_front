@@ -41,12 +41,12 @@ const ProjectListTable = ({
       dataIndex: 'service',
       key: 'service',
     },
-    {
-      title: '사업부',
-      key: 'team',
-      dataIndex: 'team',
-      align: 'center',
-    },
+    // {
+    //   title: '사업부',
+    //   key: 'team',
+    //   dataIndex: 'team',
+    //   align: 'center',
+    // },
     // {
     //   title: '상태',
     //   key: 'code_status',
@@ -66,15 +66,29 @@ const ProjectListTable = ({
       align: 'center',
     },
     {
-      title: '종료(계획)',
-      key: 'plan_enddate',
-      dataIndex: 'plan_enddate',
-      align: 'center',
+      title: '경과',
+      key: 'elapsed',
+      dataIndex: 'elapsed',
+      align: 'right',
+      // sorter: (a, b) => a.elapsed - b.elapsed,
     },
     {
       title: '최근작업일',
       key: 'lastUpdate',
       dataIndex: 'lastUpdate',
+      align: 'center',
+    },
+    {
+      title: '경과',
+      key: 'elapsed_last',
+      dataIndex: 'elapsed_last',
+      align: 'right',
+      // sorter: (a, b) => a.elapsed_last - b.elapsed_last,
+    },
+    {
+      title: '종료(계획)',
+      key: 'plan_enddate',
+      dataIndex: 'plan_enddate',
       align: 'center',
     },
     // {
@@ -84,10 +98,16 @@ const ProjectListTable = ({
     //   align: 'right',
     // },
     {
-      title: '계획(일)',
+      title: '계획',
       key: 'total_plan',
       dataIndex: 'total_plan',
-      align: 'right',
+      align: 'center',
+    },
+    {
+      title: '초과',
+      key: 'over_day',
+      dataIndex: 'over_day',
+      align: 'center',
     },
     // {
     //   title: '초과(일)',
@@ -96,14 +116,14 @@ const ProjectListTable = ({
     //   align: 'right',
     // },
     {
-      title: '작업(일)',
+      title: '작업',
       key: 'total_work',
       dataIndex: 'total_work',
       align: 'right',
       sorter: (a, b) => a.total_work - b.total_work,
     },
     {
-      title: '잔여(일)',
+      title: '잔여',
       key: 'remaining_day',
       dataIndex: 'remaining_day',
       align: 'right',
@@ -115,20 +135,7 @@ const ProjectListTable = ({
     //   dataIndex: 'startdate',
     //   align: 'right',
     // },
-    // {
-    //   title: '(start)',
-    //   key: 'elapsed',
-    //   dataIndex: 'elapsed',
-    //   align: 'right',
-    //   sorter: (a, b) => a.elapsed - b.elapsed,
-    // },
-    // {
-    //   title: '(last)',
-    //   key: 'elapsed_last',
-    //   dataIndex: 'elapsed_last',
-    //   align: 'right',
-    //   sorter: (a, b) => a.elapsed_last - b.elapsed_last,
-    // },
+
     {
       title: '금액',
       key: 'price',
@@ -174,7 +181,7 @@ const ProjectListTable = ({
                   contentStyle={{ backgroundColor: '#f0f5ff' }}
                   extra={
                     <>
-                      <Button onClick={() => onClick(record.id)}>Info</Button>
+                      <Button onClick={() => onClick(record.id)}>상세</Button>
                       <Button
                         type="primary"
                         disabled={record.code_status === '완료'}

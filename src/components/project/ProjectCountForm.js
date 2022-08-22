@@ -191,7 +191,7 @@ const ProjectCountForm = ({ count, countFormOnclick }) => {
               </p>
               <h3>시작전</h3>
             </div>
-            <div className="circle line">
+            <div className="circle">
               <p>
                 <strong>2</strong>건
               </p>
@@ -209,7 +209,7 @@ const ProjectCountForm = ({ count, countFormOnclick }) => {
               </p>
               <h3>보 류</h3>
             </div>
-            <div className="circle line arr">
+            <div className="circle arr on">
               <p>
                 <strong>2</strong>건
               </p>
@@ -227,7 +227,7 @@ const ProjectCountForm = ({ count, countFormOnclick }) => {
               </p>
               <h3>완 료</h3>
             </div>
-            <div className="square line arr">
+            <div className="square arr">
               <p>
                 <strong>2</strong>건
               </p>
@@ -236,7 +236,7 @@ const ProjectCountForm = ({ count, countFormOnclick }) => {
                 <i data-perc="10"></i>
               </div>
             </div>
-            <div className="square line arr">
+            <div className="square arr">
               <p>
                 <strong>2</strong>건
               </p>
@@ -245,7 +245,7 @@ const ProjectCountForm = ({ count, countFormOnclick }) => {
                 <i data-perc="25"></i>
               </div>
             </div>
-            <div className="square line arr">
+            <div className="square arr">
               <p>
                 <strong>2</strong>건
               </p>
@@ -254,7 +254,7 @@ const ProjectCountForm = ({ count, countFormOnclick }) => {
                 <i data-perc="50"></i>
               </div>
             </div>
-            <div className="square line arr">
+            <div className="square arr">
               <p>
                 <strong>2</strong>건
               </p>
@@ -263,7 +263,7 @@ const ProjectCountForm = ({ count, countFormOnclick }) => {
                 <i data-perc="75"></i>
               </div>
             </div>
-            <div className="square line">
+            <div className="square">
               <p>
                 <strong>2</strong>건
               </p>

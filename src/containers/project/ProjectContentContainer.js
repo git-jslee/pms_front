@@ -95,7 +95,7 @@ const ProjectContentContainer = () => {
 
   const [tableData, setTableData] = useState([]);
   useEffect(() => {
-    const baseprice = 400000; //기준금액
+    const baseprice = 500000; //기준금액
     let backlog = 0;
     if (lists) {
       const tableList = lists.map((list, index) => {
@@ -120,7 +120,7 @@ const ProjectContentContainer = () => {
             ? '-'
             : _base_day - list.total_plan >= 0
             ? '-'
-            : list.total_plan - _base_day;
+            : (list.total_plan - _base_day).toFixed(0);
         const array = {
           key: list.id,
           id: list.id,
@@ -137,15 +137,17 @@ const ProjectContentContainer = () => {
               ? ''
               : list.attributes.scode_team.data.attributes.name,
           code_status: list.attributes.code_status.data.attributes.name,
-          plan_startdate: list.attributes.plan_startdate,
-          plan_enddate: list.attributes.plan_enddate,
-          // startdate: `${moment(list.startdate).format(
-          //   'YY-MM-DD',
-          // )}(${elapsed}D)`,
-          startdate: list.startdate,
+          plan_startdate: moment(list.attributes.plan_startdate).format(
+            'YY-MM-DD',
+          ),
+          plan_enddate: moment(list.attributes.plan_enddate).format('YY-MM-DD'),
+          startdate: `${moment(list.startdate).format('YY-MM-DD')}`,
+          // startdate: list.startdate,
           enddate: list.attributes.enddate,
           price: list.attributes.price.toLocaleString('ko-KR'),
-          lastUpdate: list.attributes.last_workupdate,
+          lastUpdate: moment(list.attributes.last_workupdate).format(
+            'YY-MM-DD',
+          ),
           project_progress: list.project_progress,
           progressRate: list.progressRate,
           elapsed: elapsed,

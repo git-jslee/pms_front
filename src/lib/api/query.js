@@ -1006,7 +1006,7 @@ export const qs_workingTime = (startdate, enddate, start, limit) =>
           populate: '*',
         },
         code_pj_team: {
-          fields: ['name'],
+          fields: ['name', 'abbr'],
         },
       },
       pagination: {
