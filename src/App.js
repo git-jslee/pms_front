@@ -17,7 +17,7 @@ import WorkPage from './pages/WorkPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import AddPorjectPage from './pages/AddPorjectPage';
-import AddCustomerPage from './pages/AddCustomerPage';
+// import AddCustomerPage from './pages/AddCustomerPage';
 // import WorkFormPage from './pages/WorkFormPage';
 import AddWorkFormPage from './pages/AddWorkFormPage';
 import SalesPage from './pages/SalesPage';
@@ -51,7 +51,7 @@ function App() {
 
           <Route path="/addproject/" element={<AddPorjectPage />} />
           <Route path="/customer" element={<CustomerPage />} />
-          <Route path="/addcustomer" element={<AddCustomerPage />} />
+          {/* <Route path="/addcustomer" element={<AddCustomerPage />} /> */}
           <Route path="/work" element={<WorkPage />} />
           <Route path="/addwork" element={<AddWorkFormPage />} />
           <Route path="/sales" element={<SalesPage />} />

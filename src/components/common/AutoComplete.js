@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 // import Button from './Button';
 import {
@@ -69,10 +69,17 @@ const AutoComplete = ({ lists }) => {
   const [text, setText] = useState('');
   const [suggestions, setSuggestions] = useState([]);
   const [visible, setVisible] = useState(false);
+  const [addBtnDisabled, setAddBtnDisabled] = useState(true);
 
-  // const { auth } = useSelector(({ auth }) => ({
-  //   auth: auth.auth,
-  // }));
+  // <-- 등급결 권한..7이상 고객등록 가능하게 ..22/09/11
+  const { auth } = useSelector(({ auth }) => ({
+    auth: auth.auth,
+  }));
+  // console.log('------', auth.user);
+  // ---->
+  useEffect(() => {
+    setAddBtnDisabled(auth.user.level >= 7 ? false : true);
+  }, [auth]);
 
   const onChangeHandler = (text) => {
     let matches = [];
@@ -161,7 +168,11 @@ const AutoComplete = ({ lists }) => {
                 ))}
             </div>
           </div>
-          <Button onClick={showDrawer} icon={<PlusOutlined />}>
+          <Button
+            onClick={showDrawer}
+            icon={<PlusOutlined />}
+            disabled={addBtnDisabled}
+          >
             고객등록
           </Button>
         </div>
