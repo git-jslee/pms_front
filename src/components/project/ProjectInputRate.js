@@ -40,37 +40,44 @@ const options = {
   },
 };
 
-const ProjectInputRate = ({ inputRate }) => {
+const ProjectInputRate = ({ inputRate, teamHistory }) => {
   if (!inputRate) return <></>;
   const labels = Object.keys(inputRate);
   console.log('**labels**', labels);
   console.log('**inputRate**', inputRate);
+  console.log('**teamHistory**', teamHistory);
+
+  //디자인사업부
   const data_de = labels.map((v) => {
     const result = inputRate[v]['DE']
-      ? Math.round((inputRate[v]['DE']['time'] / (40 * 3)) * 100)
+      ? Math.round(
+          (inputRate[v]['DE']['time'] / (40 * inputRate[v]['DE']['mp'])) * 100,
+        )
       : 0;
     return result;
   });
+
+  //영상사업부
   const data_pr = labels.map((v) => {
     const result = inputRate[v]['VE']
-      ? Math.round((inputRate[v]['VE']['time'] / (40 * 2)) * 100)
+      ? Math.round(
+          (inputRate[v]['VE']['time'] / (40 * inputRate[v]['VE']['mp'])) * 100,
+        )
       : 0;
     return result;
   });
-  // const data_3d = labels.map((v) => {
-  //   const result = inputRate[v]['3']
-  //     ? Math.round((inputRate[v]['3'] / (40 * 1)) * 100)
-  //     : 0;
-  //   return result;
-  // });
+
+  //기술연구소
   const data_mv = labels.map((v) => {
     const result = inputRate[v]['RD']
-      ? Math.round((inputRate[v]['RD']['time'] / (40 * 2)) * 100)
+      ? Math.round(
+          (inputRate[v]['RD']['time'] / (40 * inputRate[v]['RD']['mp'])) * 100,
+        )
       : 0;
     return result;
   });
   // console.log('**labels**', labels);
-  // console.log('**디자인**', data_de);
+  console.log('**디자인**', data_de);
   // console.log('**영상**', data_pr);
 
   const data = {
