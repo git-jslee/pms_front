@@ -20,6 +20,7 @@ import ProjectSubContainer from './ProjectSubContainer';
 import { message } from 'antd';
 import { tbl_update, tbl_insert } from '../../modules/common/tbl_crud';
 import { isTypeSystemDefinitionNode } from 'graphql';
+import ProjectDrFormIssue from '../../components/project/ProjectDrFormIssue';
 
 const ProjectContentContainer = () => {
   const dispatch = useDispatch();
@@ -41,6 +42,8 @@ const ProjectContentContainer = () => {
   const [record, setRecord] = useState();
   const [codestatus, setCodestatus] = useState();
   const [checkbox, setCheckbox] = useState({});
+  const [visibleIssue, setVisibleIssue] = useState(false);
+  const [editFormMode, setEditFormMode] = useState('pjt');
   //
   // console.log('loading', loading);
   // console.log('list', lists);
@@ -121,6 +124,11 @@ const ProjectContentContainer = () => {
             : _base_day - list.total_plan >= 0
             ? '-'
             : (list.total_plan - _base_day).toFixed(0);
+        // issue 기능 추가 22.9.25
+        const issue_cnt = list.attributes.pjt_issues.data.length;
+        const issue = issue_cnt !== 0 ? list.attributes.pjt_issues.data : '';
+
+        //
         const array = {
           key: list.id,
           id: list.id,
@@ -163,6 +171,8 @@ const ProjectContentContainer = () => {
           //     ? Math.round(_totalworktime.worktime / 8)
           //     : '',
           // action: 'View',
+          issue_cnt: issue_cnt === 0 ? '' : issue_cnt,
+          issue: issue,
         };
         return array;
       });
@@ -203,6 +213,12 @@ const ProjectContentContainer = () => {
     }
   };
 
+  // 이슈 보기 & 수정 2022.09.26
+  const handleIssue = async (record) => {
+    console.log('*** handle Issue ***', record);
+    setVisibleIssue(true);
+  };
+
   const onClose = (status) => {
     //
     console.log('----onClose----');
@@ -215,60 +231,98 @@ const ProjectContentContainer = () => {
     }
   };
 
-  const onSubmit = async (value) => {
-    console.log('>>>>>>', value);
-    try {
-      setBtnDisabled(true);
-      const update_data = {};
-      for (let k in checkbox) {
-        const v = checkbox[k];
-        if (v === true && typeof value[k] === 'object') {
-          update_data[k] = moment(value[k]).format('YYYY-MM-DD').toString();
-        } else if (v === true && typeof value[k] !== 'object') {
-          update_data[k] = value[k];
-        }
-      }
-      console.log('1.>>>>>>>', update_data);
-      if (typeof update_data.code_status === 'string') {
-        return message.error(`입력 오류 - 서비스 상태`, 3);
-      }
-      const request = await tbl_update('api/projects', value.id, update_data);
-      // console.log('-----------', request);
-      message.success(`update - ${request.statusText}`, 3);
-      const status_filter = (key) => {
-        const test = codestatus.filter((f) => f.id === key);
-        return test[0].attributes.name;
-      };
-      // prject_change table insert
-      console.log('record-----------', record);
-      let count = 0;
-      for (let k in update_data) {
-        let changevalue;
-        if (k === 'code_status') {
-          changevalue = `${record[k]} -> ${status_filter(update_data[k])}`;
-        } else {
-          const newvalue =
-            update_data[k] !== undefined ? update_data[k].toString() : '';
-          changevalue = `${record[k]} -> ${newvalue}`;
-        }
+  const onSubmit1 = (value1) => {
+    console.log('>>>>value>>', value1);
+    console.log('>>>>issue mode>>', editFormMode);
+  };
 
-        const insert_data = {
-          project: value.id,
-          type: k,
-          change: changevalue,
-          users_permissions_user: auth.user.id,
+  const onSubmit = async (value) => {
+    // console.log('>>>>>>', value);
+    if (editFormMode === 'pjt') {
+      try {
+        setBtnDisabled(true);
+        const update_data = {};
+        for (let k in checkbox) {
+          const v = checkbox[k];
+          if (v === true && typeof value[k] === 'object') {
+            update_data[k] = moment(value[k]).format('YYYY-MM-DD').toString();
+          } else if (v === true && typeof value[k] !== 'object') {
+            update_data[k] = value[k];
+          }
+        }
+        console.log('1.>>>>>>>', update_data);
+        if (typeof update_data.code_status === 'string') {
+          return message.error(`입력 오류 - 서비스 상태`, 3);
+        }
+        const request = await tbl_update('api/projects', value.id, update_data);
+        // console.log('-----------', request);
+        message.success(`update - ${request.statusText}`, 3);
+        const status_filter = (key) => {
+          const test = codestatus.filter((f) => f.id === key);
+          return test[0].attributes.name;
         };
-        // console.log('-----------', insert_data);
-        const insert = await tbl_insert('api/project-changes', insert_data);
-        count++;
-        // console.log('-----insert------', insert);
+        // prject_change table insert
+        console.log('record-----------', record);
+        let count = 0;
+        for (let k in update_data) {
+          let changevalue;
+          if (k === 'code_status') {
+            changevalue = `${record[k]} -> ${status_filter(update_data[k])}`;
+          } else {
+            const newvalue =
+              update_data[k] !== undefined ? update_data[k].toString() : '';
+            changevalue = `${record[k]} -> ${newvalue}`;
+          }
+
+          const insert_data = {
+            project: value.id,
+            type: k,
+            change: changevalue,
+            users_permissions_user: auth.user.id,
+          };
+          // console.log('-----------', insert_data);
+          const insert = await tbl_insert('api/project-changes', insert_data);
+          count++;
+          // console.log('-----insert------', insert);
+        }
+        message.success(`${count}건 처리 완료`, 3);
+      } catch (error) {
+        console.error(error);
+        message.error(`관리자에게 문의 바랍니다.`, 3);
+      } finally {
+        setCheckbox({});
+        setVisible(false);
+        setBtnDisabled(false);
       }
-      message.success(`${count}건 처리 완료`, 3);
-    } catch (error) {
-      console.error(error);
-      message.error(`관리자에게 문의 바랍니다.`, 3);
-    } finally {
-      setCheckbox({});
+    } else if (editFormMode === 'issue') {
+      console.log('>>>>pjt id>>', record.id);
+      //
+      setBtnDisabled(true);
+      const insert_data = {
+        ...value,
+        project: record.id,
+        name: value.issue_name,
+        issue_date: moment(value.issue_date).format('YYYY-MM-DD').toString(),
+      };
+      console.log('>>>>insert data>>', insert_data);
+      const request = await tbl_insert('api/pjt-issues', insert_data);
+      message.success(`add issue - ${request.statusText}`, 3);
+      console.log('-----------', request);
+
+      // change log 추가
+      const issue_changelog_data = {
+        project: record.id,
+        type: 'issue',
+        change: `issue 추가`,
+        users_permissions_user: auth.user.id,
+      };
+      const insert = await tbl_insert(
+        'api/project-changes',
+        issue_changelog_data,
+      );
+      message.success(`change log - ${insert.statusText}`, 3);
+
+      //
       setVisible(false);
       setBtnDisabled(false);
     }
@@ -286,6 +340,11 @@ const ProjectContentContainer = () => {
     console.log('id', id),
   ];
 
+  const handleEditFormMode = (v) => {
+    // edit form 언마운트시 'pjt' 리턴
+    setEditFormMode(v);
+  };
+
   return (
     <>
       <ProjectListTable
@@ -293,6 +352,7 @@ const ProjectContentContainer = () => {
         loading={loading}
         handleEdit={handleEdit}
         handleSearch1={handleSearch1}
+        handleIssue={handleIssue}
       />
       {visible ? (
         <ProjectEditForm
@@ -304,10 +364,13 @@ const ProjectContentContainer = () => {
           onSubmit={onSubmit}
           handleCheck={handleCheck}
           checkbox={checkbox}
+          editFormMode={editFormMode}
+          handleEditFormMode={handleEditFormMode}
         />
       ) : (
         ''
       )}
+      {visibleIssue ? <ProjectDrFormIssue visible={visibleIssue} /> : ''}
     </>
   );
 };

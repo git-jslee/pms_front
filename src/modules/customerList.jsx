@@ -1,5 +1,7 @@
 import { handleActions } from 'redux-actions';
 import { apiCustomerList } from '../lib/api/api';
+import fetchAllList from '../lib/api/fetchAllList';
+import { qs_customers } from '../lib/api/queryCustomer';
 
 const GET_CUSTOMERLIST = 'customer_lists/GET_CUSTOMERLIST';
 const GET_CUSTOMERLIST_SUCCESS = 'customer_lists/GET_CUSTOMERLIST_SUCCESS';
@@ -8,20 +10,25 @@ const GET_CUSTOMERLIST_FAILURE = 'customer_lists/GET_CUSTOMERLIST_FAILURE';
 export const getCustomerlist = () => async (dispatch) => {
   dispatch({ type: GET_CUSTOMERLIST });
   try {
-    const response = await apiCustomerList();
-    console.log('---response---', response.data.data);
-    // 오름차순 정렬
-    const sortResponse = response.data.data.sort((a, b) => {
-      return a.attributes.name < b.attributes.name
-        ? -1
-        : a.attributes.name > b.attributes.name
-        ? 1
-        : 0;
+    // const response = await apiCustomerList();
+    const response = await fetchAllList({
+      path: 'api/customers',
+      qs: qs_customers,
     });
-    console.log('---sort---', sortResponse);
+    console.log('---response-customers all--', response);
+    // 오름차순 정렬 --> 데이터베이스에서 가져올때 정렬로 변경
+    // const sortResponse = response.data.data.sort((a, b) => {
+    //   return a.attributes.name < b.attributes.name
+    //     ? -1
+    //     : a.attributes.name > b.attributes.name
+    //     ? 1
+    //     : 0;
+    // });
+    // console.log('---sort---', sortResponse);
     dispatch({
       type: GET_CUSTOMERLIST_SUCCESS,
-      payload: sortResponse,
+      // payload: sortResponse,
+      payload: response,
       status: true,
     });
   } catch (error) {

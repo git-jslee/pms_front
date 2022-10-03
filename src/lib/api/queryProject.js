@@ -54,6 +54,15 @@ export const qs_projectList = (stateId, qsFilter) =>
             },
           },
         },
+        pjt_issues: {
+          filters: {
+            solved: {
+              $eq: false,
+            },
+          },
+          sort: ['issue_date:desc'],
+          fields: ['name', 'solved', 'risk', 'issue_date', 'memo'],
+        },
       },
       pagination: {
         // page: 1,
