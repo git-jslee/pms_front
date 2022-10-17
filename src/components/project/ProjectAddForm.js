@@ -30,6 +30,7 @@ const ProjectAddForm = (props) => {
   const [tasks, setTasks] = useState();
   const [input, setInput] = useState({ name: null });
   const [count, setCount] = useState(0);
+  const visible = props.visible;
   const loading = props.loading;
   const btnDisabled = props.btnDisabled;
   const handleOnClose = props.handleOnClose;
@@ -82,7 +83,7 @@ const ProjectAddForm = (props) => {
     setInput({ ...input, [name]: value });
   };
 
-  // console.log('>>>>>>>>>>>>>>', teams);
+  console.log('>>>>>>>>>>>>>>', visible);
 
   return (
     <>
@@ -90,7 +91,7 @@ const ProjectAddForm = (props) => {
         title="프로젝트 등록"
         width={800}
         // onClose={addSalesOnClose}
-        visible={true}
+        visible={visible}
         extra={
           <Space>
             <Button onClick={handleOnClose}>Cancel</Button>

@@ -9,6 +9,12 @@ const CHANGE_MODE = 'common/CHANGE_MODE';
 // edit 버튼틀릭시 모드 변경 editmode false-> true
 const CHANGE_EDITMODE = 'common/CHANGE_EDITMODE';
 
+// subMenu ..project -> status - inputrate -
+const CHANGE_SUBMENU = 'common/CHANGE_SUBMENU';
+
+// add, edit 등 DRAWER FROM 관련..
+const CHANGE_DRAWER = 'common/CHANGE_DRAWER';
+
 // 월별 조회 관련 날짜 지정 기능
 const SET_STARTENDOFMONTH = 'common/SET_STARTENDOFMONTH';
 
@@ -37,6 +43,11 @@ export const changeEditMode = createAction(
 
 export const setTitle = createAction(SET_TITLE, (title) => title);
 
+// sub menu 변경
+export const changeSubMenu = createAction(CHANGE_SUBMENU, (submenu) => submenu);
+
+export const changeDrawer = createAction(CHANGE_DRAWER, (value) => value);
+
 // Autocomplete 기능 이용하여 고객 검색시 고객Id 등록
 export const setCustomerId = createAction(SET_CUSTOMERID, (id) => id);
 
@@ -61,6 +72,8 @@ const initialState = {
   params: null,
   error: null,
   mode: 'VIEW',
+  submenu: 'status',
+  drawer: null,
 };
 
 const common = handleActions(
@@ -68,12 +81,23 @@ const common = handleActions(
     // 모드변경(VIEW - EDIT)
     [CHANGE_MODE]: (state, { payload }) => ({
       ...state,
-      mode: payload.mode,
+      // mode: payload.mode,
+      mode: payload,
     }),
     // 모드변경(VIEW - EDIT)
     [CHANGE_EDITMODE]: (state, { payload }) => ({
       ...state,
       editmode: payload.editmode,
+    }),
+    // sub menu 변경
+    [CHANGE_SUBMENU]: (state, { payload }) => ({
+      ...state,
+      submenu: payload,
+    }),
+    // add/edit DRAWER Form 제어
+    [CHANGE_DRAWER]: (state, { payload }) => ({
+      ...state,
+      drawer: payload,
     }),
     // Title 저장
     [SET_TITLE]: (state, { payload }) => ({

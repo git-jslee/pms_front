@@ -40,7 +40,7 @@ const options = {
   },
 };
 
-const ProjectInputRate = ({ inputRate, teamHistory }) => {
+const ProjectInputRateChart = ({ inputRate, teamHistory }) => {
   if (!inputRate) return <></>;
   const labels = Object.keys(inputRate);
   console.log('**labels**', labels);
@@ -124,4 +124,4 @@ const ProjectInputRate = ({ inputRate, teamHistory }) => {
   );
 };
 
-export default ProjectInputRate;
+export default ProjectInputRateChart;

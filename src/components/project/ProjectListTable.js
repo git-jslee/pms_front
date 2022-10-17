@@ -14,7 +14,13 @@ import {
   Divider,
 } from 'antd';
 
-const ProjectListTable = ({ tableData, loading, handleEdit, handleIssue }) => {
+const ProjectListTable = ({
+  tableData,
+  loading,
+  handleEdit,
+  handleIssue,
+  onClickDetail,
+}) => {
   const navigate = useNavigate();
   console.log('>>>>>>>>>>>>>>>>>data', tableData);
   const expandedRowRender = (record) => {
@@ -63,7 +69,6 @@ const ProjectListTable = ({ tableData, loading, handleEdit, handleIssue }) => {
         render: () => (
           <Space size="small">
             <a>Edit</a>
-            <a>Clear</a>
           </Space>
         ),
       },
@@ -85,13 +90,21 @@ const ProjectListTable = ({ tableData, loading, handleEdit, handleIssue }) => {
 
     return (
       <>
-        <Table
-          columns={columns}
-          dataSource={data}
-          pagination={false}
-          size="small"
-        />
-        {/* <span /> */}
+        <Row>
+          <Col span={16}>
+            <span>issue</span>
+            <Table
+              columns={columns}
+              dataSource={data}
+              pagination={false}
+              size="small"
+            />
+            {/* <span /> */}
+          </Col>
+          <Col span={8}>
+            <span>risk</span>
+          </Col>
+        </Row>
       </>
     );
   };
@@ -206,10 +219,10 @@ const ProjectListTable = ({ tableData, loading, handleEdit, handleIssue }) => {
     },
   ];
 
-  const onClickDetail = (id) => {
-    console.log('키..', id);
-    navigate(`/project/${id}`);
-  };
+  // const onClickDetail = (id) => {
+  //   console.log('키..', id);
+  //   navigate(`/project/${id}`);
+  // };
 
   return (
     <>

@@ -1,215 +1,100 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import moment from 'moment';
-import { message } from 'antd';
-// module
-import * as api from '../../lib/api/api';
-import { tbl_update, tbl_insert } from '../../modules/common/tbl_crud';
-import calInputRate from '../../modules/project/calInputRate';
-import pjtQsFilter from '../../modules/project/pjtQsFilter';
-import { qs_projectCount } from '../../lib/api/query';
-import { qs_projectList } from '../../lib/api/queryProject';
 import {
   getProjectList,
-  changeProjectStatus,
-  changeProjectProgress,
-  initProjectStorage,
+  getProject,
   updateBacklog,
 } from '../../modules/project';
-
-//component
-import ProjectInputRateChart from '../../components/project/ProjectInputRateChart';
-import ProjectStatusForm from '../../components/project/ProjectStatusForm';
+import moment from 'moment';
+// import { getProjectList } from '../../modules/projectList';
 import ProjectListTable from '../../components/project/ProjectListTable';
 import ProjectEditForm from '../../components/project/ProjectEditForm';
-import ProjectDetailContainer from './ProjectDetailContainer';
-//임시
-import PjtStatusContainer from './PjtStatusContainer';
-import { changeSubMenu } from '../../modules/common';
+import { apiCustomerList } from '../../lib/api/api';
+import * as api from '../../lib/api/api';
+import { startLoading, finishLoading } from '../../modules/loading';
+import calWorkTime from '../../modules/project/calWorkTime';
+import { weekOfMonth } from '../../modules/common/weekOfMonth';
+import { qs_workListAll } from '../../lib/api/query';
+import { qs_projectList } from '../../lib/api/queryProject';
+import ProjectSubContainer from './ProjectSubContainer';
+import { message } from 'antd';
+import { tbl_update, tbl_insert } from '../../modules/common/tbl_crud';
+import { isTypeSystemDefinitionNode } from 'graphql';
+import ProjectDrFormIssue from '../../components/project/ProjectDrFormIssue';
 
 const ProjectContentContainer = () => {
   const dispatch = useDispatch();
   const { auth } = useSelector(({ auth }) => ({
     auth: auth.auth,
   }));
-  const { submenu } = useSelector(({ common }) => ({
-    submenu: common.submenu,
-  }));
-
-  //
-  // <-- 프로젝트 현황
-  const [filterContract, setFilterContract] = useState([{ price: { $ne: 0 } }]);
-  const [filterTeam, setFilterTeam] = useState([{}]);
-  const [pjtFilter, setPjtFilter] = useState([{ price: { $ne: 0 } }]);
-
-  // 프로젝트 리스트, 진행률 정보 가져오기..
-  const [progressCount, setProgressCount] = useState({
-    _10: 0,
-    _25: 0,
-    _50: 0,
-    _75: 0,
-    _90: 0,
-  });
   const { project_status } = useSelector(({ project }) => ({
-    project_status:
-      project.status.id === null ? { id: 2, progress: null } : project.status,
+    project_status: project.status,
   }));
-
-  const { lists, getState, backlog } = useSelector(({ project }) => ({
-    // lists: project.data ? project.data[2] : null,
-    lists: project.data ? project.data[project_status.id] : null,
-    getState: project.getdata,
-    backlog: project.backlog,
-  }));
-
-  const { error, loading } = useSelector(({ project, loading }) => ({
+  // const [projectList, setProjectList] = useState();
+  const { lists, error, loading } = useSelector(({ project, loading }) => ({
     // lists: project.list,
-    // pjtlists: project.data !== null ? project.data[project_status.id] : null,
+    lists: project.data ? project.data[project_status.id] : null,
     error: project.error,
     loading: loading['project/GET_PROJECTLIST'],
   }));
-  useEffect(() => {
-    if (!lists) return;
-    let _10 = 0;
-    let _25 = 0;
-    let _50 = 0;
-    let _75 = 0;
-    let _90 = 0;
-    lists.map((v) => {
-      const progress = v.progressRate;
-      if (progress === 10) {
-        _10 += 1;
-      } else if (progress === 25) {
-        _25 += 1;
-      } else if (progress === 50) {
-        _50 += 1;
-      } else if (progress === 75) {
-        _75 += 1;
-      } else if (progress === 90) {
-        _90 += 1;
-      }
-    });
-    setProgressCount({ _10, _25, _50, _75, _90 });
-    // console.log('>>>>>>>>>>>>progressCount', progressCount);
-  }, [lists]);
-
-  //카운터(전체, 진행중, 완료, ..)
-  //request(`/api/articles?${query}`);
-  const [count, setCount] = useState([]);
-
-  useEffect(() => {
-    const query = [];
-    for (let i = 1; i <= 6; i++) {
-      query.push(qs_projectCount(i, pjtFilter));
-    }
-    console.log('**query**', query);
-    api
-      .getCountProject('api/projects', query)
-      .then((result) => {
-        console.log('getQueryResult', result);
-        const projectCount = result.map((v, index) => {
-          return {
-            id: index + 1,
-            count: v.data.meta.pagination.total,
-          };
-        });
-        setCount(projectCount);
-      })
-      .catch((error) => {
-        console.log('error', error);
-      });
-  }, [pjtFilter]);
-
-  // qs filter 설정
-  const [selectedBt, setSelectedBt] = useState(['bt1', 'bt0', 'bt0']);
-  const qs_filter = (value) => {
-    const code_status_id = 2;
-    const getFilter = pjtQsFilter(
-      selectedBt,
-      filterContract,
-      filterTeam,
-      value,
-    );
-    if (getFilter === undefined) return;
-    if (getFilter.newFilterContract === null)
-      setFilterTeam(getFilter.newFilterTeam);
-    if (getFilter.newFilterTeam === null) {
-      setFilterContract(getFilter.newFilterContract);
-    }
-    setSelectedBt(getFilter.newBtn);
-    setPjtFilter(getFilter.newPjtFilter);
-    const query = qs_projectList(code_status_id, getFilter.newPjtFilter);
-    // console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>query>>>>>', query);
-    dispatch(initProjectStorage());
-    dispatch(getProjectList(query, code_status_id));
-  };
-  //   else {
-  //     if (getFilter.newFilterContract === null) {
-  //       console.log('>>>>>getFilter-team>>>>>', getFilter);
-  //       setSelectedBt(getFilter.newBtn);
-  //       setFilterTeam(getFilter.newFilterTeam);
-  //       setPjtFilter(getFilter.newPjtFilter);
-  //     } else if (getFilter.newFilterTeam === null) {
-  //       console.log('>>>>>getFilter-contract>>>>>', getFilter);
-  //       setSelectedBt(getFilter.newBtn);
-  //       setFilterContract(getFilter.newFilterContract);
-  //       setPjtFilter(getFilter.newPjtFilter);
-  //     }
-  //     // setQsFilter(filter);
-  //     // 리덕스 프로젝트 초기화..
-  //     console.log(
-  //       '>>>>>PJTFILTER, code_status_id>>>>>',
-  //       pjtFilter,
-  //       code_status_id,
-  //     );
-  //     console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>query>>>>>', query);
-  //     dispatch(initProjectStorage());
-  //     dispatch(getProjectList(query, code_status_id));
-  //   }
-  // };
-
-  const countFormOnclick = (code_status_id) => {
-    console.log('count Form OnClick - ', code_status_id);
-    // store 저장 안된 데이터만 api 호출하게 변경
-    // 저장되어 있을경우 project.mode 값만 변경
-    if (code_status_id in getState) {
-      dispatch(changeProjectStatus(code_status_id));
-    } else {
-      const query = qs_projectList(code_status_id, pjtFilter);
-      // dispatch(getProject(query));
-      dispatch(getProjectList(query, code_status_id));
-    }
-  };
-
-  const progressButtonOnclick = (value) => {
-    const code_status_id = 2;
-    dispatch(changeProjectProgress(value));
-  };
-
-  // 프로젝트 현황 -->
-
-  // <-- 프로젝트 투입률 차트
-  const [inputRate, setInputRate] = useState({
-    inputRate: '',
-    teamHistory: '',
-  });
-
-  const promise_inputRate = async () => {
-    const test = await calInputRate();
-    setInputRate(test);
-  };
-
-  useEffect(() => {
-    promise_inputRate();
-  }, []);
-  // 프로젝트 투입률 차트 -->
-
-  // <-- 프로젝트 리스트
-  const [visibleIssue, setVisibleIssue] = useState(false);
+  const [btnDisabled, setBtnDisabled] = useState(false);
+  const [visible, setVisible] = useState(false);
   const [record, setRecord] = useState();
   const [codestatus, setCodestatus] = useState();
-  const [visible, setVisible] = useState(false);
-  const [pjtid, setPjtid] = useState();
+  const [checkbox, setCheckbox] = useState({});
+  const [visibleIssue, setVisibleIssue] = useState(false);
+  const [editFormMode, setEditFormMode] = useState('pjt');
+  //
+  // console.log('loading', loading);
+  // console.log('list', lists);
+  const { wlist } = useSelector(({ project }) => ({
+    wlist: project.wlist,
+  }));
+  const [totalWorkTime, setTotalWorktime] = useState([]);
+
+  // 컴포넌트가 처음 렌더링 될 때 프로젝트 전체 리스트 정보 가져옴
+  // 페이지 이동 후 재 접속시.. 프로젝트 리스트 다시 가져옴...코드 수정 필요..
+  // useEffect(() => {
+  //   // const params = 'projects?code_status.id=2';
+  //   // 1-시작전, 2-진행중, 3-보류, 4-완료, 5-대기, 6-검수
+  //   const code_status_id = 2;
+  //   const query = qs_projectList(code_status_id);
+  //   ////
+  //   // dispatch(getProject(query));
+  //   dispatch(getProjectList(query, code_status_id));
+  //   calTotalWorkTime();
+  // }, []);
+
+  const calTotalWorkTime = async () => {
+    const result = [];
+    const statusId = 2;
+    let start = 0;
+    const limit = 50;
+    const query = qs_workListAll(statusId, start, limit);
+    const request = await api.getQueryString('api/works', query);
+    result.push(...request.data.data);
+    // console.log('-----request-----', request.data);
+    const total = request.data.meta.pagination.total;
+    for (start = start + limit; start <= total; start += limit) {
+      const query = qs_workListAll(statusId, start, limit);
+      const request = await api.getQueryString('api/works', query);
+      result.push(...request.data.data);
+      // console.log('-----request-----', start, '--', request.data);
+    }
+    // console.log('-----result------', result);
+    const worktime = calWorkTime(result);
+    // console.log('--calworktime--', worktime);
+    setTotalWorktime(worktime);
+  };
+
+  // 작업통계 기능 projectSubContainer 통합필요..
+  const [worktime, setWorktime] = useState([]);
+  useEffect(() => {
+    if (!wlist) return;
+    const result = calWorkTime(wlist);
+    console.log('--calworktime--', result);
+    setWorktime(result);
+  }, [wlist]);
 
   const [tableData, setTableData] = useState([]);
   useEffect(() => {
@@ -309,24 +194,7 @@ const ProjectContentContainer = () => {
     }
   }, [lists, project_status]);
 
-  // 이슈 보기 & 수정 2022.09.26
-  const handleIssue = async (record) => {
-    console.log('*** handle Issue ***', record);
-    setVisibleIssue(true);
-  };
-
-  // view 버튼 클릭시
-  const onClickDetail = (value) => {
-    setPjtid(value);
-    dispatch(changeSubMenu('detailview'));
-  };
-
-  // 프로젝트 리스트 -->
-
-  // <-- 프로젝트 수정
-  const [editFormMode, setEditFormMode] = useState('pjt');
-  const [btnDisabled, setBtnDisabled] = useState(false);
-  const [checkbox, setCheckbox] = useState({});
+  // console.log('tableList', tableData);
 
   const handleEdit = async (record) => {
     //
@@ -343,6 +211,29 @@ const ProjectContentContainer = () => {
     } catch (error) {
       console.error(error);
     }
+  };
+
+  // 이슈 보기 & 수정 2022.09.26
+  const handleIssue = async (record) => {
+    console.log('*** handle Issue ***', record);
+    setVisibleIssue(true);
+  };
+
+  const onClose = (status) => {
+    //
+    console.log('----onClose----');
+    if (status) {
+      setRecord();
+      setCheckbox({});
+      setVisible(false);
+    } else {
+      alert('프로젝트 update 중...');
+    }
+  };
+
+  const onSubmit1 = (value1) => {
+    console.log('>>>>value>>', value1);
+    console.log('>>>>issue mode>>', editFormMode);
   };
 
   const onSubmit = async (value) => {
@@ -438,65 +329,31 @@ const ProjectContentContainer = () => {
     //
   };
 
-  const onClose = (status) => {
-    //
-    console.log('----onClose----');
-    if (status) {
-      setRecord();
-      setCheckbox({});
-      setVisible(false);
-    } else {
-      alert('프로젝트 update 중...');
-    }
-  };
-
-  const handleEditFormMode = (v) => {
-    // edit form 언마운트시 'pjt' 리턴
-    setEditFormMode(v);
-  };
-
   // 수정 form 에서 체크 박스 변경시
   const handleCheck = (e) => {
     const name = e.target['data-id'];
     setCheckbox({ ...checkbox, [name]: e.target.checked });
   };
 
-  // 프로젝트 수정 -->
+  const handleSearch1 = (id) => [
+    //
+    console.log('id', id),
+  ];
+
+  const handleEditFormMode = (v) => {
+    // edit form 언마운트시 'pjt' 리턴
+    setEditFormMode(v);
+  };
 
   return (
     <>
-      {submenu === 'status' ? (
-        <>
-          <ProjectStatusForm
-            count={count}
-            backlog={backlog}
-            progressCount={progressCount}
-            countFormOnclick={countFormOnclick}
-            progressButtonOnclick={progressButtonOnclick}
-            qs_filter={qs_filter}
-            selectedBt={selectedBt}
-          />
-          <ProjectListTable
-            tableData={tableData}
-            loading={loading}
-            handleEdit={handleEdit}
-            // handleSearch1={handleSearch1}
-            handleIssue={handleIssue}
-            onClickDetail={onClickDetail}
-          />
-        </>
-      ) : (
-        ''
-      )}
-      {submenu === 'detailview' ? <ProjectDetailContainer id={pjtid} /> : ''}
-      {submenu === 'inputrate' ? (
-        <ProjectInputRateChart
-          inputRate={inputRate.inputRate}
-          teamHistory={inputRate.teamHistory}
-        />
-      ) : (
-        ''
-      )}
+      <ProjectListTable
+        tableData={tableData}
+        loading={loading}
+        handleEdit={handleEdit}
+        handleSearch1={handleSearch1}
+        handleIssue={handleIssue}
+      />
       {visible ? (
         <ProjectEditForm
           visible={visible}
@@ -513,7 +370,7 @@ const ProjectContentContainer = () => {
       ) : (
         ''
       )}
-      {/* {visibleIssue ? <ProjectDrFormIssue visible={visibleIssue} /> : ''} */}
+      {visibleIssue ? <ProjectDrFormIssue visible={visibleIssue} /> : ''}
     </>
   );
 };

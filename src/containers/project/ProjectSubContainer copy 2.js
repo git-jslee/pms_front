@@ -2,12 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as api from '../../lib/api/api';
 import moment from 'moment';
-import {
-  setTitle,
-  changeSubMenu,
-  changeMode,
-  changeDrawer,
-} from '../../modules/common';
+import { setTitle } from '../../modules/common';
 import {
   getProject,
   getProjectList,
@@ -21,6 +16,7 @@ import ProjectSubButton from '../../components/project/ProjectSubButton';
 import ProjectAdvancedSearchForm from '../../components/project/ProjectAdvancedSearchForm';
 import calWorkTime from '../../modules/project/calWorkTime';
 import SubWorkStatistics from '../../components/project/SubWorkStatistics';
+import ProjectInputRate from '../../components/project/ProjectInputRate';
 import {
   qs_projectCount,
   qs_workList,
@@ -56,30 +52,26 @@ const ProjectSubContainer = ({ setMode }) => {
     };
   }, []);
 
-  const { submenu } = useSelector(({ common }) => ({
-    submenu: common.submenu,
-  }));
-
   // sub메뉴 버튼 클릭시 동작 구현
   const [subMenu, setSubMenu] = useState('status');
 
   const handleOnClick = (menu) => {
     console.log('subMenuSelect 버튼 클릭', menu);
-    if (menu === 'pjtadd') {
-      dispatch(changeDrawer(menu));
+    if (menu === 'add') {
+      setMode(menu);
       return;
     }
-    dispatch(changeSubMenu(menu));
-    // setSubMenu(menu);
-    // if (menu === 'inputrate') {
-    //   const date = startEndDay(
-    //     moment().subtract(4, 'months').format('YYYY-MM'),
-    //     moment().format('YYYY-MM'),
-    //   );
-    //   const startDate = date[0];
-    //   const endDate = date[1];
-    //   calInputRate(startDate, endDate);
-    // }
+    //
+    setSubMenu(menu);
+    if (menu === 'inputrate') {
+      const date = startEndDay(
+        moment().subtract(4, 'months').format('YYYY-MM'),
+        moment().format('YYYY-MM'),
+      );
+      const startDate = date[0];
+      const endDate = date[1];
+      calInputRate(startDate, endDate);
+    }
   };
 
   //카운터(전체, 진행중, 완료, ..)
@@ -304,7 +296,7 @@ const ProjectSubContainer = ({ setMode }) => {
   const subSearchOnSubmit = async (e) => {
     console.log('***on submit***', e);
     if (e.date === undefined) return;
-    if (submenu === 'inputrate') {
+    if (subMenu === 'inputrate') {
       const date = startEndDay(
         moment(e.date[0]).format('YYYY-MM'),
         moment(e.date[1]).format('YYYY-MM'),
@@ -312,7 +304,7 @@ const ProjectSubContainer = ({ setMode }) => {
       const startDate = date[0];
       const endDate = date[1];
       calInputRate(startDate, endDate);
-    } else if (submenu === 'menu2') {
+    } else if (subMenu === 'menu2') {
       const start = moment(e.date[0]).format('YYYY-MM-DD');
       const end = moment(e.date[1]).format('YYYY-MM-DD');
       const query = qs_workList(start, end);
@@ -322,7 +314,7 @@ const ProjectSubContainer = ({ setMode }) => {
 
       setStart(start);
       setEnd(end);
-    } else if (submenu === 'status') {
+    } else if (subMenu === 'status') {
       // const date = startEndDay(
       //   moment(e.date[0]).format('YYYY-MM'),
       //   moment(e.date[1]).format('YYYY-MM'),
@@ -339,11 +331,11 @@ const ProjectSubContainer = ({ setMode }) => {
       <ProjectSubButton
         handleOnClick={handleOnClick}
         reload={reload}
-        submenu={submenu}
+        subMenu={subMenu}
         subSearchOnSubmit={subSearchOnSubmit}
         buttonState={buttonState}
       />
-      {/* {subMenu === 'menu2' ? (
+      {subMenu === 'menu2' ? (
         <SubWorkStatistics
           worktime={worktime}
           subWorkStatisticsOnSubmit={subWorkStatisticsOnSubmit}
@@ -352,7 +344,13 @@ const ProjectSubContainer = ({ setMode }) => {
         />
       ) : (
         ''
-      )} */}
+      )}
+      {subMenu === 'menu3' ? <ProjectAdvancedSearchForm /> : ''}
+      {subMenu === 'inputrate' ? (
+        <ProjectInputRate inputRate={inputRate} teamHistory={teamCh} />
+      ) : (
+        ''
+      )}
     </>
   );
 };

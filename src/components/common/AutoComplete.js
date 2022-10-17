@@ -11,6 +11,7 @@ import {
   Select,
   Space,
   Switch,
+  message,
 } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { useSelector } from 'react-redux';
@@ -126,10 +127,12 @@ const AutoComplete = ({ lists }) => {
       console.log('result', result);
       // addCustomer(datas);
       // 고객등록 성공시 페이지 이동 기능 구현 필요
+      message.success('고객등록 성공');
       setVisible(false);
       // navigate('/customer');
       dispatch(getCustomerlist());
     } catch (error) {
+      message.error('관리자에게 문의 바랍니다.');
       console.log('고객등록 에러', error);
     }
     setBtnDisabled(false);

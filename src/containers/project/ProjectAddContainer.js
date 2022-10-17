@@ -8,10 +8,15 @@ import apiQueryAll from '../../lib/api/apiQueryAll';
 import { qs_customer_all, qs_tasksBySid } from '../../lib/api/query';
 import { message } from 'antd';
 import moment from 'moment';
+import { changeDrawer } from '../../modules/common';
 
-const ProjectAddContainer = ({ mode, setMode }) => {
+const ProjectAddContainer = ({ mode }) => {
+  const dispatch = useDispatch();
   const { auth } = useSelector(({ auth }) => ({
     auth: auth.auth,
+  }));
+  const { drawer } = useSelector(({ common }) => ({
+    drawer: common.drawer,
   }));
   // 중복submit 방지 기능
   const [btnDisabled, setBtnDisabled] = useState(false);
@@ -21,6 +26,9 @@ const ProjectAddContainer = ({ mode, setMode }) => {
   const [tasks, setTasks] = useState();
   const [cusTasksId, setCusTaskId] = useState();
   const [teams, setTeams] = useState();
+
+  const visible = drawer === 'pjtadd' ? true : false;
+  console.log('>>>>>>>>>>>>>>>>visible>>>>>>>>>>>>>>', visible);
 
   const apiPjtCodebook = async () => {
     setLoading(true);
@@ -74,7 +82,8 @@ const ProjectAddContainer = ({ mode, setMode }) => {
   }, []);
 
   const handleOnClose = () => {
-    setMode('view');
+    dispatch(changeDrawer(null));
+    // setMode('view');
     setBtnDisabled(false);
   };
 
@@ -208,7 +217,8 @@ const ProjectAddContainer = ({ mode, setMode }) => {
       console.error(error);
     }
     setBtnDisabled(false);
-    setMode('view');
+    dispatch(changeDrawer(null));
+    // setMode('view');
   };
 
   const onSubmit1 = async (values) => {
@@ -285,7 +295,8 @@ const ProjectAddContainer = ({ mode, setMode }) => {
 
     //
     setBtnDisabled(false);
-    setMode('view');
+    dispatch(changeDrawer(null));
+    // setMode('view');
   };
 
   //   console.log('*******', teams);
@@ -293,6 +304,7 @@ const ProjectAddContainer = ({ mode, setMode }) => {
   return (
     <>
       <ProjectAddForm
+        visible={visible}
         loading={loading}
         btnDisabled={btnDisabled}
         customers={customers}

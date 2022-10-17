@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import * as api from '../../lib/api/api';
@@ -16,14 +17,16 @@ import { Row, Col, Timeline, Button } from 'antd';
 import { LeftSquareTwoTone } from '@ant-design/icons';
 import ProjectTimeline from '../../components/project/ProjectTimeline';
 import ProjectTaskTable from '../../components/project/ProjectTaskTable';
+import { changeSubMenu } from '../../modules/common';
 
 const Base = styled.div`
   width: 100%;
 `;
 
-const ProjectDetailContainer = () => {
+const ProjectDetailContainer = ({ id }) => {
   const naviagte = useNavigate();
-  const { id } = useParams();
+  const dispatch = useDispatch();
+  // const { id } = useParams();
   const [project, setProject] = useState();
   const [tasks, setTasks] = useState();
   const [works, setWorks] = useState();
@@ -138,7 +141,8 @@ const ProjectDetailContainer = () => {
       <div>
         <Row>
           <LeftSquareTwoTone
-            onClick={() => naviagte(-1)}
+            // onClick={() => naviagte(-1)}
+            onClick={() => dispatch(changeSubMenu('status'))}
             style={{ fontSize: '30px', color: '#08c' }}
           />
           <h1>{project ? project.attributes.name : '-'}</h1>

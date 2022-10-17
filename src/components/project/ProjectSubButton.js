@@ -125,7 +125,7 @@ const ProjectSubButton = ({
   advancedSearch,
   handleOnClick,
   reload,
-  subMenu,
+  submenu,
   buttonState,
 }) => {
   const [form] = Form.useForm();
@@ -138,24 +138,24 @@ const ProjectSubButton = ({
     <>
       <SubMenuBlock>
         <div className="btnWrap">
-          <Button onClick={() => handleOnClick('add')}>등록</Button>
+          <Button onClick={() => handleOnClick('pjtadd')}>등록</Button>
           <Button
-            onClick={() => handleOnClick('menu1')}
-            type={subMenu === 'menu1' ? 'primary' : ''}
+            onClick={() => handleOnClick('status')}
+            type={submenu === 'status' ? 'primary' : ''}
             // className="on"
           >
             <span>현황</span>
           </Button>
-          <Button
+          {/* <Button
             onClick={() => handleOnClick('menu2')}
-            type={subMenu === 'menu2' ? 'primary' : ''}
+            type={submenu === 'menu2' ? 'primary' : ''}
           >
             <span>작업통계</span>
-          </Button>
+          </Button> */}
           {/* <Button onClick={() => handleOnClick('menu3')}>상세조회</Button> */}
           <Button
-            onClick={() => handleOnClick('menu4')}
-            type={subMenu === 'menu4' ? 'primary' : ''}
+            onClick={() => handleOnClick('inputrate')}
+            type={submenu === 'inputrate' ? 'primary' : ''}
           >
             <span>투입률</span>
           </Button>
@@ -168,13 +168,13 @@ const ProjectSubButton = ({
           />
         </div> */}
         {/* 작업통계, 투입률 선택시 기간별 조회 기능 활성화 */}
-        {subMenu === 'menu1' || subMenu === 'menu2' || subMenu === 'menu4' ? (
+        {submenu === 'menu1' || submenu === 'menu2' || submenu === 'menu4' ? (
           <div className="inline">
             <Form onFinish={subSearchOnSubmit} form={form}>
               <Row>
                 <Col className="inline">
                   <Form.Item name="date" label="기준일자">
-                    {subMenu === 'menu2' ? (
+                    {submenu === 'menu2' ? (
                       <RangePicker />
                     ) : (
                       <RangePicker picker="month" />
