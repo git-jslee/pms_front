@@ -41,6 +41,7 @@ export const qs_projectList = (stateId, qsFilter) =>
             'cus_task',
             'total_time',
             'other_totaltime',
+            'plan_startdate',
             'startdate',
             'last_workupdate',
             'revision',

@@ -127,23 +127,24 @@ const ProjectListTable = ({
       dataIndex: 'name',
       key: 'name',
     },
-    {
-      title: '서비스',
-      dataIndex: 'service',
-      key: 'service',
-    },
     Table.EXPAND_COLUMN,
-    {
-      title: 'ISSUE',
-      dataIndex: 'issue_cnt',
-      key: 'issue_cnt',
-      align: 'right',
-    },
     {
       title: 'RISK',
       dataIndex: 'risk',
       key: 'risk',
-      aligh: 'right',
+      align: 'center',
+      sorter: (a, b) => a.risk - b.risk,
+    },
+    {
+      title: 'ISSUE',
+      dataIndex: 'issue_cnt',
+      key: 'issue_cnt',
+      align: 'center',
+    },
+    {
+      title: '서비스',
+      dataIndex: 'service',
+      key: 'service',
     },
     {
       title: '진행률',
@@ -202,7 +203,10 @@ const ProjectListTable = ({
       render: (text, record) => (
         <Space size="small">
           {/* <a onClick={() => console.log(record.id)}>Detail</a> */}
-          <Button onClick={() => onClickDetail(record.id)} size="small">
+          <Button
+            onClick={() => onClickDetail(record.id, record.arr_no)}
+            size="small"
+          >
             view
           </Button>
           {/* <Button size="small">이슈</Button> */}

@@ -87,6 +87,7 @@ export const getProject = (query) => async (dispatch) => {
       });
       console.log('task_progress', task_progress);
       console.log('total_weight', Math.round(total_weight * 10) / 10);
+
       // 가중치 weight 계산
       let _progress = 0;
       const project_progress = task_progress.map((v) => {
@@ -101,7 +102,7 @@ export const getProject = (query) => async (dispatch) => {
         total_work,
       };
     });
-    console.log('lists', lists);
+    console.log('00000000000000000000000>>>>>>>>>>>lists', lists);
     // 변경 -->
 
     // <--기존방식
@@ -182,6 +183,7 @@ export const getProjectList = (query, sid) => async (dispatch) => {
     // const response = await api.getList(params);
     console.log('response', response);
     let payload_data;
+    const baseprice = 500000; //기준금액
 
     // 프로젝트 > 리스트 > 상태 : 진행중
     if (sid === 2) {
@@ -192,6 +194,7 @@ export const getProjectList = (query, sid) => async (dispatch) => {
         let total_weight = 0;
         let total_plan = 0;
         let total_work = 0;
+        let plan_startdate = null;
         let startdate = '9999-01-01';
         const task_progress = tasks.map((task) => {
           let weight = 0;
@@ -201,10 +204,19 @@ export const getProjectList = (query, sid) => async (dispatch) => {
               )
             : 0;
           // task 중 시작일 기준 최근값 리턴
-          console.log('>>>', task.attributes.startdate);
+          console.log('>>>', list.attributes.name);
           if (moment(startdate).isAfter(task.attributes.startdate)) {
-            console.log(`--${startdate}-->${task.attributes.startdate}`);
+            console.log(`--88888${startdate}-->${task.attributes.startdate}`);
             startdate = task.attributes.startdate;
+          }
+          if (
+            plan_startdate === null ||
+            moment(plan_startdate).isAfter(task.attributes.plan_startdate)
+          ) {
+            // console.log(
+            //   `-88888_plalstart:${plan_startdate}-->${task.attributes.plan_startdate}`,
+            // );
+            plan_startdate = task.attributes.plan_startdate;
           }
           // task 계획시간, total 작업 시간중 ..큰 값 리턴..
           const plan_day = task.attributes.manpower * task.attributes.plan_day;
@@ -223,6 +235,7 @@ export const getProjectList = (query, sid) => async (dispatch) => {
                 ? Math.round(plan_day * 100) / 100
                 : Math.round(estimatedTotalday * 100) / 100;
           }
+
           total_weight += weight;
           total_plan += plan_day;
           total_work += task_totaltime / 8;
@@ -234,6 +247,12 @@ export const getProjectList = (query, sid) => async (dispatch) => {
           };
           return returndata;
         });
+        // 금액대비 기준일 계산
+        const _base_day =
+          list.attributes.price !== 0
+            ? (list.attributes.price / baseprice).toFixed(0)
+            : 0;
+        //
         console.log('task_progress', task_progress);
         // console.log('total_weight', Math.round(total_weight * 10) / 10);
         // 가중치 weight 계산
@@ -261,11 +280,13 @@ export const getProjectList = (query, sid) => async (dispatch) => {
 
         return {
           ...list,
+          plan_startdate: plan_startdate,
           startdate: startdate === '9999-01-01' ? '-' : startdate,
           project_progress: Math.round(_progress * 100),
           progressRate: progressRate(),
-          total_plan,
+          total_plan: Math.round(total_plan * 10) / 10,
           total_work: Math.round(total_work * 10) / 10,
+          base_day: parseInt(_base_day),
         };
       });
       console.log('lists', lists);

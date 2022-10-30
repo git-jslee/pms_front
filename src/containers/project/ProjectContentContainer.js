@@ -26,6 +26,7 @@ import ProjectDetailContainer from './ProjectDetailContainer';
 //임시
 import PjtStatusContainer from './PjtStatusContainer';
 import { changeSubMenu } from '../../modules/common';
+import calRiskLevel from '../../modules/project/calRiskLevel';
 
 const ProjectContentContainer = () => {
   const dispatch = useDispatch();
@@ -201,6 +202,10 @@ const ProjectContentContainer = () => {
 
   useEffect(() => {
     promise_inputRate();
+    return () => {
+      setPjtid({ pid: null, arrno: null });
+      dispatch(changeSubMenu('status'));
+    };
   }, []);
   // 프로젝트 투입률 차트 -->
 
@@ -209,7 +214,7 @@ const ProjectContentContainer = () => {
   const [record, setRecord] = useState();
   const [codestatus, setCodestatus] = useState();
   const [visible, setVisible] = useState(false);
-  const [pjtid, setPjtid] = useState();
+  const [pjtid, setPjtid] = useState({ pid: null, arrno: null });
 
   const [tableData, setTableData] = useState([]);
   useEffect(() => {
@@ -229,24 +234,30 @@ const ProjectContentContainer = () => {
         const remaining_day =
           Math.round((list.total_plan - list.total_work) * 10) / 10;
         backlog += remaining_day > 0 ? remaining_day : 0;
-        const _base_day =
-          list.attributes.price !== 0
-            ? (list.attributes.price / baseprice).toFixed(0)
-            : 0;
-        const _over_day =
-          _base_day === 0
-            ? '-'
-            : _base_day - list.total_plan >= 0
-            ? '-'
-            : (list.total_plan - _base_day).toFixed(0);
+        // const _base_day =
+        //   list.attributes.price !== 0
+        //     ? (list.attributes.price / baseprice).toFixed(0)
+        //     : 0;
+        // const _over_day =
+        //   _base_day === 0
+        //     ? '-'
+        //     : _base_day - list.total_plan >= 0
+        //     ? '-'
+        //     : (list.total_plan - _base_day).toFixed(0);
         // issue 기능 추가 22.9.25
         const issue_cnt = list.attributes.pjt_issues.data.length;
         const issue = issue_cnt !== 0 ? list.attributes.pjt_issues.data : '';
+
+        // risk 기능 추가 22.10.30
+        const risk_cnt = calRiskLevel({ issue, list });
+        const risk_cnt_total = risk_cnt.issue + risk_cnt.plan;
+        console.log('6666666666666666666>>>>>>>>issue>>>>>>>', risk_cnt);
 
         //
         const array = {
           key: list.id,
           id: list.id,
+          arr_no: index,
           contracted:
             list.attributes.contracted === null ||
             list.attributes.contracted === false
@@ -278,8 +289,8 @@ const ProjectContentContainer = () => {
           // total_plan: list.total_plan.toFixed(0),
           total_plan: list.total_plan ? list.total_plan.toFixed(0) : '-',
           total_work: list.total_work,
-          base_day: _base_day === 0 ? '-' : _base_day,
-          over_day: _over_day,
+          // base_day: _base_day === 0 ? '-' : _base_day,
+          // over_day: _over_day,
           remaining_day: remaining_day > 0 ? remaining_day : 0,
           // totalday:
           //   _totalworktime !== undefined
@@ -288,6 +299,7 @@ const ProjectContentContainer = () => {
           // action: 'View',
           issue_cnt: issue_cnt === 0 ? '' : issue_cnt,
           issue: issue,
+          risk: risk_cnt_total,
         };
         return array;
       });
@@ -296,6 +308,7 @@ const ProjectContentContainer = () => {
         dispatch(updateBacklog(Math.round(backlog)));
       }
       if (!project_status.progress) {
+        tableList.sort((a, b) => b.risk - a.risk);
         setTableData(tableList);
       } else if (project_status.id === 2 && project_status.progress) {
         const filterlist = tableList.filter((v) => {
@@ -304,6 +317,7 @@ const ProjectContentContainer = () => {
           return v.progressRate === project_status.progress;
         });
         // console.log('>>>>>>>>>>>>>>>>filterlist', filterlist);
+        filterlist.sort((a, b) => b.risk - a.risk);
         setTableData(filterlist);
       }
     }
@@ -316,8 +330,8 @@ const ProjectContentContainer = () => {
   };
 
   // view 버튼 클릭시
-  const onClickDetail = (value) => {
-    setPjtid(value);
+  const onClickDetail = (pid, arrno) => {
+    setPjtid({ pid: pid, arrno: arrno });
     dispatch(changeSubMenu('detailview'));
   };
 
@@ -488,7 +502,11 @@ const ProjectContentContainer = () => {
       ) : (
         ''
       )}
-      {submenu === 'detailview' ? <ProjectDetailContainer id={pjtid} /> : ''}
+      {submenu === 'detailview' ? (
+        <ProjectDetailContainer pid_arrno={pjtid} />
+      ) : (
+        ''
+      )}
       {submenu === 'inputrate' ? (
         <ProjectInputRateChart
           inputRate={inputRate.inputRate}

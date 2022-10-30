@@ -18,23 +18,35 @@ import { LeftSquareTwoTone } from '@ant-design/icons';
 import ProjectTimeline from '../../components/project/ProjectTimeline';
 import ProjectTaskTable from '../../components/project/ProjectTaskTable';
 import { changeSubMenu } from '../../modules/common';
+import ProjectDetailDiscription from '../../components/project/ProjectDetailDiscription';
 
 const Base = styled.div`
   width: 100%;
 `;
 
-const ProjectDetailContainer = ({ id }) => {
-  const naviagte = useNavigate();
+const ProjectDetailContainer = ({ pid_arrno }) => {
+  const id = pid_arrno.pid;
+  const arrno = pid_arrno.arrno;
   const dispatch = useDispatch();
   // const { id } = useParams();
-  const [project, setProject] = useState();
+  // 프로젝트 status 가져오기(진행중:2, 대기:5 ...)
+  const { pjt_status } = useSelector(({ project }) => ({
+    pjt_status: project.status.id,
+  }));
+  const { project } = useSelector(({ project }) => ({
+    project: project.data[pjt_status][arrno],
+  }));
+  // const [project, setProject] = useState();
   const [tasks, setTasks] = useState();
   const [works, setWorks] = useState();
   const [timeline, setTimeline] = useState();
 
+  console.log('999999999999999999>>projects', project);
+  console.log('999999999999999999>>pid', pid_arrno);
+
   //work list
   useEffect(() => {
-    get_project(`api/projects/${id}`, qs_project, setProject);
+    // get_project(`api/projects/${id}`, qs_project, setProject);
     get_worklistall(`api/works`, qs_workallByPid, setWorks);
     get_changelistall(`api/project-changes`, qs_changeallByPid, setTimeline);
   }, []);
@@ -69,20 +81,20 @@ const ProjectDetailContainer = ({ id }) => {
     }
   };
 
-  const get_project = async (path, query, callback) => {
-    const request = await api.getQueryString(path, query());
-    console.log(`<<<<< ${path} >>>>>>`, request.data.data);
-    setProject(request.data.data);
-    console.log('>>>>>>>project', request.data.data);
-    const tasks = request.data.data.attributes.project_tasks.data;
-    const sortTasks = tasks.sort((a, b) => {
-      return (
-        a.attributes.code_task.data.attributes.sort -
-        b.attributes.code_task.data.attributes.sort
-      );
-    });
-    setTasks(sortTasks);
-  };
+  // const get_project = async (path, query, callback) => {
+  //   const request = await api.getQueryString(path, query());
+  //   console.log(`9999999999999999999<<<<< ${path} >>>>>>`, request.data.data);
+  //   console.log('44444444444444444>>>>>>>project', request.data.data);
+  //   const tasks = request.data.data.attributes.project_tasks.data;
+  //   const sortTasks = tasks.sort((a, b) => {
+  //     return (
+  //       a.attributes.code_task.data.attributes.sort -
+  //       b.attributes.code_task.data.attributes.sort
+  //     );
+  //   });
+  //   setProject(request.data.data);
+  //   setTasks(tasks);
+  // };
 
   const get_changelistall = async (path, query, callback) => {
     try {
@@ -145,11 +157,16 @@ const ProjectDetailContainer = ({ id }) => {
             onClick={() => dispatch(changeSubMenu('status'))}
             style={{ fontSize: '30px', color: '#08c' }}
           />
-          <h1>{project ? project.attributes.name : '-'}</h1>
+          {/* <h1>
+            {project
+              ? `${id} - ${project.attributes.customer.data.attributes.name} - ${project.attributes.name}`
+              : '-'}
+          </h1> */}
+          {project ? <ProjectDetailDiscription project={project} /> : ''}
         </Row>
         <Row gutter={16}>
           <Col span={18}>
-            <ProjectTaskTable tasks={tasks} />
+            <ProjectTaskTable tasks={project.attributes.project_tasks.data} />
           </Col>
           <Col span={6}>
             <h3>Time line</h3>
@@ -157,6 +174,7 @@ const ProjectDetailContainer = ({ id }) => {
           </Col>
         </Row>
       </div>
+
       <ProjectWorkListTable dataSource={works} />
     </Base>
   );
