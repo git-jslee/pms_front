@@ -2,7 +2,7 @@ import React from 'react';
 import DefaultLayout from '../components/Layout/DefaultLayout';
 import CodeBookContainer from '../containers/common/CodebookContainer';
 import AddWorkDrawerContainer from '../containers/work/AddWorkDrawerContainer';
-import WorkFilterContainer from '../containers/work/WorkFilterContainer';
+import WorkSubContainer from '../containers/work/WorkSubContainer';
 import WorkListContainer from '../containers/work/WorkListContainer';
 
 const WorkPage = () => {
@@ -11,7 +11,7 @@ const WorkPage = () => {
       <CodeBookContainer />
       <AddWorkDrawerContainer />
       <hr />
-      <WorkFilterContainer />
+      <WorkSubContainer />
       <hr />
       <WorkListContainer />
       <hr />

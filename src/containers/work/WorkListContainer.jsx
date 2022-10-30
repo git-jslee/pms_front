@@ -23,9 +23,13 @@ const WorkListContainer = () => {
   const [mainWorkList, setMainWorkList] = useState([]);
   const [visible, setVisible] = useState(false);
   const [initialValues, setInitialValues] = useState({});
-  const { selectedUserId } = useSelector(({ work }) => ({
-    selectedUserId: work.selectedUserId,
-  }));
+  const { selectedType, selectedUser, selectedTeam } = useSelector(
+    ({ work }) => ({
+      selectedType: work.selectedType,
+      selectedUser: work.selectedUser,
+      selectedTeam: work.selectedTeam,
+    }),
+  );
   const { code_tasks } = useSelector(({ codebook }) => ({
     code_tasks: codebook.code_tasks,
   }));
@@ -50,39 +54,32 @@ const WorkListContainer = () => {
 
   // 컴포넌트 렌더링 시 작업 리스트 정보 가져옴
   useEffect(() => {
-    console.log('useEffect 실행', selectedUserId);
+    // console.log('useEffect 실행', selectedUser);
     // setWorkList([]);
-    const query_project = qs_workListByUid(selectedUserId);
-    const query_main = qs_mainWorkListByUid(selectedUserId);
+    const query_project = qs_workListByUid(selectedUser);
+    const query_main = qs_mainWorkListByUid(selectedUser);
 
-    //프로젝트 & 유지보수 작업 리스트
-    api_worklist('api/works', query_project, setWorkList);
-    // api
-    //   .getQueryString('api/works', query_project)
-    //   .then((result) => {
-    //     console.log('****11111*****', result.data.data);
-    //     setWorkList(result.data.data);
-    //   })
-    //   .catch((error) => {
-    //     console.error('에러발생', error);
-    //   });
-
-    // 유지보수 작업 리스트
-    api
-      .getQueryString('api/maintenance-works', query_main)
-      .then((result) => {
-        setMainWorkList(result.data.data);
-        console.log('****2. array****', result.data.data);
-      })
-      .catch((error) => {
-        console.error('에러발생', error);
-      });
+    if (selectedType === 'pjt') {
+      //프로젝트 & 유지보수 작업 리스트
+      api_worklist('api/works', query_project, setWorkList);
+    } else if (selectedType === 'mnt') {
+      // 유지보수 작업 리스트
+      api
+        .getQueryString('api/maintenance-works', query_main)
+        .then((result) => {
+          setWorkList(result.data.data);
+          // setMainWorkList(result.data.data);
+          console.log('****2. array****', result.data.data);
+        })
+        .catch((error) => {
+          console.error('에러발생', error);
+        });
+    }
 
     // setWorkList([work_project, work_main]);
-  }, [selectedUserId]);
+  }, [selectedUser, selectedType, selectedTeam]);
   console.log('=====worklist=======', workList);
-  console.log('=====Man worklist=======', mainWorkList);
-  const newList = [...workList, ...mainWorkList];
+  // const newList = [...workList, ...mainWorkList];
 
   // Action 버튼 클릭
   const drawerOnClick = async (e) => {
@@ -91,6 +88,10 @@ const WorkListContainer = () => {
     const request = await api.getQueryString('api/works', query);
     console.log('***request***', request.data.data);
     const workinfo = request.data.data[0].attributes;
+    console.log(
+      '***request***',
+      workinfo.project_task.data.attributes.cus_task,
+    );
     const value = {
       type: '프로젝트',
       // customer: workinfo.customer.data.attributes.name,
@@ -99,8 +100,9 @@ const WorkListContainer = () => {
       title: workinfo.project.data.attributes.name,
       service_type:
         workinfo.project.data.attributes.code_service.data.attributes.name,
-      task: workinfo.project_task.data.attributes.code_task.data.attributes
-        .name,
+      task: workinfo.project_task.data.attributes.cus_task
+        ? workinfo.project_task.data.attributes.cus_task
+        : workinfo.project_task.data.attributes.code_task.data.attributes.name,
       user: workinfo.users_permissions_user.data.attributes.username,
       userId: workinfo.users_permissions_user.data.id,
       working_day: moment(workinfo.working_day),
@@ -133,9 +135,9 @@ const WorkListContainer = () => {
 
   return (
     <Base>
-      {workList && mainWorkList && code_tasks && selectedUserId ? (
+      {workList && code_tasks && selectedUser ? (
         <WorkListTable
-          lists={newList}
+          lists={workList}
           code_tasks={code_tasks.data}
           drawerOnClick={drawerOnClick}
         />

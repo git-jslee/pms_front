@@ -31,3 +31,46 @@ export const qs_teamchangehistory = () =>
       encodeValuesOnly: true,
     },
   );
+
+// 작업 > 사업부 & 사용자 리스트
+export const qs_team_worker_list = () =>
+  qs.stringify(
+    {
+      filters: {
+        used: {
+          $eq: true,
+        },
+      },
+      sort: ['sort:asc'],
+      fields: ['name', 'abbr'],
+      populate: {
+        users: {
+          sort: ['username:asc'],
+          fields: ['username', 'email', 'blocked', 'level'],
+        },
+      },
+      pagination: {
+        start: 0,
+        limit: 100,
+      },
+    },
+    {
+      encodeValuesOnly: true,
+    },
+  );
+
+// user team 정보 가져오기
+export const qs_teamByUserid = () =>
+  qs.stringify(
+    {
+      fields: ['username', 'email'],
+      populate: {
+        code_pj_team: {
+          fields: ['name', 'abbr'],
+        },
+      },
+    },
+    {
+      encodeValuesOnly: true,
+    },
+  );

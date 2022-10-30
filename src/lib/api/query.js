@@ -972,7 +972,7 @@ export const qs_mainWorkListByUid = (uid) =>
       },
       pagination: {
         start: 0,
-        limit: 30,
+        limit: 50,
       },
     },
     {

@@ -7,7 +7,7 @@ const WorkFilterForm = ({ userList, workerId, userOnChange }) => {
   const optionsWithDisabled = [
     // { label: '고객사', value: 'Customer' },
     { label: '프로젝트', value: 'Project' },
-    { label: '작업자', value: 'Worker' },
+    { label: '유지보수', value: 'Maintenance' },
   ];
   const onChange = (e) => {
     console.log('radio4 checked', e.target.value);
