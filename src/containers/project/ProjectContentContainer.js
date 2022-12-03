@@ -18,7 +18,7 @@ import {
 } from '../../modules/project';
 
 //component
-import ProjectInputRateChart from '../../components/project/ProjectInputRateChart';
+import ProjectInputRateChart from '../../components/project/ProjectInputrateChart';
 import ProjectStatusForm from '../../components/project/ProjectStatusForm';
 import ProjectListTable from '../../components/project/ProjectListTable';
 import ProjectEditForm from '../../components/project/ProjectEditForm';
@@ -250,7 +250,7 @@ const ProjectContentContainer = () => {
 
         // risk 기능 추가 22.10.30
         const risk_cnt = calRiskLevel({ issue, list });
-        const risk_cnt_total = risk_cnt.issue + risk_cnt.plan;
+        const risk_cnt_total = risk_cnt.issue + risk_cnt.plan + risk_cnt.progress;
         console.log('6666666666666666666>>>>>>>>issue>>>>>>>', risk_cnt);
 
         //
