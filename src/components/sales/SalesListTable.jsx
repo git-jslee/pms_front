@@ -14,6 +14,7 @@ const Base = styled.div`
 
 const SalesListTable = ({ tableData, addSalesOnClick, infoSalesOnClick }) => {
   const navigate = useNavigate();
+  console.log('>>>>>>>table..data>>>>>>', tableData)
 
   const columns = [
     {

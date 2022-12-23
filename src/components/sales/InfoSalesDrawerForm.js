@@ -33,15 +33,22 @@ const InfoSalesDrawerForm = ({
   console.log('^^^sales_list^^^', slist);
   const salesList = slist.attributes;
   const sales_profits = salesList.sales_histories.data;
-  const sales_profit = sales_profits[sales_profits.length - 1];
+  // const sales_profit = sales_profits[sales_profits.length - 1];
+  const sales_profit = sales_profits[0];
   console.log('sales_pofir_length', sales_profit);
   console.log('3.infoSalesVisible', infoSalesVisible);
 
   const columns = [
+    // {
+    //   title: 'No',
+    //   dataIndex: 'no',
+    //   key: 'no',
+    // },
     {
-      title: 'No',
-      dataIndex: 'no',
-      key: 'no',
+      title: 'Id',
+      dataIndex: 'key',
+      key: 'key',
+      align: 'center',
     },
     {
       title: '확률',

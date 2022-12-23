@@ -695,6 +695,7 @@ export const qs_salesAdvanced = (arg) =>
             'paymentdate',
             'confirmed',
           ],
+          sort: ['id:desc'],
         },
       },
       pagination: {
@@ -737,6 +738,7 @@ export const qs_salesStatistics = (start, end) =>
         },
         sales_histories: {
           fields: ['sales', 'sales_profit', 'confirmed'],
+          sort: ['id:desc'],
         },
       },
       pagination: {

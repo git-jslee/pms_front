@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import {  useSelector } from 'react-redux';
 import moment from 'moment';
+import ProjectTaskTableEdit from './ProjectTaskTableEdit';
 import {
   Button,
+  Table,
   Drawer,
   Row,
   Col,
@@ -16,6 +19,7 @@ import {
   InputNumber,
   Empty,
 } from 'antd';
+import project from '../../modules/project';
 
 const ProjectEditForm = ({
   visible,
@@ -33,6 +37,7 @@ const ProjectEditForm = ({
   const [issueType, setIssueType] = useState('issue');
   const [issueLevel, setIssueLevel] = useState('low');
   const [issueState, setIssueState] = useState('ing');
+  const [tasks, setTasks] = useState();
   const _status = checkbox['code_status'] === true ? true : false;
   const _plan_start = checkbox['plan_startdate'] === true ? true : false;
   const _plan_end = checkbox['plan_enddate'] === true ? true : false;
@@ -41,6 +46,15 @@ const ProjectEditForm = ({
   const _contracted = checkbox['contracted'] === true ? true : false;
   const _price = checkbox['price'] === true ? true : false;
   const _description = checkbox['description'] === true ? true : false;
+
+  const { pjt_status } = useSelector(({ project }) => ({
+    pjt_status: project.status.id,
+  }));
+  const { pjtTasks } = useSelector (({ project }) => ({
+    pjtTasks : project.data[pjt_status][record.arr_no].attributes.project_tasks.data
+    ,
+  }))
+  console.log('pjttasks', pjtTasks)
 
   const enddate = record.enddate ? moment(record.enddate) : '';
   //22-09-01 -> 2022-09-01 형태로 변경
@@ -63,7 +77,7 @@ const ProjectEditForm = ({
 
   useEffect(() => {
     return () => {
-      handleEditFormMode('pjt');
+      handleEditFormMode('pjt-update');
     };
   }, []);
 
@@ -106,17 +120,20 @@ const ProjectEditForm = ({
           // onValuesChange={onFormLayoutChange}
         >
           <Row>
-            <Button
+            {/* <Button
               onClick={() =>
-                handleEditFormMode(editFormMode === 'pjt' ? 'issue' : 'pjt')
+                handleEditFormMode(editFormMode === 'pjt-update' ? 'issue' : 'pjt')
               }
             >
-              {editFormMode === 'pjt' ? '이슈/협의 등록' : 'pjt - update'}
-            </Button>
+              {editFormMode === 'pjt-update' ? '이슈/회의내용 등록' : 'pjt - update'}
+            </Button> */}
+            <Button onClick={()=>handleEditFormMode('pjt-update')}>pjt-update</Button>
+            <Button onClick={()=>handleEditFormMode('pjt-task')}>Task 수정</Button>
+            <Button onClick={()=>handleEditFormMode('pjt-issue')}>이슈/회의내용 등록</Button>
           </Row>
           <Divider />
           {/* <-- edit mode */}
-          {editFormMode === 'pjt' ? (
+          {editFormMode === 'pjt-update' ? (
             <>
               <Row gutter={16}>
                 <Col span={12}>
@@ -147,18 +164,7 @@ const ProjectEditForm = ({
                 </Col>
               </Row>
               <Row gutter={16}>
-                {/* <Col span={12}>
-              <Space>
-                <Checkbox data-id="plan_startdate" onChange={handleCheck} />
-                <span>계획시작</span>
-              </Space>
-              <Form.Item
-                 name="plan_startdate"
-                rules={[{ required: true }]}
-              >
-                <DatePicker disabled={!_plan_start} />
-              </Form.Item>
-            </Col> */}
+
 
                 <Col span={12}>
                   <Space>
@@ -175,24 +181,7 @@ const ProjectEditForm = ({
                 </Col>
               </Row>
               <Row gutter={16}>
-                {/* <Col span={12}>
-                  <Space>
-                    <Checkbox data-id="startdate" onChange={handleCheck} />
-                    <span>시작일</span>
-                  </Space>
-                  <Form.Item name="startdate" rules={[{ required: true }]}>
-                    <DatePicker disabled={!_startdate} />
-                  </Form.Item>
-                </Col> */}
-                {/* <Col span={12}>
-                  <Space>
-                    <Checkbox data-id="enddate" onChange={handleCheck} />
-                    <span>종료일</span>
-                  </Space>
-                  <Form.Item name="enddate" rules={[{ required: _enddate }]}>
-                    <DatePicker disabled={!_enddate} />
-                  </Form.Item>
-                </Col> */}
+
               </Row>
               <Row gutter={16}>
                 <Col span={12}>
@@ -239,7 +228,13 @@ const ProjectEditForm = ({
                 </Col>
               </Row>
             </>
-          ) : (
+          ) : "" }
+          {editFormMode === 'pjt-task' ? (
+            <ProjectTaskTableEdit tasks={pjtTasks}  />
+          ):''}
+          
+          {editFormMode === 'pjt-issue' ?
+          (
             <>
               <Row gutter={16}>
                 <Col span={8}>
@@ -318,7 +313,7 @@ const ProjectEditForm = ({
                 </Col>
               </Row>
             </>
-          )}
+          ) : ''}
 
           {/* 공통 */}
           <Divider />

@@ -12,8 +12,9 @@ const sumSalesValueByMonth = (salesListValue) => {
 
   const sumSalesList = salesListValue.map((list) => {
     const slist = list.attributes;
-    const value = slist.sales_histories.data[slist.count - 1];
-    // console.log('**계산용**', slist, value);
+    // const value = slist.sales_histories.data[slist.count - 1];
+    const value = slist.sales_histories.data[0];
+    console.log('**계산용**', slist, value);
     // 매출 확정 일경우
     // 데이터가 없을경우 처리 로직 추가 필요..
     if (value.attributes.confirmed === true) {

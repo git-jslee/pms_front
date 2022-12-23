@@ -338,7 +338,7 @@ const ProjectContentContainer = () => {
   // 프로젝트 리스트 -->
 
   // <-- 프로젝트 수정
-  const [editFormMode, setEditFormMode] = useState('pjt');
+  const [editFormMode, setEditFormMode] = useState('pjt-update');
   const [btnDisabled, setBtnDisabled] = useState(false);
   const [checkbox, setCheckbox] = useState({});
 

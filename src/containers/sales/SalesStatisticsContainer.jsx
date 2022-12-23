@@ -38,9 +38,9 @@ const SalesStatisticsContainer = () => {
         // console.log('--1.queryString--', query);
         const query1 = 'populate=%2A';
         const response = await api.getQueryString('api/sales-statuses', query);
-        // console.log(`**2.response[${i}]`, response.data.data);
+        console.log(`**2.response[${i}]`, response.data.data);
         const sum = sumSalesValueByMonth(response.data.data);
-        // console.log(`***sum..[${i}]****`, sum);
+        console.log(`***sum..[${i}]****`, sum);
         obj[i] = sum;
       }
     } catch (error) {

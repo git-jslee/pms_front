@@ -8,6 +8,7 @@ import InfoSalesDrawerForm from '../../components/sales/InfoSalesDrawerForm';
 import InfoSalesDrawerContainer from './InfoSalesDrawerContainer';
 import * as api from '../../lib/api/api';
 import { message, Button, Space } from 'antd';
+import { qs_salesBySid } from '../../lib/api/query';
 
 const SalesListContainer = () => {
   const dispatch = useDispatch();
@@ -61,7 +62,9 @@ const SalesListContainer = () => {
       const slist = list.attributes;
       // 매출, 매출이익, 마진 정보 가져오기, 가장 최근 입력 데이터 가져옴
       const sales_profit =
-        slist.sales_histories.data[slist.sales_histories.data.length - 1];
+        slist.sales_histories.data[0];
+      // const sales_profit =
+      //   slist.sales_histories.data[slist.sales_histories.data.length - 1];
       salesProfitData.push(sales_profit);
       // 매출확률 %로 변환
       // console.log('**sales_profit**', sales_profit);
@@ -75,7 +78,7 @@ const SalesListContainer = () => {
         division: slist.scode_division.data.attributes.name,
         item: slist.scode_item.data.attributes.name,
         team: slist.scode_team.data.attributes.name,
-        confirmed: sales_profit.attributes.confirmed ? 'Yes' : 'No',
+        confirmed: slist.confirmed ? 'Yes' : 'No',
         sales: sales_profit.attributes.sales.toLocaleString('ko-KR'),
         profit: sales_profit.attributes.sales_profit.toLocaleString('ko-KR'),
         margin: sales_profit.attributes.sales_margin,
@@ -83,7 +86,6 @@ const SalesListContainer = () => {
       };
       return array;
     });
-
     setTableData(data);
   }, [lists]);
 
@@ -91,11 +93,15 @@ const SalesListContainer = () => {
   const addSalesOnClick = async (id) => {
     console.log('항목복사', id);
     try {
-      const response = await api.getSalesId(id);
+      const query = qs_salesBySid(salesId);
+      // const response = await api.getSalesId(id);
+      const response = await api.getQueryString('sales-statuses', query)
+
       const sdata = response.data.data.attributes;
       console.log('--response--', sdata);
       const sales_profits = sdata.sales_histories.data;
-      const sales_profit = sales_profits[sales_profits.length - 1];
+      // const sales_profit = sales_profits[sales_profits.length - 1];
+      const sales_profit = sales_profits[0];
       const initValues = {
         customer: sdata.customer.data.id,
         sales_name: sdata.name,
