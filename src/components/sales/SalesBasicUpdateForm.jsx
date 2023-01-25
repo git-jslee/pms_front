@@ -19,7 +19,8 @@ const SalesBasicUpdateForm = ({
   // 체크박스 옵션
   const optionsWithDisabled = [
     { label: '건명', value: 'sales_name' },
-    { label: '매출처', value: 'customer' },
+    { label: '고객사', value: 'customer' },
+    { label: '매출처', value: 'sales_customer' },
     { label: '매출구분/품목', value: 'division', disabled: false },
     { label: '사업부', value: 'team', disabled: false },
     { label: '비고', value: 'description', disabled: false },
@@ -69,7 +70,7 @@ const SalesBasicUpdateForm = ({
 
         {/* <Divider /> */}
         <Row gutter={16}>
-          <Col span={15}>
+          <Col span={10}>
             <Form.Item
               name="sales_name"
               label="건명"
@@ -78,9 +79,26 @@ const SalesBasicUpdateForm = ({
               <Input placeholder="사업명을 입력하세요" />
             </Form.Item>
           </Col>
-          <Col span={8} offset={1}>
+          <Col span={6} offset={1}>
             <Form.Item
               name="customer"
+              label="고객사"
+              rules={[{ required: true, message: '매출처를 입력하세요' }]}
+            >
+              <Select>
+                {customer.map((list, index) => {
+                  return (
+                    <Select.Option key={index} value={list.id}>
+                      {list.attributes.name}
+                    </Select.Option>
+                  );
+                })}
+              </Select>
+            </Form.Item>
+          </Col>
+          <Col span={6} offset={1}>
+            <Form.Item
+              name="sales_customer"
               label="매출처"
               rules={[{ required: true, message: '매출처를 입력하세요' }]}
             >

@@ -576,6 +576,9 @@ export const qs_salesByDate = (start, end) =>
         customer: {
           fields: ['name'],
         },
+        sales_customer: {
+          fields: ['name'],
+        },
         scode_division: {
           fields: ['name'],
         },
@@ -625,6 +628,9 @@ export const qs_salesBySid = (sid) =>
         customer: {
           fields: ['name'],
         },
+        sales_customer: {
+          fields: ['name'],
+        },
         scode_division: {
           fields: ['name'],
         },
@@ -672,6 +678,9 @@ export const qs_salesAdvanced = (arg) =>
       populate: {
         fields: ['name', 'sales_recdate', 'count', 'confirmed', 'description'],
         customer: {
+          fields: ['name'],
+        },
+        sales_customer: {
           fields: ['name'],
         },
         scode_division: {

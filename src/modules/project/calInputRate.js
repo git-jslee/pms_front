@@ -5,11 +5,12 @@ import moment from 'moment';
 
 const calInputRate = async (startDate, endDate) => {
   // 투입률 계산, menu4 클릭
+  console.log('-----------', startDate, endDate)
 
   const resultArray = [];
   const returnData = {};
   let start = 0;
-  const limit = 50;
+  const limit = 100;
   const query = qs_workingTime(startDate, endDate, start, limit);
   const request = await api.getQueryString('api/works', query);
   resultArray.push(...request.data.data);

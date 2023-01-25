@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import {
   Chart as ChartJS,
@@ -11,6 +11,7 @@ import {
   Legend,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
+import { InputNumber, Slider, Row, Col } from 'antd';
 
 ChartJS.register(
   CategoryScale,
@@ -40,7 +41,15 @@ const options = {
   },
 };
 
-const ProjectInputRateChart = ({ inputRate, teamHistory }) => {
+const ProjectInputRateChart = ({ inputRate, teamHistory, onChangeSlider, sliderInputValue }) => {
+  //
+  // const [ inputValue, setInputValue] = useState(6);
+  // const onChangeSlider = (newValue) => {
+  //   console.log('--', newValue)
+  //   setInputValue(newValue);
+  // };
+  //
+
   if (!inputRate) return <></>;
   const labels = Object.keys(inputRate);
   console.log('**labels**', labels);
@@ -117,6 +126,27 @@ const ProjectInputRateChart = ({ inputRate, teamHistory }) => {
 
   return (
     <>
+      <Row>
+        <Col span={8}>
+          <Slider
+            min={1}
+            max={12}
+            onChange={onChangeSlider}
+            value={sliderInputValue}
+          />
+        </Col>
+        <Col span={4}>
+          <InputNumber
+            min={1}
+            max={12}
+            style={{
+              margin: '0 16px',
+            }}
+            value={sliderInputValue}
+            onChange={onChangeSlider}
+          />
+        </Col>
+      </Row>
       <ChartBlock>
         <Line data={data} width={300} height={120} options={options} />
       </ChartBlock>

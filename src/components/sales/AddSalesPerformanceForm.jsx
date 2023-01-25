@@ -37,6 +37,8 @@ const AddSalesPerformanceForm = ({
   profitMarginValue,
   checked,
   onChangeSwitch,
+  addSwitchCustomer,
+  btnAddCustomer,
   btnDisabled,
 }) => {
   // if (divisionId) {
@@ -68,9 +70,9 @@ const AddSalesPerformanceForm = ({
         <Row>
           {/* <Col offset={3} span={8}> */}
           <Col></Col>
-          <Col span={12}>
+          <Col span={9}>
             <Form.Item
-              label="매출처"
+              label="고객사"
               name="customer"
               rules={[{ required: true }]}
             >
@@ -83,6 +85,51 @@ const AddSalesPerformanceForm = ({
                   );
                 })}
               </Select>
+            </Form.Item>
+          </Col>
+          <Col offset={1} span={5}>
+            <Form.Item
+              label='매출처 등록'
+              name="addCustomerConfirmed"
+              valuePropName="checked"
+            >
+              <Switch onChange={addSwitchCustomer} />
+            </Form.Item>
+          </Col>
+          <Col span={9}>
+            { btnAddCustomer ?            
+              <Form.Item
+              label="매출처"
+              name="sales_customer"
+              rules={[{ required: true }]}
+            >
+              <Select>
+                {customer.map((list, index) => {
+                  return (
+                    <Select.Option key={index} value={list.id}>
+                      {list.attributes.name}
+                    </Select.Option>
+                  );
+                })}
+              </Select>
+            </Form.Item> 
+            : ''}
+          </Col>
+        </Row>
+        <Row>
+          <Col span={12}>
+            <Form.Item
+              label={<div className="form-lavel">건 명</div>}
+              name="sales_name"
+              rules={[
+                { required: true, message: '프로젝트명을 입력해 주세요.' },
+              ]}
+            >
+              <Input
+                className="project-name"
+                size="large"
+                placeholder="프로젝트명을 입력해 주세요!!"
+              />
             </Form.Item>
           </Col>
           <Col offset={1} span={5}>
@@ -113,24 +160,7 @@ const AddSalesPerformanceForm = ({
               </Select>
             </Form.Item>
           </Col>
-        </Row>
-        <Row>
-          <Col span={12}>
-            <Form.Item
-              label={<div className="form-lavel">건 명</div>}
-              name="sales_name"
-              rules={[
-                { required: true, message: '프로젝트명을 입력해 주세요.' },
-              ]}
-            >
-              <Input
-                className="project-name"
-                size="large"
-                placeholder="프로젝트명을 입력해 주세요!!"
-              />
-            </Form.Item>
-          </Col>
-          <Col offset={12}></Col>
+          {/* <Col offset={12}></Col> */}
         </Row>
         <Row>
           <Col offset={2} span={6}>

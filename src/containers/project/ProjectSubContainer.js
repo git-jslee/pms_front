@@ -56,8 +56,9 @@ const ProjectSubContainer = ({ setMode }) => {
     };
   }, []);
 
-  const { submenu } = useSelector(({ common }) => ({
+  const { submenu, renewcnt } = useSelector(({ common, project }) => ({
     submenu: common.submenu,
+    renew: project.status.renew,
   }));
 
   // sub메뉴 버튼 클릭시 동작 구현
@@ -109,7 +110,7 @@ const ProjectSubContainer = ({ setMode }) => {
       .catch((error) => {
         console.log('error', error);
       });
-  }, [sumFilter]);
+  }, []);
 
   // 프로젝트 리스트 가져오기
   useEffect(() => {
@@ -121,7 +122,7 @@ const ProjectSubContainer = ({ setMode }) => {
     // dispatch(getProject(query));
     dispatch(getProjectList(query, code_status_id));
     // calTotalWorkTime();
-  }, [sumFilter]);
+  }, []);
 
   // 작업통계 정보 가져오기
   // const start = useRef(moment().subtract(7, 'days').format('YYYY-MM-DD'));

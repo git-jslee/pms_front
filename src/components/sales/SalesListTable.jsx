@@ -36,9 +36,14 @@ const SalesListTable = ({ tableData, addSalesOnClick, infoSalesOnClick }) => {
       align: 'center',
     },
     {
-      title: '매출처',
+      title: '고객사',
       dataIndex: 'customer',
       key: 'custmer',
+    },
+    {
+      title: '매출처',
+      dataIndex: 'sales_customer',
+      key: 'sales_custmer',
     },
     {
       title: '건명',

@@ -263,6 +263,7 @@ const InfoSalesDrawerContainer = ({
     const basic_data = {
       name: values.sales_name,
       customer: values.customer,
+      sales_customer: values.sales_customer,
       scode_division: values.division,
       scode_item: values.item,
       scode_team: values.team,
@@ -311,10 +312,12 @@ const InfoSalesDrawerContainer = ({
       ? moment(sales_profit.attributes.paymentdate)
       : '';
     console.log('^^^_payment_date^^^', _payment_date);
+    console.log('^^^_payment_date^^^', slist);
     const initialValues = {
       // SalesBasicUpdateForm
       sales_name: slist.attributes.name,
       customer: slist.attributes.customer.data.id,
+      sales_customer: slist.attributes.sales_customer.data.id,
       division: slist.attributes.scode_division.data.id,
       item: slist.attributes.scode_item.data.id,
       team: slist.attributes.scode_team.data.id,

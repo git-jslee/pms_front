@@ -245,7 +245,7 @@ const PjtStatusContainer = ({ setMode }) => {
     // store 저장 안된 데이터만 api 호출하게 변경
     // 저장되어 있을경우 project.mode 값만 변경
     if (code_status_id in getState) {
-      dispatch(changeProjectStatus(code_status_id));
+      dispatch(changeProjectStatus({id:code_status_id, progress: null}));
     } else {
       const query = qs_projectList(code_status_id, pjtFilter);
       // dispatch(getProject(query));
@@ -255,7 +255,7 @@ const PjtStatusContainer = ({ setMode }) => {
 
   const progressButtonOnclick = (value) => {
     const code_status_id = 2;
-    dispatch(changeProjectProgress(value));
+    dispatch(changeProjectStatus({id:2, progress: value}));
   };
 
   return (

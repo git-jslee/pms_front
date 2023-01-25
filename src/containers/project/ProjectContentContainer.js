@@ -27,13 +27,14 @@ import ProjectDetailContainer from './ProjectDetailContainer';
 import PjtStatusContainer from './PjtStatusContainer';
 import { changeSubMenu } from '../../modules/common';
 import calRiskLevel from '../../modules/project/calRiskLevel';
+import { ConsoleSqlOutlined } from '@ant-design/icons';
 
 const ProjectContentContainer = () => {
   const dispatch = useDispatch();
   const { auth } = useSelector(({ auth }) => ({
     auth: auth.auth,
   }));
-  const { submenu } = useSelector(({ common }) => ({
+  const { submenu,  } = useSelector(({ common }) => ({
     submenu: common.submenu,
   }));
 
@@ -42,7 +43,9 @@ const ProjectContentContainer = () => {
   const [filterContract, setFilterContract] = useState([{ price: { $ne: 0 } }]);
   const [filterTeam, setFilterTeam] = useState([{}]);
   const [pjtFilter, setPjtFilter] = useState([{ price: { $ne: 0 } }]);
-
+  // 프로젝트 수정시 화면 갱신
+  const [ renewcnt, setRenewcnt ] = useState(1);
+    
   // 프로젝트 리스트, 진행률 정보 가져오기..
   const [progressCount, setProgressCount] = useState({
     _10: 0,
@@ -119,7 +122,7 @@ const ProjectContentContainer = () => {
       .catch((error) => {
         console.log('error', error);
       });
-  }, [pjtFilter]);
+  }, [pjtFilter, renewcnt]);
 
   // qs filter 설정
   const [selectedBt, setSelectedBt] = useState(['bt1', 'bt0', 'bt0']);
@@ -174,7 +177,7 @@ const ProjectContentContainer = () => {
     // store 저장 안된 데이터만 api 호출하게 변경
     // 저장되어 있을경우 project.mode 값만 변경
     if (code_status_id in getState) {
-      dispatch(changeProjectStatus(code_status_id));
+      dispatch(changeProjectStatus({id:code_status_id, progress: null}));
     } else {
       const query = qs_projectList(code_status_id, pjtFilter);
       // dispatch(getProject(query));
@@ -184,7 +187,7 @@ const ProjectContentContainer = () => {
 
   const progressButtonOnclick = (value) => {
     const code_status_id = 2;
-    dispatch(changeProjectProgress(value));
+    dispatch(changeProjectStatus({id:2, progress: value}));
   };
 
   // 프로젝트 현황 -->
@@ -194,19 +197,31 @@ const ProjectContentContainer = () => {
     inputRate: '',
     teamHistory: '',
   });
+  const [ sliderInputValue, setSliderInputValue] = useState(6);
 
   const promise_inputRate = async () => {
-    const test = await calInputRate();
+    const startDate = moment().subtract(sliderInputValue,'month').format('YYYY-MM-DD')
+    const endDate = moment().subtract(1, 'day').format('YYYY-MM-DD')
+    const test = await calInputRate(startDate, endDate);
     setInputRate(test);
   };
 
   useEffect(() => {
-    promise_inputRate();
     return () => {
       setPjtid({ pid: null, arrno: null });
       dispatch(changeSubMenu('status'));
     };
   }, []);
+
+  useEffect(() => {
+    promise_inputRate();
+  }, [sliderInputValue]);
+
+  const onChangeSlider = (newValue) => {
+    console.log('--', newValue)
+    setSliderInputValue(newValue);
+  };
+
   // 프로젝트 투입률 차트 -->
 
   // <-- 프로젝트 리스트
@@ -360,8 +375,9 @@ const ProjectContentContainer = () => {
   };
 
   const onSubmit = async (value) => {
-    // console.log('>>>>>>', value);
-    if (editFormMode === 'pjt') {
+    console.log('>>>>>>', value);
+    console.log('>>>>>>', editFormMode);
+    if (editFormMode === 'pjt-update') {
       try {
         setBtnDisabled(true);
         const update_data = {};
@@ -416,6 +432,24 @@ const ProjectContentContainer = () => {
         setCheckbox({});
         setVisible(false);
         setBtnDisabled(false);
+        //화면갱신코드 - 최적화 필요..23/01/10
+        setRenewcnt(renewcnt + 1);
+        // dispatch(changeProjectStatus({renew: renewcnt + 1})); ->삭제
+        // redux > project 초기화 작업
+        console.log('##########################################')
+        console.log(pjtFilter)
+        console.log(selectedBt)
+        console.log('##########################################')
+        dispatch(initProjectStorage())
+        const code_status_id = 2;
+        const newSumFilter = [{ price: { $ne: 0 } }]
+        // const newSumFilter = [{ price: filterContract[0].price }]
+        // console.log(filterContract[0].price)
+        const query = qs_projectList(code_status_id, newSumFilter);
+        dispatch(getProjectList(query, code_status_id));
+        // selectedBt 버튼 초기화
+        // setSelectedBt(['bt1', 'bt0', 'bt0']);
+
       }
     } else if (editFormMode === 'issue') {
       console.log('>>>>pjt id>>', record.id);
@@ -511,6 +545,8 @@ const ProjectContentContainer = () => {
         <ProjectInputRateChart
           inputRate={inputRate.inputRate}
           teamHistory={inputRate.teamHistory}
+          onChangeSlider={onChangeSlider}
+          sliderInputValue={sliderInputValue}
         />
       ) : (
         ''

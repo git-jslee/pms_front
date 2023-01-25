@@ -385,7 +385,7 @@ export const getProjectWork = (query) => async (dispatch) => {
 const initialState = {
   data: null,
   getdata: null,
-  status: { id: null, progress: null },
+  status: { id: null, progress: null, renew: 1 },
   backlog: null,
   error: null,
   werror: null,
@@ -426,7 +426,7 @@ const project = handleActions(
     // 프로젝트 리스트 가져오기 성공
     [GET_PROJECTLIST_SUCCESS]: (state, { payload, state_id }) => ({
       ...state,
-      status: { id: state_id, progress: null },
+      status: { id: state_id, progress: null, renew:1 },
       data: { ...state.data, [state_id]: payload },
       getdata: { ...state.getdata, [state_id]: 'OK' },
     }),
@@ -438,13 +438,14 @@ const project = handleActions(
     // 프로젝트 status 변경
     [CHANGE_PROJECTSTATUS]: (state, { payload }) => ({
       ...state,
-      status: { id: payload, progress: null },
+      // status: { id: payload, progress: null },
+      status: { ...state.status, ...payload },
     }),
     // 프로젝트 모드 변경
-    [CHANGE_PROJECTPROGRESS]: (state, { payload }) => ({
-      ...state,
-      status: { id: 2, progress: payload }, // status 진행중으로 변경
-    }),
+    // [CHANGE_PROJECTPROGRESS]: (state, { payload }) => ({
+    //   ...state,
+    //   status: { id: 2, progress: payload }, // status 진행중으로 변경
+    // }),
     // 프로젝트 초기화
     [INIT_PROJECTSTORAGE]: (state) => ({
       ...initialState, // status 진행중으로 변경

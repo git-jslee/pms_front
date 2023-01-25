@@ -18,6 +18,7 @@ const AddSalesContainer = () => {
   const navigate = useNavigate();
   // 중복Submit 방지
   const [btnDisabled, setBtnDisabled] = useState(false);
+  const [btnAddCustomer, setBtnAddCustomer] = useState(false);
   const [divisionId, setDivisionId] = useState(null);
   const [radioValue, setRadioValue] = useState(true);
   const [salesValue, setSalesValue] = useState(null);
@@ -114,9 +115,11 @@ const AddSalesContainer = () => {
     }
     const _confirmed = checked.checked === true ? true : false;
     const _probability = checked.checked === true ? 5 : values.probability;
+    const _sales_customer = btnAddCustomer ? values.sales_customer : values.customer;
 
     const sales_data = {
       customer: values.customer,
+      sales_customer: _sales_customer,
       name: values.sales_name,
       scode_division: values.division,
       scode_item: values.item,
@@ -151,8 +154,14 @@ const AddSalesContainer = () => {
     navigate('/sales');
   };
 
+  // 고객사 필드 추가 23.01.09
+  const addSwitchCustomer = (e) => {
+    console.log('고객사추가', e)
+    setBtnAddCustomer(e)
+  }
+
   const onChangeSwitch = (e) => {
-    console.log('스위치button', e);
+    // console.log('스위치button', e);
     if (e) {
       const value = {
         checked: true,
@@ -191,6 +200,8 @@ const AddSalesContainer = () => {
               radioValue={radioValue}
               profitMarginValue={profitMarginValue}
               checked={checked}
+              addSwitchCustomer={addSwitchCustomer}
+              btnAddCustomer={btnAddCustomer}
               onChangeSwitch={onChangeSwitch}
               btnDisabled={btnDisabled}
             />

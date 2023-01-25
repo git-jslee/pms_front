@@ -74,6 +74,7 @@ const SalesListContainer = () => {
         probability: slist.scode_probability.data.attributes.name,
         // probability: probability[scode_probability - 1],
         customer: slist.customer.data.attributes.name,
+        sales_customer: slist.sales_customer.data.attributes.name,
         name: slist.name,
         division: slist.scode_division.data.attributes.name,
         item: slist.scode_item.data.attributes.name,
