@@ -191,8 +191,8 @@ const ProjectListTable = ({
     },
     {
       title: '금액',
-      key: 'price',
-      dataIndex: 'price',
+      key: 'amount',
+      dataIndex: 'amount',
       align: 'right',
     },
     {

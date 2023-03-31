@@ -294,6 +294,7 @@ const ProjectContentContainer = () => {
           // startdate: list.startdate,
           enddate: list.attributes.enddate,
           price: list.attributes.price.toLocaleString('ko-KR'),
+          amount:Math.floor(list.attributes.price/1000000),
           lastUpdate: moment(list.attributes.last_workupdate).format(
             'YY-MM-DD',
           ),
@@ -451,7 +452,7 @@ const ProjectContentContainer = () => {
         // setSelectedBt(['bt1', 'bt0', 'bt0']);
 
       }
-    } else if (editFormMode === 'issue') {
+    } else if (editFormMode === 'pjt-issue') {
       console.log('>>>>pjt id>>', record.id);
       //
       setBtnDisabled(true);

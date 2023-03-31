@@ -67,6 +67,21 @@ const calInputRate = async (startDate, endDate) => {
     });
     return mp;
   };
+  //mp 계산 수정(23.02.09)
+  const cal_manpower = (team, working_day) => {
+    const new_arr = team_mp_array[team];
+    let manpower;
+    for (let i=0; i <= new_arr.length; i++) {
+      const team_arr = new_arr[i].attributes.change_date;
+      const isAfter = moment(working_day).isAfter(team_arr) || moment(working_day).isSame(team_arr)
+      // console.log(`>>>----${i}---->>>>`);
+      // console.log('>>>working_day>>>>', working_day);
+      // console.log('>>>team_arr>>>>', team_arr);
+      if (isAfter) {
+        manpower = new_arr[i].attributes.number;
+        return manpower};
+      }
+  }
 
   // 팀 & 주차에 해댕하는 mp 값 계산 ---->
 
@@ -83,6 +98,7 @@ const calInputRate = async (startDate, endDate) => {
 
     if (Object.keys(returnData).includes(work_week)) {
       let mp = 0;
+      let manpower;
       // console.log('======= return Data =======', returnData[work_week]);
       // console.log('======= return Data =======', returnData[work_week][team]);
       if (returnData[work_week][team] !== undefined) {
@@ -101,25 +117,28 @@ const calInputRate = async (startDate, endDate) => {
         // team 인원 계산
         if (team !== 'CG') {
           // mp = team_mp_array[team][0].attributes.number;
-          mp = cal_mp(team, work_week);
+          // mp = cal_mp(team, work_week);
           // console.log('======= 2.mp =======', mp);
+          manpower = cal_manpower(team,list.attributes.working_day);
         }
         returnData[work_week] = {
           ...returnData[work_week],
-          [team]: { time: work_time, mp: mp },
+          [team]: { time: work_time, manpower: manpower },
         };
       }
     } else {
       let mp = 0;
+      let manpower;
       // 주차 & 팀 생성
       //   console.log('======= 1.work_week & team =======', work_week, team);
       // team 인원 계산
       if (team !== 'CG') {
-        mp = cal_mp(team, work_week);
+        // mp = cal_mp(team, work_week);
+        manpower = cal_manpower(team,list.attributes.working_day);
         // mp = team_mp_array[team][0].attributes.number;
         // console.log('======= 2.mp =======', mp);
       }
-      returnData[work_week] = { [team]: { time: work_time, mp: mp } };
+      returnData[work_week] = { [team]: { time: work_time, manpower: manpower } };
     }
   });
   // 주차별 투입가능 인원 추가 적용

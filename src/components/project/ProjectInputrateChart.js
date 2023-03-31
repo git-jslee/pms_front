@@ -60,7 +60,7 @@ const ProjectInputRateChart = ({ inputRate, teamHistory, onChangeSlider, sliderI
   const data_de = labels.map((v) => {
     const result = inputRate[v]['DE']
       ? Math.round(
-          (inputRate[v]['DE']['time'] / (40 * inputRate[v]['DE']['mp'])) * 100,
+          (inputRate[v]['DE']['time'] / (40 * inputRate[v]['DE']['manpower'])) * 100,
         )
       : 0;
     return result;
@@ -70,7 +70,7 @@ const ProjectInputRateChart = ({ inputRate, teamHistory, onChangeSlider, sliderI
   const data_pr = labels.map((v) => {
     const result = inputRate[v]['VE']
       ? Math.round(
-          (inputRate[v]['VE']['time'] / (40 * inputRate[v]['VE']['mp'])) * 100,
+          (inputRate[v]['VE']['time'] / (40 * inputRate[v]['VE']['manpower'])) * 100,
         )
       : 0;
     return result;
@@ -80,7 +80,7 @@ const ProjectInputRateChart = ({ inputRate, teamHistory, onChangeSlider, sliderI
   const data_mv = labels.map((v) => {
     const result = inputRate[v]['RD']
       ? Math.round(
-          (inputRate[v]['RD']['time'] / (40 * inputRate[v]['RD']['mp'])) * 100,
+          (inputRate[v]['RD']['time'] / (40 * inputRate[v]['RD']['manpower'])) * 100,
         )
       : 0;
     return result;

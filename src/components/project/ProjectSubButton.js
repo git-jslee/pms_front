@@ -157,7 +157,7 @@ const ProjectSubButton = ({
             onClick={() => handleOnClick('inputrate')}
             type={submenu === 'inputrate' ? 'primary' : ''}
           >
-            <span>투입률</span>
+            <span>참여율</span>
           </Button>
         </div>
 
